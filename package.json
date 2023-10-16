@@ -25,9 +25,9 @@
     "dev:tsc": "pnpm run build:tsc -w",
     "dev:site": "vitepress dev docs",
     "build": "run-s build:*",
-    "build:site": "vitepress build docs",
     "build:plugins": "npx swc ./src/ -d ./lib/ --ignore ./src/types/*  --copy-files -C jsc.transform.react.runtime=automatic",
     "build:tsc": "vue-tsc --project ./tsconfig.json",
+    "build:site": "vitepress build docs",
     "preview:site": "vitepress preview docs",
     "release": "pnpm dlx standard-version"
   },
