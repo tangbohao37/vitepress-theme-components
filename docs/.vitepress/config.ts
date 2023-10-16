@@ -8,7 +8,7 @@ export default defineConfigWithTheme<AdvThemeConfig>({
   title: 'My Awesome Project',
   description: 'A VitePress Site',
   extends: baseConfig,
-  base: '/docs/',
+  base: '/vitepress-theme-components/',
   themeConfig: {
     changelog: {
       path: path.resolve(__dirname, '../assets/CHANGELOG-test.md')
