@@ -1,7 +1,6 @@
 import { defineConfigWithTheme } from 'vitepress';
 import { baseConfig } from '../../lib/base-config';
 import { type AdvThemeConfig } from '../../lib';
-import path from 'path';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfigWithTheme<AdvThemeConfig>({
@@ -10,11 +9,12 @@ export default defineConfigWithTheme<AdvThemeConfig>({
   extends: baseConfig,
   base: '/vitepress-theme-components/',
   themeConfig: {
+    // 获取public中的文件。 直接使用站点绝对路径
     changelog: {
-      path: path.resolve(__dirname, '../assets/CHANGELOG-test.md')
+      path: '/CHANGELOG-test.md'
     },
     coverage: {
-      path: path.resolve(__dirname, '../assets/coverage-summary.json')
+      path: '/coverage-summary.json'
     },
     nav: [
       { text: 'Guide', link: '/guide/' },

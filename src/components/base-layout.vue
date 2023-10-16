@@ -27,8 +27,8 @@
 <script setup lang="ts">
 import DefaultTheme from 'vitepress/theme'
 import RecordDrawer from './record-drawer.vue'
-import { useData, useRoute } from 'vitepress'
-import { ref, onMounted, computed, watchEffect, watch } from 'vue'
+import { useData, useRoute, withBase } from 'vitepress'
+import { ref, onMounted, computed } from 'vue'
 import { type AdvThemeConfig } from '../types'
 import { readFileAsync } from './tools'
 
@@ -46,7 +46,7 @@ const { Layout } = DefaultTheme
 const active = ref(false)
 const changelogContent = ref('')
 const summaryContent = ref('')
-const { theme, frontmatter, isDark } = useData<AdvThemeConfig>()
+const { theme, frontmatter, isDark, } = useData<AdvThemeConfig>()
 const currentSummary = ref<any>()
 const route = useRoute()
 
@@ -74,12 +74,16 @@ function getColorByCoverage(coverage) {
 
 const readChangelog = async () => {
   const changelog = theme.value.changelog
-  changelogContent.value = await readFileAsync(changelog?.path)
+  const content = await readFileAsync(withBase(changelog?.path))
+  const data = await content.text()
+  changelogContent.value = data
 }
 
 const readCoverage = async () => {
   const coverage = theme.value.coverage
-  summaryContent.value = await readFileAsync(coverage?.path)
+  const content = await readFileAsync(withBase(coverage?.path))
+  const data = await content.json()
+  summaryContent.value = data
 }
 
 onMounted(() => {

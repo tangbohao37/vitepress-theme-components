@@ -49,7 +49,5 @@ export const readFileAsync = async (p: string) => {
   if (!p) {
     return;
   }
-  const importPath = `${p}?raw`;
-  const module = await import(/* @vite-ignore */ importPath);
-  return module.default;
+  return await fetch(p);
 };
