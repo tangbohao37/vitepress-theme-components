@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "composite": true,
+    "lib": ["ESNext", "DOM", "DOM.Iterable", "ES2015"],
+    "baseUrl": ".",
+    "jsx": "react-jsx",
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "allowJs": true,
+    "downlevelIteration": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "outDir": "./lib",
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "types": ["node", "element-plus/global"]
+  },
+  "exclude": ["./.vitepress/cache", "./lib"],
+  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./src/**/*.vue"]
+}

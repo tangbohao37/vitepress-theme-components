@@ -1,0 +1,12 @@
+.react-live-comp-wrapper {
+  width: 100%;
+  .react-live-comp-demo-wrapper {
+    width: 100%;
+    padding: 10px;
+  }
+}
+
+.react-live-comp-demo-wrapper pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}

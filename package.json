@@ -1,0 +1,88 @@
+{
+  "name": "vitepress-theme-components",
+  "version": "0.0.0",
+  "description": "",
+  "type": "module",
+  "types": "./lib/index.d.ts",
+  "module": "./lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    },
+    "./plugin": {
+      "default": "./lib/plugins/index.js",
+      "types": "./lib/plugins/index.d.ts"
+    },
+    "./config": {
+      "import": "./lib/base-config.js",
+      "types": "./lib/base-config.d.ts"
+    }
+  },
+  "scripts": {
+    "dev": "run-p dev:*",
+    "dev:plugins": "pnpm run build:plugins -w",
+    "dev:tsc": "pnpm run tsc -w",
+    "dev:site": "vitepress dev docs",
+    "build": "pnpm run build:plugins && pnpm run tsc",
+    "build:site": "vitepress build docs",
+    "build:plugins": "npx swc ./src/ -d ./lib/ --ignore ./src/types/*  --copy-files -C jsc.transform.react.runtime=automatic",
+    "tsc": "vue-tsc --project ./tsconfig.json",
+    "preview:site": "vitepress preview docs"
+  },
+  "files": [
+    "lib",
+    "config.d.ts",
+    "plugin.d.ts"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@iconify-json/ep": "^1.1.12",
+    "@swc/cli": "^0.1.62",
+    "@swc/core": "^1.3.90",
+    "@types/node": "^20.7.0",
+    "@types/react": "^18.2.23",
+    "@types/react-dom": "^18.2.8",
+    "@vue/component-compiler": "^4.2.4",
+    "@vue/eslint-config-prettier": "^8.0.0",
+    "@vue/eslint-config-typescript": "^12.0.0",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "npm-run-all": "^4.1.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.2.2",
+    "unplugin-auto-import": "^0.16.6",
+    "unplugin-icons": "^0.17.0",
+    "unplugin-vue-components": "^0.25.2",
+    "vite": "^4.4.11",
+    "vitepress": "1.0.0-rc.20",
+    "vue": "^3.3.4",
+    "vue-tsc": "^1.8.15"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.23.0",
+    "@babel/traverse": "^7.23.0",
+    "@element-plus/icons-vue": "^2.1.0",
+    "@guolao/vue-monaco-editor": "^1.3.0",
+    "@vue/compiler-core": "^3.3.4",
+    "element-plus": "^2.3.14",
+    "react-live": "^4.1.5",
+    "semver": "^7.5.4",
+    "veaury": "^2.3.12",
+    "vue3-markdown-it": "^1.0.10"
+  },
+  "packageManager": "pnpm@8.6.9",
+  "volta": {
+    "node": "18.17.1"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "vitepress": "1.0.0-rc.20"
+  }
+}
