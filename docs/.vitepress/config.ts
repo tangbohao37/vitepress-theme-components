@@ -8,6 +8,7 @@ export default defineConfigWithTheme<AdvThemeConfig>({
   title: 'My Awesome Project',
   description: 'A VitePress Site',
   extends: baseConfig,
+  base: '/docs/',
   themeConfig: {
     changelog: {
       path: path.resolve(__dirname, '../assets/CHANGELOG-test.md')
@@ -41,6 +42,11 @@ export default defineConfigWithTheme<AdvThemeConfig>({
           }
         ]
       }
+    }
+  },
+  vite: {
+    ssr: {
+      noExternal: ['element-plus', 'veaury']
     }
   }
 });

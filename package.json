@@ -22,12 +22,12 @@
   "scripts": {
     "dev": "run-p dev:*",
     "dev:plugins": "pnpm run build:plugins -w",
-    "dev:tsc": "pnpm run tsc -w",
+    "dev:tsc": "pnpm run build:tsc -w",
     "dev:site": "vitepress dev docs",
-    "build": "pnpm run build:plugins && pnpm run tsc",
+    "build": "run-s build:*",
     "build:site": "vitepress build docs",
     "build:plugins": "npx swc ./src/ -d ./lib/ --ignore ./src/types/*  --copy-files -C jsc.transform.react.runtime=automatic",
-    "tsc": "vue-tsc --project ./tsconfig.json",
+    "build:tsc": "vue-tsc --project ./tsconfig.json",
     "preview:site": "vitepress preview docs",
     "release": "pnpm dlx standard-version"
   },
