@@ -1,6 +1,6 @@
 {
   "name": "vitepress-theme-components",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
   "type": "module",
   "types": "./lib/index.d.ts",
@@ -28,7 +28,8 @@
     "build:site": "vitepress build docs",
     "build:plugins": "npx swc ./src/ -d ./lib/ --ignore ./src/types/*  --copy-files -C jsc.transform.react.runtime=automatic",
     "tsc": "vue-tsc --project ./tsconfig.json",
-    "preview:site": "vitepress preview docs"
+    "preview:site": "vitepress preview docs",
+    "release": "pnpm dlx standard-version"
   },
   "files": [
     "lib",
