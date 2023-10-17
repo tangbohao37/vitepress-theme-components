@@ -74,6 +74,9 @@ function getColorByCoverage(coverage) {
 
 const readChangelog = async () => {
   const changelog = theme.value.changelog
+  if (!changelog?.path) {
+    return
+  }
   const content = await readFileAsync(withBase(changelog?.path))
   const data = await content.text()
   changelogContent.value = data
@@ -81,6 +84,9 @@ const readChangelog = async () => {
 
 const readCoverage = async () => {
   const coverage = theme.value.coverage
+  if (!coverage?.path) {
+    return
+  }
   const content = await readFileAsync(withBase(coverage?.path))
   const data = await content.json()
   summaryContent.value = data

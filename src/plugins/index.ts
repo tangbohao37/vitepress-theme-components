@@ -1,4 +1,3 @@
-
 import { parse, type ParseResult } from '@babel/parser';
 import traverse, { NodePath } from '@babel/traverse';
 import { baseParse, transform } from '@vue/compiler-core';
@@ -9,7 +8,13 @@ import { type MarkdownRenderer } from 'vitepress';
 /**
  * It runs in Node.js.
  */
-import { importRegex, scriptClientRE, scriptRE, scriptRegex, scriptSetupRE } from '../constant/index.js'
+import {
+  importRegex,
+  scriptClientRE,
+  scriptRE,
+  scriptRegex,
+  scriptSetupRE
+} from '../constant/index.js';
 import { type ILiveEditor } from '../types';
 
 const DemoTag = 'LiveEditor';

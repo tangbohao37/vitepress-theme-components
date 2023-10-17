@@ -6,10 +6,10 @@
         :options="MONACO_EDITOR_OPTIONS" @mount="handleMount" :on-change="onChange" />
       <div class="editor-tool">
         <el-icon @click="refresh" class="pointer">
-          <i-ep-refresh-left />
+          <RefreshRight />
         </el-icon>
         <el-icon @click="copy" class="pointer">
-          <i-ep-document-copy />
+          <CopyDocument />
         </el-icon>
       </div>
     </div>
