@@ -43,10 +43,5 @@ export default defineConfigWithTheme<AdvThemeConfig>({
         ]
       }
     }
-  },
-  vite: {
-    ssr: {
-      noExternal: ['element-plus', 'veaury']
-    }
   }
 });

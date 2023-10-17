@@ -54,7 +54,7 @@
 import { computed, ref, watchEffect } from 'vue'
 import { parseChangelog, type IChangelog, type IChange } from './tools'
 import { useData } from 'vitepress'
-import semver from 'semver'
+import * as semver from 'semver'
 import MarkdownIt from './markdown-it.vue'
 import { type AdvThemeConfig } from '../types'
 

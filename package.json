@@ -52,10 +52,14 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
+    "markdown-it": "^13.0.2",
     "npm-run-all": "^4.1.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "semver": "^7.5.4",
+    "sucrase": "^3.34.0",
     "typescript": "^5.2.2",
+    "veaury": "^2.3.12",
     "vite": "^4.4.11",
     "vitepress": "1.0.0-rc.20",
     "vue": "^3.3.4",
@@ -69,18 +73,19 @@
     "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@vue/compiler-core": "^3.3.4",
     "element-plus": "^2.3.14",
-    "markdown-it": "^13.0.2",
-    "react-live": "^4.1.5",
-    "semver": "^7.5.4",
-    "veaury": "^2.3.12"
+    "react-live": "^4.1.5"
   },
   "packageManager": "pnpm@8.6.9",
   "volta": {
     "node": "18.17.1"
   },
   "peerDependencies": {
+    "markdown-it": "^13.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "semver": "^7.5.4",
+    "sucrase": "^3.34.0",
+    "veaury": "^2.3.12",
     "vitepress": "1.0.0-rc.20"
   }
 }
