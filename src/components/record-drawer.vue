@@ -39,8 +39,7 @@
                   <el-text size="large">
                     {{ change.category }}
                   </el-text>
-                  <!-- @vue-ignore -->
-                  <Markdown :source="change.description" />
+                  <MarkdownIt :content="change.description"></MarkdownIt>
                 </div>
               </li>
             </ul>
@@ -56,7 +55,7 @@ import { computed, ref, watchEffect } from 'vue'
 import { parseChangelog, type IChangelog, type IChange } from './tools'
 import { useData } from 'vitepress'
 import semver from 'semver'
-import Markdown from 'vue3-markdown-it'
+import MarkdownIt from './markdown-it.vue'
 import { type AdvThemeConfig } from '../types'
 
 interface IRecordDrawer {
