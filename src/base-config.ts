@@ -1,5 +1,6 @@
 import { demoBlockPlugin } from './plugins/index.js';
 import { defineConfig } from 'vitepress';
+import react from '@vitejs/plugin-react';
 
 /**
  * @description
@@ -17,7 +18,7 @@ const baseConfig = defineConfig({
     optimizeDeps: {
       include: ['veaury', 'semver', 'markdown-it', 'sucrase']
     },
-
+    plugins:[react()],
     ssr: {
       noExternal: ['element-plus', 'veaury']
     }
