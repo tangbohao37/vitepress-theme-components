@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2-alpha.2](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-alpha.1...v0.0.2-alpha.2) (2023-10-17)
+
+
+### Bug Fixes
+
+*  rm vue3 markdown ([b36a9b8](https://github.com/tangbohao37/vitepress-theme-components/commit/b36a9b8fb6f919de4bdd1d9c79dbdb92e8a4d33a))
+* deps ([f3f1a5c](https://github.com/tangbohao37/vitepress-theme-components/commit/f3f1a5c55ed9256960b284e3b35f4f932f71773c))
+
 ### [0.0.2-alpha.1](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-alpha.0...v0.0.2-alpha.1) (2023-10-17)
 
 ### [0.0.2-alpha.0](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.1...v0.0.2-alpha.0) (2023-10-17)
