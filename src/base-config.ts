@@ -18,9 +18,9 @@ const baseConfig = defineConfig({
     optimizeDeps: {
       include: ['veaury', 'semver', 'markdown-it', 'sucrase']
     },
-    plugins:[react()],
+    plugins: [react()],
     ssr: {
-      noExternal: ['element-plus', 'veaury']
+      noExternal: ['element-plus', 'veaury', 'vitepress-theme-components']
     }
   }
 });
