@@ -25,7 +25,7 @@ const baseConfig = defineConfig({
   },
   vite: {
     optimizeDeps: {
-      exclude: deps
+      include: deps
     },
     plugins: [react()],
     ssr: {
