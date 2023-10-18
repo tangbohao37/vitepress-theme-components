@@ -2,6 +2,15 @@ import { demoBlockPlugin } from './plugins/index.js';
 import { defineConfig } from 'vitepress';
 import react from '@vitejs/plugin-react';
 
+const deps = [
+  'element-plus',
+  'veaury',
+  'semver',
+  'markdown-it',
+  'sucrase',
+  'vitepress-theme-components'
+];
+
 /**
  * @description
  * HACK: vite bugs: https://github.com/vitejs/vite/issues/14545 不能预编译子依赖.
@@ -16,11 +25,11 @@ const baseConfig = defineConfig({
   },
   vite: {
     optimizeDeps: {
-      include: ['veaury', 'semver', 'markdown-it', 'sucrase']
+      exclude: deps
     },
     plugins: [react()],
     ssr: {
-      noExternal: ['element-plus', 'veaury', 'vitepress-theme-components']
+      noExternal: deps
     }
   }
 });
