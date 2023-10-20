@@ -1,34 +1,37 @@
 <template>
-  <Layout>
-    <template #doc-before>
-      <el-space alignment="space-between">
-        <el-space v-if="isShowCoverage">
-          <img alt="Static Badge" :src="`https://img.shields.io/badge/coverage%3Alines-${currentSummary?.lines?.pct || 0}%25-${getColorByCoverage(
-            currentSummary?.lines?.pct || 0,
-          )}`" />
-          <img alt="Static Badge" :src="`https://img.shields.io/badge/coverage%3Astatements-${currentSummary?.statements?.pct || 0}%25-${getColorByCoverage(
-            currentSummary?.statements?.pct || 0,
-          )}`" />
-          <img alt="Static Badge" :src="`https://img.shields.io/badge/coverage%3Afunctions-${currentSummary?.functions?.pct || 0}%25-${getColorByCoverage(
-            currentSummary?.functions?.pct || 0,
-          )}`" />
-          <img alt="Static Badge" :src="`https://img.shields.io/badge/coverage%3Abranches-${currentSummary?.branches?.pct || 0}%25-${getColorByCoverage(
-            currentSummary?.branches?.pct || 0,
-          )}`" />
-        </el-space>
-        <el-button type="text" v-if="isShowChangeLog" @click="active = true">更新记录</el-button>
-      </el-space>
-      <el-divider v-if="isShowChangeLog || isShowCoverage" />
-    </template>
-  </Layout>
-  <record-drawer :changelog-content="changelogContent" v-model:active="active"></record-drawer>
+  <NConfigProvider :theme="isDark ? darkTheme : null">
+    <Layout>
+      <template #doc-before>
+        <NSpace justify="space-between" align="center">
+          <NSpace v-if="isShowCoverage">
+            <img alt="Static Badge" :src="`https://img.shields.io/badge/lines-${currentSummary?.lines?.pct || 0}%25-${getColorByCoverage(
+              currentSummary?.lines?.pct || 0,
+            )}`" />
+            <img alt="Static Badge" :src="`https://img.shields.io/badge/statements-${currentSummary?.statements?.pct || 0}%25-${getColorByCoverage(
+              currentSummary?.statements?.pct || 0,
+            )}`" />
+            <img alt="Static Badge" :src="`https://img.shields.io/badge/functions-${currentSummary?.functions?.pct || 0}%25-${getColorByCoverage(
+              currentSummary?.functions?.pct || 0,
+            )}`" />
+            <img alt="Static Badge" :src="`https://img.shields.io/badge/branches-${currentSummary?.branches?.pct || 0}%25-${getColorByCoverage(
+              currentSummary?.branches?.pct || 0,
+            )}`" />
+          </NSpace>
+          <NButton text type="primary" v-if="isShowChangeLog" @click="active = true">更新记录</NButton>
+        </NSpace>
+        <NDivider v-if="isShowChangeLog || isShowCoverage" />
+      </template>
+    </Layout>
+    <record-drawer :changelog-content="changelogContent" v-model:active="active"></record-drawer>
+  </NConfigProvider>
 </template>
 
 <script setup lang="ts">
 import DefaultTheme from 'vitepress/theme'
 import RecordDrawer from './record-drawer.vue'
+import { NSpace, NButton, NDivider, NConfigProvider, darkTheme } from 'naive-ui'
 import { useData, useRoute, withBase } from 'vitepress'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, } from 'vue'
 import { type AdvThemeConfig } from '../types'
 import { readFileAsync } from './tools'
 
@@ -48,7 +51,6 @@ const changelogContent = ref('')
 const summaryContent = ref('')
 const { theme, frontmatter, isDark, } = useData<AdvThemeConfig>()
 const currentSummary = ref<any>()
-const route = useRoute()
 
 const isShowChangeLog = computed(() => {
   return changelogContent.value && !frontmatter.value.hideRecord

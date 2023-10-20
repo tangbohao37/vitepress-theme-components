@@ -3,11 +3,11 @@ import { defineConfig } from 'vitepress';
 import react from '@vitejs/plugin-react';
 
 const deps = [
-  'element-plus',
   'veaury',
   'semver',
   'markdown-it',
   'sucrase',
+  'naive-ui',
   'vitepress-theme-components'
 ];
 

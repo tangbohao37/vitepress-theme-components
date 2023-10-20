@@ -5,12 +5,12 @@
       <vue-monaco-editor v-model:value="code" language="javascript" :theme="isDark ? 'vs-dark' : 'vs'"
         :options="MONACO_EDITOR_OPTIONS" @mount="handleMount" :on-change="onChange" />
       <div class="editor-tool">
-        <el-icon @click="refresh" class="pointer">
-          <RefreshRight />
-        </el-icon>
-        <el-icon @click="copy" class="pointer">
-          <CopyDocument />
-        </el-icon>
+        <NIcon size="18" @click="refresh" class="pointer">
+          <Refresh></Refresh>
+        </NIcon>
+        <NIcon size="18" @click="copy" class="pointer">
+          <CopyOutline />
+        </NIcon>
       </div>
     </div>
   </div>
@@ -19,6 +19,8 @@
 <script setup lang="ts">
 import { ReactLive } from '../react-components/index'
 import { useData } from 'vitepress'
+import { NIcon } from "naive-ui";
+import { Refresh, CopyOutline } from '@vicons/ionicons5'
 import { applyReactInVue } from 'veaury'
 import VueMonacoEditor from '@guolao/vue-monaco-editor'
 import { ref, shallowRef } from 'vue'

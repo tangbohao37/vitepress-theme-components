@@ -19,7 +19,7 @@
     "paths": {
       "@/*": ["./*"]
     },
-    "types": ["node", "element-plus/global"]
+    "types": ["node"]
   },
   "exclude": ["./.vitepress/cache", "./lib"],
   "include": ["./src/**/*.ts", "./src/**/*.tsx", "./src/**/*.vue"]
