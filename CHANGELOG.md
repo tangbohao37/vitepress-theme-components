@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2-alpha.12](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-alpha.11...v0.0.2-alpha.12) (2023-10-20)
+
+
+### Bug Fixes
+
+* record drawer props ([5d1f4a5](https://github.com/tangbohao37/vitepress-theme-components/commit/5d1f4a5d92841103f4039b33574aa942e80f4091))
+
 ### [0.0.2-alpha.11](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-alpha.10...v0.0.2-alpha.11) (2023-10-18)
 
 
