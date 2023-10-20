@@ -97,6 +97,7 @@ const filterLogsContent = (change: IChange) => (
   change.component.toUpperCase() === frontmatter.value['title']?.toUpperCase()
 )
 
+const props = defineProps<IRecordDrawer>()
 
 watchEffect(async () => {
   if (!props.changelogContent) {
@@ -111,7 +112,6 @@ watchEffect(async () => {
   }
 })
 
-const props = defineProps<IRecordDrawer>()
 const emit = defineEmits<{
   'update:active': [active: IRecordDrawer['active']]
 }>()
