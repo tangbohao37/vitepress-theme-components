@@ -93,8 +93,8 @@ watchEffect(async () => {
   const result: IChangelog[] = parseChangelog(props.changelogContent)
   logContent.value = result
   formValue.value = {
-    version1: logsOptions?.value?.[0].value,
-    version2: logsOptions?.value?.reverse()?.[0].value,
+    version1: logsOptions?.value?.[0]?.value,
+    version2: logsOptions?.value?.reverse()?.[0]?.value,
     type: logsTypeOptions?.value?.map((o: any) => o.value) || [],
   }
 })

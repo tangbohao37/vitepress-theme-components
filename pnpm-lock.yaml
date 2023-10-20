@@ -11,6 +11,9 @@ dependencies:
   '@babel/traverse':
     specifier: ^7.23.0
     version: 7.23.0
+  '@css-render/vue3-ssr':
+    specifier: ^0.15.12
+    version: 0.15.12(vue@3.3.4)
   '@guolao/vue-monaco-editor':
     specifier: ^1.3.0
     version: 1.3.0(monaco-editor@0.38.0)(vue@3.3.4)

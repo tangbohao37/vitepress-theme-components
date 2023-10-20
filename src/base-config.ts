@@ -7,8 +7,10 @@ const deps = [
   'semver',
   'markdown-it',
   'sucrase',
+  'date-fns-tz/formatInTimeZone',
+  'vueuc',
   'naive-ui',
-  'vitepress-theme-components'
+  'date-fns'
 ];
 
 /**
@@ -24,12 +26,22 @@ const baseConfig = defineConfig({
     }
   },
   vite: {
+    build: {},
     optimizeDeps: {
-      include: deps
+      include: process.env.NODE_ENV === 'development' ? deps : []
     },
     plugins: [react()],
     ssr: {
-      noExternal: deps
+      noExternal: [
+        'veaury',
+        'semver',
+        'markdown-it',
+        'sucrase',
+        'naive-ui',
+        'vueuc',
+        'date-fns-tz/formatInTimeZone',
+        'date-fns'
+      ]
     }
   }
 });
