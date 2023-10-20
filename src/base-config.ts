@@ -26,22 +26,12 @@ const baseConfig = defineConfig({
     }
   },
   vite: {
-    build: {},
     optimizeDeps: {
-      include: process.env.NODE_ENV === 'development' ? deps : []
+      include: deps
     },
     plugins: [react()],
     ssr: {
-      noExternal: [
-        'veaury',
-        'semver',
-        'markdown-it',
-        'sucrase',
-        'naive-ui',
-        'vueuc',
-        'date-fns-tz/formatInTimeZone',
-        'date-fns'
-      ]
+      noExternal: deps
     }
   }
 });
