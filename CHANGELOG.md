@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2-alpha.17](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-alpha.16...v0.0.2-alpha.17) (2023-10-25)
+
+
+### Features
+
+*  add api table ([31025cf](https://github.com/tangbohao37/vitepress-theme-components/commit/31025cf39f38a065aa82b8a323b1af4ae82be8ee))
+
 ### [0.0.2-alpha.16](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-alpha.15...v0.0.2-alpha.16) (2023-10-20)
 
 
