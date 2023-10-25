@@ -4,6 +4,8 @@ import { baseParse, transform } from '@vue/compiler-core';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
+import * as docgen from 'react-docgen-typescript';
+import { markdownRender } from 'react-docgen-typescript-markdown-render';
 import { type MarkdownRenderer } from 'vitepress';
 /**
  * It runs in Node.js.
@@ -17,7 +19,8 @@ import {
 } from '../constant/index.js';
 import { type ILiveEditor } from '../types';
 
-const DemoTag = 'LiveEditor';
+const LiveEditorTag = 'LiveEditor';
+const ApiTag = 'ApiTable';
 
 const filterJSXComments = (code: string) => {
   const commentRegex = /{\/\*[\s\S]*?\*\/}|\/\/.*/g;
@@ -156,75 +159,23 @@ export function demoBlockPlugin(md: MarkdownRenderer) {
     md.renderer.rules[type] = (tokens, idx, options, env, self) => {
       const token = tokens[idx];
       const content = token.content.trim();
-
-      if (!content.match(new RegExp(`^<${DemoTag}\\s`))) {
-        return defaultRender!(tokens, idx, options, env, self);
-      }
-      const props = parseProps<IPropsType>(content);
-
-      if (!props.sourceCodePath) {
-        return defaultRender!(tokens, idx, options, env, self);
-      }
-      const mdFilePath = path.dirname(env.path); // md 原文件路径
-      const statement = getFileStatement(mdFilePath, props.sourceCodePath);
-      if (!statement) {
-        // TODO: 改为错误提示
-        return defaultRender!(tokens, idx, options, env, self);
-      }
-      const { sourceFileStr, demoImportCodeArr, demoImportCodeStr } = statement;
-      if (demoImportCodeStr) {
-        if (!env.sfcBlocks.scripts) {
-          env.sfcBlocks.scripts = [];
+      const liveEditorReg = new RegExp(`^<${LiveEditorTag}\\s`);
+      if (liveEditorReg.test(content)) {
+        try {
+          return liveEditorRender(tokens, idx, options, env, self, content);
+        } catch (error) {
+          return defaultRender(tokens, idx, options, env, self);
         }
-        const tags = env.sfcBlocks.scripts as { content: string }[];
-        const existingSetupScriptIndex = tags?.findIndex(
-          (tag) =>
-            scriptRE.test(tag.content) &&
-            scriptSetupRE.test(tag.content) &&
-            !scriptClientRE.test(tag.content)
-        );
-        let _code = demoImportCodeStr;
-        if (existingSetupScriptIndex > -1) {
-          const tagSrc = tags[existingSetupScriptIndex];
-          const [, c] = tagSrc.content.match(scriptRegex);
-          const componentRegisStatement = demoImportCodeArr.join(os.EOL).trim();
-          _code = [c, componentRegisStatement].join(os.EOL);
-        }
-        const { importRecord: statementObj, directImportRecord } =
-          importStatementObj(_code);
-        const importStatementCode = buildImportStatement(statementObj)
-          .join(os.EOL)
-          .trim();
-        const finalCode = [importStatementCode, ...directImportRecord]
-          .join(os.EOL)
-          .trim();
-        const ast = parse(finalCode, {
-          sourceType: 'module',
-          plugins: ['typescript']
-        });
-
-        // 分离 import 语句的 module。 获取需要引入的 scope 传给 LiveEditor
-        const _modules = getImportModules(ast);
-        if (existingSetupScriptIndex > -1) {
-          tags[existingSetupScriptIndex].content =
-            `<script lang="ts" setup >${finalCode}</script>`.trim();
-        } else {
-          tags.unshift({
-            content: `<script lang="ts" setup >${finalCode}</script>`.trim()
-          });
-        }
-        return liveEditorTemplate({
-          sourceCode: sourceFileStr,
-          hideCode: props.hideCode,
-          noStyle: props.noStyle,
-          scope: _modules.toString() as any
-        });
       }
-      return liveEditorTemplate({
-        sourceCode: sourceFileStr,
-        hideCode: props.hideCode,
-        noStyle: props.noStyle
-      });
+      const ApiTableTag = new RegExp(`^<${ApiTag}\\s`);
+      if (ApiTableTag.test(content)) {
+        try {
+          return ApiTableRender(tokens, idx, options, env, self, content);
+        } catch (error) {
+          return defaultRender(tokens, idx, options, env, self);
+        }
+      }
+      return defaultRender(tokens, idx, options, env, self);
     };
   };
   // addRenderRule('html_block');
@@ -240,6 +191,87 @@ const liveEditorTemplate = ({
   return `<LiveEditor :scope="{ ${scope} }" sourceCode="${sourceCode}" :hideCode="${hideCode}" :noStyle="${noStyle}" ></LiveEditor>`;
 };
 
+const liveEditorRender = (tokens, idx, options, env, self, content) => {
+  const props = parseProps<IPropsType>(content);
+
+  const mdFilePath = path.dirname(env.path); // md 原文件路径
+  const statement = getFileStatement(mdFilePath, props.sourceCodePath);
+  if (!props.sourceCodePath) {
+    throw new Error(`${mdFilePath} LiveEditor 缺少 sourceCodePath 属性!`);
+  }
+  if (!statement) {
+    throw new Error(`${mdFilePath} 语句解析错误`);
+  }
+  const { sourceFileStr, demoImportCodeArr, demoImportCodeStr } = statement;
+  if (demoImportCodeStr) {
+    if (!env.sfcBlocks.scripts) {
+      env.sfcBlocks.scripts = [];
+    }
+    const tags = env.sfcBlocks.scripts as { content: string }[];
+    const existingSetupScriptIndex = tags?.findIndex(
+      (tag) =>
+        scriptRE.test(tag.content) &&
+        scriptSetupRE.test(tag.content) &&
+        !scriptClientRE.test(tag.content)
+    );
+    let _code = demoImportCodeStr;
+    if (existingSetupScriptIndex > -1) {
+      const tagSrc = tags[existingSetupScriptIndex];
+      const [, c] = tagSrc.content.match(scriptRegex);
+      const componentRegisStatement = demoImportCodeArr.join(os.EOL).trim();
+      _code = [c, componentRegisStatement].join(os.EOL);
+    }
+    const { importRecord: statementObj, directImportRecord } =
+      importStatementObj(_code);
+    const importStatementCode = buildImportStatement(statementObj)
+      .join(os.EOL)
+      .trim();
+    const finalCode = [importStatementCode, ...directImportRecord]
+      .join(os.EOL)
+      .trim();
+    const ast = parse(finalCode, {
+      sourceType: 'module',
+      plugins: ['typescript']
+    });
+
+    // 分离 import 语句的 module。 获取需要引入的 scope 传给 LiveEditor
+    const _modules = getImportModules(ast);
+    if (existingSetupScriptIndex > -1) {
+      tags[existingSetupScriptIndex].content =
+        `<script lang="ts" setup >${finalCode}</script>`.trim();
+    } else {
+      tags.unshift({
+        content: `<script lang="ts" setup >${finalCode}</script>`.trim()
+      });
+    }
+    return liveEditorTemplate({
+      sourceCode: sourceFileStr,
+      hideCode: props.hideCode,
+      noStyle: props.noStyle,
+      scope: _modules.toString() as any
+    });
+  }
+  return liveEditorTemplate({
+    sourceCode: sourceFileStr,
+    hideCode: props.hideCode,
+    noStyle: props.noStyle
+  });
+};
+
+const ApiTableRender = (tokens, idx, options, env, self, content) => {
+  const props = parseProps<{ path: string }>(content);
+  const mdFilePath = path.dirname(env.path); // md 原文件路径
+  const p = path.resolve(mdFilePath, props.path); // 引入的 code 原文件路径
+
+  const opts: docgen.ParserOptions = {
+    savePropValueAsString: true
+  };
+
+  const res = docgen.parse(p, opts);
+  const str = markdownRender(res);
+  return `<ApiTable content='${str}'></ApiTable>`;
+};
+
 export const parseProps = <T extends Record<string, any> = any>(
   content: string
 ) => {
@@ -248,7 +280,7 @@ export const parseProps = <T extends Record<string, any> = any>(
   transform(ast, {
     nodeTransforms: [
       (node) => {
-        if (node.type === 1 && node.tag === 'LiveEditor') {
+        if (node.type === 1 && content.includes(node.tag)) {
           // 元素节点且标签为 LiveEditor
           // 提取参数
           if (node.props.length) {

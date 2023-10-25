@@ -74,6 +74,8 @@
     "@vitejs/plugin-react": "^4.1.0",
     "@vue/compiler-core": "^3.3.4",
     "naive-ui": "^2.35.0",
+    "react-docgen-typescript": "^2.2.2",
+    "react-docgen-typescript-markdown-render": "^0.2.5",
     "react-live": "^4.1.5",
     "vfonts": "^0.0.3"
   },

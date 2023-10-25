@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import * as  MarkdownIt from 'markdown-it'
+import MarkdownIt from 'markdown-it'
 
 interface IProps {
   content: string
