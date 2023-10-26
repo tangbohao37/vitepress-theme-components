@@ -1,17 +1,42 @@
 import React, { FC } from 'react';
 
-interface IProps {
+
+/**
+ * 测试类型
+ */
+type Test = {
   /**
-   * @default abcdfsdf
-   * path
-   * @deprecated 请使用 path2
+   * 测试属性 aaaa
+   * @default 0
    */
-  path: string;
-  /**
-   * obj obj
-   */
-  obj: Record<'aaa' | 'bb', string>;
+  aaaa: number
 }
-export const Comp: FC<IProps> = () => {
+
+/**
+ * 测试类型2
+ */
+interface Test2 {
+  /**
+   * cccc 描述
+   */
+  ccccc: Record<'aaa' | 'bbbb', string>
+}
+
+interface ILoadingProps extends Test2 {
+  /**
+   * 背景图
+   * @default null
+   */
+  loadingBgImg?: string
+  /**
+   * 测试属性
+   * @default 0
+   */
+  testProps: {
+    number: number
+    otherType: Test
+  }
+}
+export const Comp: FC<ILoadingProps> = () => {
   return <p>123123</p>;
 };

@@ -264,7 +264,10 @@ const ApiTableRender = (tokens, idx, options, env, self, content) => {
   const p = path.resolve(mdFilePath, props.path); // 引入的 code 原文件路径
 
   const opts: docgen.ParserOptions = {
-    savePropValueAsString: true
+    savePropValueAsString: false,
+    skipChildrenPropWithoutDoc: false,
+    shouldRemoveUndefinedFromOptional: false,
+    shouldExtractValuesFromUnion: false
   };
 
   const res = docgen.parse(p, opts);
