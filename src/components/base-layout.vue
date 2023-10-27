@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import DefaultTheme from 'vitepress/theme'
+import DefaultTheme from 'vitepress/theme-without-fonts'
 import RecordDrawer from './record-drawer.vue'
 import { NSpace, NButton, NDivider, NConfigProvider, darkTheme } from 'naive-ui'
 import { useData, useRoute, withBase } from 'vitepress'
