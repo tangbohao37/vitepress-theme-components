@@ -31,7 +31,7 @@ import DefaultTheme from 'vitepress/theme-without-fonts'
 import RecordDrawer from './record-drawer.vue'
 import { NSpace, NButton, NDivider, NConfigProvider, darkTheme } from 'naive-ui'
 import { useData, useRoute, withBase } from 'vitepress'
-import { ref, onMounted, computed, } from 'vue'
+import { ref, onMounted, computed, watchEffect, } from 'vue'
 import { type AdvThemeConfig } from '../types'
 import { readFileAsync } from './tools'
 
@@ -45,6 +45,7 @@ const coverageColorMap = {
   0: 'indianred',
 }
 
+const route = useRoute()
 const { Layout } = DefaultTheme
 const active = ref(false)
 const changelogContent = ref('')
@@ -83,6 +84,14 @@ const readChangelog = async () => {
   const data = await content.text()
   changelogContent.value = data
 }
+
+watchEffect(() => {
+  const component = route.data.filePath.split('.')[0]
+  const summary = summaryContent.value
+  const [key] = Object.keys(summary).filter((k) => k.includes(component))
+  // TODO: 容错
+  currentSummary.value = summary[key]
+})
 
 const readCoverage = async () => {
   const coverage = theme.value.coverage
