@@ -86,9 +86,9 @@ const readChangelog = async () => {
 }
 
 watchEffect(() => {
-  const component = route.data.filePath.split('.')[0]
+  const componentName = frontmatter.value.componentName || route.data.filePath.split('.')[0]
   const summary = summaryContent.value
-  const [key] = Object.keys(summary).filter((k) => k.includes(component))
+  const [key] = Object.keys(summary).filter((k) => k.toLowerCase().includes(componentName.toLowerCase()))
   // TODO: 容错
   currentSummary.value = summary[key]
 })
