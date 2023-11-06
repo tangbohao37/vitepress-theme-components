@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2-alpha.21](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-alpha.20...v0.0.2-alpha.21) (2023-11-06)
+
+
+### Bug Fixes
+
+* summary i18n ([c0b9f34](https://github.com/tangbohao37/vitepress-theme-components/commit/c0b9f34e59ec80b33647e89ac3144aee6d0f2031))
+
 ### [0.0.2-alpha.20](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-alpha.19...v0.0.2-alpha.20) (2023-10-30)
 
 
