@@ -17,6 +17,7 @@
               currentSummary?.branches?.pct || 0,
             )}`" />
           </NSpace>
+          <div v-else></div>
           <NButton text type="primary" v-if="isShowChangeLog" @click="active = true">更新记录</NButton>
         </NSpace>
         <NDivider v-if="isShowChangeLog || isShowCoverage" />

@@ -4,8 +4,8 @@ import { type AdvThemeConfig } from '../../lib';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfigWithTheme<AdvThemeConfig>({
-  title: 'My Awesome Project',
-  description: 'A VitePress Site',
+  title: 'Vitepress theme components',
+  description: 'A vitepress theme for components site',
   extends: baseConfig,
   base: '/vitepress-theme-components/',
   themeConfig: {
@@ -17,7 +17,7 @@ export default defineConfigWithTheme<AdvThemeConfig>({
       path: '/coverage-summary.json'
     },
     nav: [
-      { text: 'Guide', link: '/guide/' },
+      { text: '指南', link: '/guide/start' },
       { text: 'Demo', link: '/demo/' }
     ],
     sidebar: {
@@ -25,8 +25,19 @@ export default defineConfigWithTheme<AdvThemeConfig>({
         base: '/guide/',
         items: [
           {
-            text: 'Guide',
-            items: [{ text: 'Start', link: '/' }]
+            text: '指南',
+            items: [
+              { text: '动机', link: 'why' },
+              { text: '开始', link: 'start' }
+            ]
+          },
+          {
+            text: '使用',
+            items: [
+              { text: '配置项', link: 'config' },
+              { text: 'Markdown 扩展', link: 'markdown' },
+              { text: 'Frontmatter 扩展', link: 'frontmatter' }
+            ]
           }
         ]
       },

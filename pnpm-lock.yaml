@@ -23,6 +23,9 @@ dependencies:
   '@vue/compiler-core':
     specifier: ^3.3.4
     version: 3.3.4
+  markdown-it-task-lists:
+    specifier: ^2.1.1
+    version: 2.1.1
   naive-ui:
     specifier: ^2.35.0
     version: 2.35.0(vue@3.3.4)
@@ -3777,6 +3780,10 @@ packages:
 
   /markdown-escapes@1.0.4:
     resolution: {integrity: sha512-8z4efJYk43E0upd0NbVXwgSTQs6cT3T06etieCMEg7dRbzCbxUCK/GHlX8mhHRDcp+OLlHkPKsvqQTCvsRl2cg==}
+    dev: false
+
+  /markdown-it-task-lists@2.1.1:
+    resolution: {integrity: sha512-TxFAc76Jnhb2OUu+n3yz9RMu4CwGfaT788br6HhEDlvWfdeJcLUsxk1Hgw2yJio0OXsxv7pyIPmvECY7bMbluA==}
     dev: false
 
   /markdown-it@13.0.2:

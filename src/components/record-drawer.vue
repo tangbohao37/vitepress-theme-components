@@ -81,7 +81,7 @@ const filterVersions = (log: any) => {
 
 const filterLogsContent = (change: IChange) => (
   formValue.value.type.includes(change.category) &&
-  change.component.toUpperCase() === frontmatter.value['title']?.toUpperCase()
+  change.component.toUpperCase() === frontmatter.value?.componentName?.toUpperCase()
 )
 
 const props = defineProps<IRecordDrawer>()
