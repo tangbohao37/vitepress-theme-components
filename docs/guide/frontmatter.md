@@ -16,7 +16,7 @@ hideRecord: true
 
 ## 单测覆盖率
 
-Coverage 自动根据组件名字获取，若没有单测则渲染 0%。 (需要配置 [coverage](/guide/coverage.md)路径)
+Coverage 自动根据组件名称获取，若没有单测则渲染 0%。 (需要配置 [coverage](/guide/config#coverage)路径)
 
 ```md
 ---
@@ -26,6 +26,8 @@ componentName: xxxx
 ```
 
 ## 迭代记录
+
+根据组件名称迭代记录获取 (需要配置 [changelog](/guide/config#changelog)路径)
 
 ```md
 ---
