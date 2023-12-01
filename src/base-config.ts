@@ -1,7 +1,7 @@
 import { demoBlockPlugin } from './plugins/index.js';
 import { defineConfig } from 'vitepress';
 import react from '@vitejs/plugin-react';
-import taskLists from 'markdown-it-task-lists'
+import taskLists from 'markdown-it-task-lists';
 
 const deps = [
   'vitepress-theme-components',
@@ -24,7 +24,7 @@ const deps = [
 const baseConfig = defineConfig({
   markdown: {
     config(md) {
-      md.use(demoBlockPlugin).use(taskLists)
+      md.use(demoBlockPlugin).use(taskLists);
     }
   },
   vite: {

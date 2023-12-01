@@ -17,7 +17,8 @@
     "skipLibCheck": true,
     "outDir": "./lib",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "vite": ["node_modules/vite"]
     },
     "types": ["node"]
   },
