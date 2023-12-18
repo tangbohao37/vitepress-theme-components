@@ -421,6 +421,7 @@ packages:
     hasBin: true
     dependencies:
       '@babel/types': 7.23.0
+    dev: false
 
   /@babel/parser@7.23.5:
     resolution: {integrity: sha512-hOOqoiNXrmGdFbhgCzu6GiURxUgM27Xwd/aPuu8RfHEZPBzL1Z54okAHAQjXfcQNwvrlkAmAp4SlRTZ45vlthQ==}
@@ -490,6 +491,7 @@ packages:
       '@babel/helper-string-parser': 7.23.4
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
+    dev: false
 
   /@babel/types@7.23.5:
     resolution: {integrity: sha512-ON5kSOJwVO6xXVRTvOI0eOnWe7VdUcIpsovGo9U/Br4Ie4UVFQTboO2cYnDhAGU6Fp+UxSiT+pMft0SMHfuq6w==}
@@ -1685,7 +1687,7 @@ packages:
   /@vue/compiler-core@3.3.4:
     resolution: {integrity: sha512-cquyDNvZ6jTbf/+x+AgM2Arrp6G4Dzbb0R64jiG804HRMfRiFXWI6kqUVqZ6ZR0bQhIoQjB4+2bhNtVwndW15g==}
     dependencies:
-      '@babel/parser': 7.23.0
+      '@babel/parser': 7.23.5
       '@vue/shared': 3.3.4
       estree-walker: 2.0.2
       source-map-js: 1.0.2
@@ -1948,7 +1950,7 @@ packages:
       '@volar/source-map': 1.10.1
       '@vue/compiler-dom': 3.3.4
       '@vue/reactivity': 3.3.4
-      '@vue/shared': 3.3.4
+      '@vue/shared': 3.3.12
       minimatch: 9.0.3
       muggle-string: 0.3.1
       typescript: 5.2.2
@@ -2030,6 +2032,10 @@ packages:
       '@vue/compiler-ssr': 3.3.9
       '@vue/shared': 3.3.9
       vue: 3.3.9(typescript@5.2.2)
+    dev: true
+
+  /@vue/shared@3.3.12:
+    resolution: {integrity: sha512-6p0Yin0pclvnER7BLNOQuod9Z+cxSYh8pSh7CzHnWNjAIP6zrTlCdHRvSCb1aYEx6i3Q3kvfuWU7nG16CgG1ag==}
     dev: true
 
   /@vue/shared@3.3.4:
