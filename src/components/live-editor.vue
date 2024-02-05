@@ -1,5 +1,5 @@
 <template>
-  <div class="editor-container">
+  <div class="editor-container vp-raw">
     <ReactLivePreview :scope="props.scope" :sourceCode="code || ''" :noStyle="props.noStyle" />
     <div v-if="!props.hideCode" class="editor-wrapper">
       <vue-monaco-editor v-model:value="code" language="javascript" :theme="isDark ? 'vs-dark' : 'vs'"
@@ -24,29 +24,30 @@ import { Refresh, CopyOutline } from '@vicons/ionicons5'
 import { applyReactInVue } from 'veaury'
 import VueMonacoEditor from '@guolao/vue-monaco-editor'
 import { ref, shallowRef } from 'vue'
-// import { type ILiveEditor } from "../types";
+import { type ILiveEditor } from "../types";
 
 // FIXME: 无法引入外部的类型 ILiveEditor
-type IProps = {
-  sourceCodePath?: string
-  hideCode?: boolean
-  noStyle?: boolean
-  sourceCode?: string
-  scope?: Record<string, any>
-}
+// type IProps = {
+//   sourceCodePath?: string
+//   hideCode?: boolean
+//   noStyle?: boolean
+//   sourceCode?: string
+//   scope?: Record<string, any>
+// }
 
 const ReactLivePreview = applyReactInVue(ReactLive)
 
-const props = withDefaults(defineProps<IProps>(), {
-  hideCode: false,
-  noStyle: false,
-})
-
-// const props = withDefaults(defineProps<ILiveEditor>(), {
+// const props = withDefaults(defineProps<IProps>(), {
 //   hideCode: false,
 //   noStyle: false,
-// });
-const { isDark } = useData()
+// })
+
+const props = withDefaults(defineProps<ILiveEditor>(), {
+  hideCode: false,
+  noStyle: false,
+});
+const { isDark, } = useData()
+
 const MONACO_EDITOR_OPTIONS = {
   automaticLayout: true,
   formatOnType: true,

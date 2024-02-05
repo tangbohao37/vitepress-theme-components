@@ -215,6 +215,7 @@ const liveEditorRender = (tokens, idx, options, env, self, content) => {
         !scriptClientRE.test(tag.content)
     );
     let _code = demoImportCodeStr;
+    // FIXME： 切换文件后需要清空缓存的 import 语句
     if (existingSetupScriptIndex > -1) {
       const tagSrc = tags[existingSetupScriptIndex];
       const [, c] = tagSrc.content.match(scriptRegex);
