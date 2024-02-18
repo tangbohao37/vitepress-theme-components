@@ -1,75 +1,84 @@
 <template>
   <div class="editor-container vp-raw">
-    <ReactLivePreview :scope="props.scope" :sourceCode="code || ''" :noStyle="props.noStyle" />
+    <ReactLivePreview
+      :scope="props.scope"
+      :sourceCode="code || ''"
+      :noStyle="props.noStyle"
+    />
     <div v-if="!props.hideCode" class="editor-wrapper">
-      <vue-monaco-editor v-model:value="code" language="javascript" :theme="isDark ? 'vs-dark' : 'vs'"
-        :options="MONACO_EDITOR_OPTIONS" @mount="handleMount" :on-change="onChange" />
-      <div class="editor-tool">
-        <NIcon size="18" @click="refresh" class="pointer">
-          <Refresh></Refresh>
-        </NIcon>
-        <NIcon size="18" @click="copy" class="pointer">
-          <CopyOutline />
-        </NIcon>
-      </div>
+      <vue-monaco-editor
+        v-model:value="code"
+        language="javascript"
+        :theme="isDark ? 'vs-dark' : 'vs'"
+        :options="MONACO_EDITOR_OPTIONS"
+        @mount="handleMount"
+        :on-change="onChange"
+      />
+      <NSpace class="editor-tool">
+        <NP :depth="3"> 可实时编辑 </NP>
+        <NPopover :delay="500" :show-arrow="false">
+          <template #trigger>
+            <NIcon :depth="3" size="18" @click="refresh" class="pointer">
+              <Refresh></Refresh>
+            </NIcon>
+          </template>
+          重置
+        </NPopover>
+        <NPopover :delay="500" :show-arrow="false">
+          <template #trigger>
+            <NIcon :depth="3" size="18" @click="copy" class="pointer">
+              <CopyOutline />
+            </NIcon>
+          </template>
+          复制
+        </NPopover>
+      </NSpace>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ReactLive } from '../react-components/index'
-import { useData } from 'vitepress'
-import { NIcon } from "naive-ui";
-import { Refresh, CopyOutline } from '@vicons/ionicons5'
-import { applyReactInVue } from 'veaury'
-import VueMonacoEditor from '@guolao/vue-monaco-editor'
-import { ref, shallowRef } from 'vue'
-import { type ILiveEditor } from "../types";
+import { ReactLive } from '../react-components/index';
+import { useData } from 'vitepress';
+import { NIcon, NSpace, NP, NPopover, useMessage } from 'naive-ui';
+import { Refresh, CopyOutline } from '@vicons/ionicons5';
+import { applyReactInVue } from 'veaury';
+import VueMonacoEditor from '@guolao/vue-monaco-editor';
+import { ref, shallowRef } from 'vue';
+import { type ILiveEditor } from '../types';
 
-// FIXME: 无法引入外部的类型 ILiveEditor
-// type IProps = {
-//   sourceCodePath?: string
-//   hideCode?: boolean
-//   noStyle?: boolean
-//   sourceCode?: string
-//   scope?: Record<string, any>
-// }
-
-const ReactLivePreview = applyReactInVue(ReactLive)
-
-// const props = withDefaults(defineProps<IProps>(), {
-//   hideCode: false,
-//   noStyle: false,
-// })
-
+const message = useMessage();
+const ReactLivePreview = applyReactInVue(ReactLive);
 const props = withDefaults(defineProps<ILiveEditor>(), {
   hideCode: false,
-  noStyle: false,
+  noStyle: false
 });
-const { isDark, } = useData()
+const { isDark } = useData();
 
 const MONACO_EDITOR_OPTIONS = {
   automaticLayout: true,
   formatOnType: true,
   formatOnPaste: true,
   minimap: {
-    autohide: true,
-  },
-}
-const code = ref(props.sourceCode)
-const editorRef = shallowRef()
-const handleMount = (editor: any) => (editorRef.value = editor)
+    autohide: true
+  }
+};
+const code = ref(props.sourceCode);
+const editorRef = shallowRef();
+const handleMount = (editor: any) => (editorRef.value = editor);
 const onChange = (newValue: any) => {
-  code.value = newValue
-}
+  code.value = newValue;
+};
 
 const refresh = () => {
-  code.value = props.sourceCode
-}
+  code.value = props.sourceCode;
+  message.success('重置成功');
+};
 
 const copy = () => {
-  navigator.clipboard.writeText(code.value || '')
-}
+  navigator.clipboard.writeText(code.value || '');
+  message.success('复制成功');
+};
 </script>
 
 <style scoped>
@@ -90,12 +99,10 @@ const copy = () => {
   }
 
   .editor-tool {
-    display: flex;
     visibility: hidden;
-    justify-content: space-around;
-    align-items: center;
-    width: 60px;
-    height: 30px;
+    border-radius: 3px;
+    padding: 0px 5px;
+    height: 25px;
     background-color: var(--vp-c-bg-alt);
     position: absolute;
     right: 15px;
@@ -105,6 +112,7 @@ const copy = () => {
 
 .pointer {
   cursor: pointer;
+  vertical-align: middle;
 }
 
 pre {

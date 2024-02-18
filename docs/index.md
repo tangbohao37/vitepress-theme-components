@@ -10,7 +10,7 @@ hero:
       link: /guide/start
     - theme: alt
       text: Demo Components
-      link: /components/
+      link: /demo/
 
   image:
     src: /vitepress-logo-large.webp

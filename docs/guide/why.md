@@ -35,4 +35,4 @@ hideRecord: true
 
 对比后组件库建站方案提取：选择最轻量级方案 `vite`+`markdown-it` 方案渲染 markdown，这与`vitepress`/`tdesign`同方案
 
-既然 `vitepress` 已经帮我们把渲染层的问题搞定了, 那就再添加一些组件库的能力即可,因此就有了这个项目 :rofl::rofl:
+既然 `vitepress` 已经帮我们把渲染层的问题搞定了, 那就再添加一些组件库的能力即可,因此就有了这个项目

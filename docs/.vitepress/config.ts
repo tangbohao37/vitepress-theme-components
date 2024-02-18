@@ -48,7 +48,8 @@ export default defineConfigWithTheme<AdvThemeConfig>({
             text: 'Demo Components',
             items: [
               { text: 'Button', link: '/button' },
-              { text: 'Icon', link: '/icon' }
+              { text: 'Icons', link: '/icons' },
+              { text: 'Custom Component', link: '/custom-component' }
             ]
           }
         ]

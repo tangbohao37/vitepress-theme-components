@@ -15,7 +15,7 @@ hideRecord: true
 ```md
 <!-- 引入演示源码使用相对路径 -->
 
-<LiveEditor sourceCodePath="../demo/example/index.tsx"></LiveEditor>
+<LiveEditor sourceCodePath="../demo/example/index.jsx"></LiveEditor>
 ```
 
 #### LiveEditor 属性:
@@ -42,13 +42,13 @@ hideRecord: true
 ```md
 <!-- 引入演示源码使用相对路径 -->
 
-<ApiTable path="../demo/example/index.tsx"></ApiTable>
+<ApiTable path="../demo/example/index.jsx"></ApiTable>
 ```
 
-<<< ../demo/example/index.tsx
+<<< ../demo/example/index.jsx
 
 > 渲染如下： :point_down: :point_down:
-> <ApiTable path="../demo/example/index.tsx"></ApiTable>
+> <ApiTable path="../demo/example/index.jsx"></ApiTable>
 
 ## Task list 使用
 

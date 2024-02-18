@@ -1,4 +1,4 @@
-import { baseConfig } from './lib/config/base-config';
+import { baseConfig } from './lib/base-config';
 
 /**
  * baseConfig

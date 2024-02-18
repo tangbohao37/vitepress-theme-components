@@ -6,7 +6,7 @@ interface IApiTableProps {
 }
 
 export const ApiTable: FC<IApiTableProps> = () => {
-  const res = docgen.parse('../../docs/demo/example/index.tsx', {
+  const res = docgen.parse('../../docs/demo/example/index.jsx', {
     savePropValueAsString: true
   });
   console.log(res);
