@@ -1,6 +1,7 @@
 import { defineConfigWithTheme } from 'vitepress';
 import { baseConfig } from '../../lib/base-config';
 import { type AdvThemeConfig } from '../../lib';
+import pkg from '../../package.json';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfigWithTheme<AdvThemeConfig>({
@@ -17,6 +18,7 @@ export default defineConfigWithTheme<AdvThemeConfig>({
       path: '/coverage-summary.json'
     },
     nav: [
+      { text: `v${pkg.version}`, link: 'https://github.com/tangbohao37/vitepress-theme-components' },
       { text: '指南', link: '/guide/start' },
       { text: 'Demo', link: '/demo/' }
     ],
@@ -47,9 +49,9 @@ export default defineConfigWithTheme<AdvThemeConfig>({
           {
             text: 'Demo Components',
             items: [
-              { text: 'Button', link: '/button' },
-              { text: 'Icons', link: '/icons' },
-              { text: 'Custom Component', link: '/custom-component' }
+              { text: 'Button', link: 'button' },
+              { text: 'Icons', link: 'icons' },
+              { text: 'Custom Component', link: 'custom-component' }
             ]
           }
         ]

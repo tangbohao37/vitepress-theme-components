@@ -27,6 +27,7 @@ const filterJSXComments = (code: string) => {
   return code.replace(commentRegex, '');
 };
 
+// 处理重新组合后的代码片段
 const importStatementObj = (code: string) => {
   const importRecord: Record<string, any> = {};
   const directImportRecord = [];
@@ -75,6 +76,7 @@ const importStatementObj = (code: string) => {
   return { importRecord, directImportRecord };
 };
 
+// 根据原文件路径获取 react 源码,并分离出 import 语句代码片段
 const getFileStatement = (mdFilePath: string, sourceCodePath: string) => {
   // TODO: 如何获取 vite 配置？ 方便使用 @ 别名路径
   const codeFilePath = path.resolve(mdFilePath, sourceCodePath); // 引入的 code 原文件路径
@@ -146,6 +148,7 @@ interface IPropsType extends ILiveEditor {
 //   });
 // };
 
+//  重新构建 import 语句
 const buildImportStatement = (obj: Record<string, string>) => {
   return Object.entries(obj).map(([k, v]) => {
     return `import ${k} from '${v}';`;
@@ -156,6 +159,7 @@ export function demoBlockPlugin(md: MarkdownRenderer) {
   const addRenderRule = (type: string) => {
     const defaultRender = md.renderer.rules[type];
 
+    // 覆盖渲染规则
     md.renderer.rules[type] = (tokens, idx, options, env, self) => {
       const token = tokens[idx];
       const content = token.content.trim();
@@ -192,11 +196,15 @@ const liveEditorTemplate = ({
 };
 
 const liveEditorRender = (tokens, idx, options, env, self, content) => {
+  // 提取参数
   const props = parseProps<IPropsType>(content);
 
   const mdFilePath = path.dirname(env.path); // md 原文件路径
+
+  // 根据 sourceCodePath 获取 react 源码，并分离出 import语句代码片段
   const statement = getFileStatement(mdFilePath, props.sourceCodePath);
   if (!props.sourceCodePath) {
+    // 容错机制-如果没有 sourceCodePath 则报错提示
     throw new Error(`${mdFilePath} LiveEditor 缺少 sourceCodePath 属性!`);
   }
   if (!statement) {
@@ -217,11 +225,20 @@ const liveEditorRender = (tokens, idx, options, env, self, content) => {
     let _code = demoImportCodeStr;
     // FIXME： 切换文件后需要清空缓存的 import 语句
     if (existingSetupScriptIndex > -1) {
+      // 如果 script 中还有其他引入
       const tagSrc = tags[existingSetupScriptIndex];
       const [, c] = tagSrc.content.match(scriptRegex);
       const componentRegisStatement = demoImportCodeArr.join(os.EOL).trim();
+      // 将 react-live 所需 scope 添加在script 之中
       _code = [c, componentRegisStatement].join(os.EOL);
     }
+    /**
+     * 重新处理添加 scope 之后的代码片段，以obj形式输出所需依赖的scope
+     * 这里没用直接用 babel 等工具来提取，是因为很有可能这里的code语句语法是错误的
+     * 如 import a from 'b'
+     *    import a from 'c'
+     * 这种类似的重复命名，或者重复引用
+     */
     const { importRecord: statementObj, directImportRecord } =
       importStatementObj(_code);
     const importStatementCode = buildImportStatement(statementObj)
@@ -230,6 +247,8 @@ const liveEditorRender = (tokens, idx, options, env, self, content) => {
     const finalCode = [importStatementCode, ...directImportRecord]
       .join(os.EOL)
       .trim();
+
+    // babel 重新编译,形成正确的 import 语句片段
     const ast = parse(finalCode, {
       sourceType: 'module',
       plugins: ['typescript']

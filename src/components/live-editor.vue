@@ -48,6 +48,7 @@ import { ref, shallowRef } from 'vue';
 import { type ILiveEditor } from '../types';
 
 const message = useMessage();
+// 转换为 Vue 组件
 const ReactLivePreview = applyReactInVue(ReactLive);
 const props = withDefaults(defineProps<ILiveEditor>(), {
   hideCode: false,

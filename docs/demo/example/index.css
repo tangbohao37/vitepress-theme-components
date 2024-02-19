@@ -34,15 +34,16 @@
     height: 24px;
   }
 }
-.item:hover {
+.example-wrapper-item:hover {
   background-color: rgba(154, 154, 154, 0.2);
   transition: all 0.5s;
 }
 
-.square {
+.example-wrapper-square {
   background: #fff;
   border: 1px solid #999;
   float: left;
+  color: #000;
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
@@ -54,13 +55,13 @@
   width: 34px;
 }
 
-.board-row:after {
+.example-wrapper-board-row:after {
   clear: both;
   content: '';
   display: table;
 }
 
-.status {
+.example-wrapper-status {
   margin-bottom: 10px;
 }
 .game {
