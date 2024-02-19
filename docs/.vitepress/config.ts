@@ -18,7 +18,10 @@ export default defineConfigWithTheme<AdvThemeConfig>({
       path: '/coverage-summary.json'
     },
     nav: [
-      { text: `v${pkg.version}`, link: 'https://github.com/tangbohao37/vitepress-theme-components' },
+      {
+        text: `v${pkg.version}`,
+        link: 'https://github.com/tangbohao37/vitepress-theme-components'
+      },
       { text: '指南', link: '/guide/start' },
       { text: 'Demo', link: '/demo/' }
     ],
@@ -56,6 +59,11 @@ export default defineConfigWithTheme<AdvThemeConfig>({
           }
         ]
       }
+    }
+  },
+  vite: {
+    ssr: {
+      noExternal: ['@arco-design/web-react']
     }
   }
 });

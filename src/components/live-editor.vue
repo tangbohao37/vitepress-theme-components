@@ -1,39 +1,41 @@
 <template>
   <div class="editor-container vp-raw">
-    <ReactLivePreview
-      :scope="props.scope"
-      :sourceCode="code || ''"
-      :noStyle="props.noStyle"
-    />
-    <div v-if="!props.hideCode" class="editor-wrapper">
-      <vue-monaco-editor
-        v-model:value="code"
-        language="javascript"
-        :theme="isDark ? 'vs-dark' : 'vs'"
-        :options="MONACO_EDITOR_OPTIONS"
-        @mount="handleMount"
-        :on-change="onChange"
+    <ClientOnly>
+      <ReactLivePreview
+        :scope="props.scope"
+        :sourceCode="code || ''"
+        :noStyle="props.noStyle"
       />
-      <NSpace class="editor-tool">
-        <NP :depth="3"> 可实时编辑 </NP>
-        <NPopover :delay="500" :show-arrow="false">
-          <template #trigger>
-            <NIcon :depth="3" size="18" @click="refresh" class="pointer">
-              <Refresh></Refresh>
-            </NIcon>
-          </template>
-          重置
-        </NPopover>
-        <NPopover :delay="500" :show-arrow="false">
-          <template #trigger>
-            <NIcon :depth="3" size="18" @click="copy" class="pointer">
-              <CopyOutline />
-            </NIcon>
-          </template>
-          复制
-        </NPopover>
-      </NSpace>
-    </div>
+      <div v-if="!props.hideCode" class="editor-wrapper">
+        <vue-monaco-editor
+          v-model:value="code"
+          language="javascript"
+          :theme="isDark ? 'vs-dark' : 'vs'"
+          :options="MONACO_EDITOR_OPTIONS"
+          @mount="handleMount"
+          :on-change="onChange"
+        />
+        <NSpace class="editor-tool">
+          <NP :depth="3"> 可实时编辑 </NP>
+          <NPopover :delay="500" :show-arrow="false">
+            <template #trigger>
+              <NIcon :depth="3" size="18" @click="refresh" class="pointer">
+                <Refresh></Refresh>
+              </NIcon>
+            </template>
+            重置
+          </NPopover>
+          <NPopover :delay="500" :show-arrow="false">
+            <template #trigger>
+              <NIcon :depth="3" size="18" @click="copy" class="pointer">
+                <CopyOutline />
+              </NIcon>
+            </template>
+            复制
+          </NPopover>
+        </NSpace>
+      </div>
+    </ClientOnly>
   </div>
 </template>
 
