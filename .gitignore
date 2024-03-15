@@ -28,4 +28,4 @@ tsconfig.tsbuildinfo
 lib
 es
 .eslintcache
-tsconfig.tsbuildinfo
+pnpm-lock.yaml
