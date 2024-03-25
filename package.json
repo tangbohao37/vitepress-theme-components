@@ -54,7 +54,7 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
-    "markdown-it": "^13.0.2",
+    "markdown-it": "^14.1.0",
     "npm-run-all": "^4.1.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -87,7 +87,7 @@
     "node": "18.17.1"
   },
   "peerDependencies": {
-    "markdown-it": "^13.0.2",
+    "markdown-it": "^14.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "semver": "^7.5.4",
