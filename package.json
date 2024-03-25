@@ -63,7 +63,7 @@
     "typescript": "^5.2.2",
     "veaury": "^2.3.12",
     "vite": "^4.4.11",
-    "vitepress": "1.0.0-rc.36",
+    "vitepress": "1.0.1",
     "vue": "^3.3.4",
     "vue-tsc": "^1.8.15"
   },
