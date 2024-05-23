@@ -41,7 +41,6 @@ export const parseChangelog = (changelogText: string) => {
   if (currentVersion) {
     changelog.push(currentVersion);
   }
-  console.log(122, changelog);
   return changelog;
 };
 

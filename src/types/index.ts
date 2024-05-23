@@ -19,8 +19,13 @@ type ICoverage = {
   parse?: (content: string) => void;
 };
 
+export type MdFormat = {
+  hideRecord?: boolean;
+  coverage?: boolean;
+  componentName?: string;
+};
+
 export interface AdvThemeConfig extends /* @vue-ignore */ DefaultTheme.Config {
   changelog?: IChangelog;
   coverage?: ICoverage;
-  componentName: string;
 }

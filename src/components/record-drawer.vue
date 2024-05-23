@@ -73,7 +73,7 @@ import {
 } from 'naive-ui';
 import * as semver from 'semver';
 import MarkdownIt from './markdown-it.vue';
-import { type AdvThemeConfig } from '../types';
+import { type MdFormat } from '../types';
 
 interface IRecordDrawer {
   active: boolean;
@@ -87,7 +87,7 @@ const formValue = ref({
   type: [] as string[]
 });
 
-const { frontmatter } = useData<AdvThemeConfig>();
+const { frontmatter } = useData<MdFormat>();
 
 const logsOptions = computed(() =>
   logContent.value?.map((log: any) => ({
