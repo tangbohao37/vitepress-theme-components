@@ -1,0 +1,99 @@
+{
+  "name": "vitepress-theme-components",
+  "version": "0.0.2-beta.2",
+  "description": "",
+  "type": "module",
+  "types": "./lib/index.d.ts",
+  "module": "./lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    },
+    "./plugin": {
+      "default": "./lib/plugins/index.js",
+      "types": "./lib/plugins/index.d.ts"
+    },
+    "./config": {
+      "import": "./lib/base-config.js",
+      "types": "./lib/base-config.d.ts"
+    }
+  },
+  "scripts": {
+    "dev": "run-p dev:*",
+    "dev:plugins": "pnpm run build:plugins -w",
+    "dev:tsc": "pnpm run build:tsc -w",
+    "dev:site": "vitepress dev docs",
+    "build": "run-s build:*",
+    "build:plugins": "npx swc ./src/ -d ./lib/ --ignore ./src/types/*  --copy-files -C jsc.transform.react.runtime=automatic",
+    "build:tsc": "vue-tsc --project ./tsconfig.json",
+    "build:site": "vitepress build docs",
+    "preview:site": "vitepress preview docs",
+    "version": "pnpm dlx standard-version --prerelease beta"
+  },
+  "files": [
+    "lib",
+    "config.d.ts",
+    "plugin.d.ts",
+    "types.d.ts"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@arco-design/web-react": "^2.59.1",
+    "@swc/cli": "^0.3.9",
+    "@swc/core": "^1.3.90",
+    "@types/node": "^20.7.0",
+    "@types/react": "^18.2.23",
+    "@types/react-dom": "^18.2.8",
+    "@vue/component-compiler": "^4.2.4",
+    "@vue/eslint-config-prettier": "^8.0.0",
+    "@vue/eslint-config-typescript": "^13.0.0",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "markdown-it": "^14.1.0",
+    "npm-run-all": "^4.1.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "semver": "^7.5.4",
+    "sucrase": "^3.34.0",
+    "typescript": "^5.2.2",
+    "veaury": "^2.3.12",
+    "vite": "^4.4.11",
+    "vitepress": "1.0.2",
+    "vue": "^3.3.4",
+    "vue-tsc": "^2.0.7"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.23.0",
+    "@babel/traverse": "^7.23.0",
+    "@guolao/vue-monaco-editor": "^1.3.0",
+    "@vicons/ionicons5": "^0.12.0",
+    "@vitejs/plugin-react": "^4.1.0",
+    "@vue/compiler-core": "^3.3.4",
+    "markdown-it-task-lists": "^2.1.1",
+    "marked": "^12.0.2",
+    "naive-ui": "^2.35.0",
+    "postcss": "^8.4.33",
+    "react-docgen-typescript": "^2.2.2",
+    "react-docgen-typescript-markdown-render": "^0.2.5",
+    "react-live": "^4.1.5",
+    "vfonts": "^0.0.3"
+  },
+  "packageManager": "pnpm@8.6.9",
+  "volta": {
+    "node": "18.17.1"
+  },
+  "peerDependencies": {
+    "markdown-it": "^14.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "semver": "^7.5.4",
+    "sucrase": "^3.34.0",
+    "veaury": "^2.3.12",
+    "vitepress": ">=1"
+  }
+}
