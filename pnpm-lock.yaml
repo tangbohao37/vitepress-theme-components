@@ -7,7 +7,7 @@ settings:
 dependencies:
   '@babel/parser':
     specifier: ^7.23.0
-    version: 7.23.0
+    version: 7.24.5
   '@babel/traverse':
     specifier: ^7.23.0
     version: 7.23.0
@@ -473,14 +473,6 @@ packages:
       picocolors: 1.0.0
     dev: false
 
-  /@babel/parser@7.23.0:
-    resolution: {integrity: sha512-vvPKKdMemU85V9WE/l5wZEmImpCtLqbnTvqDS2U1fJ96KrxoW7KrXhNsNCblQlg8Ck4b85yxdTyelsMUgFUXiw==}
-    engines: {node: '>=6.0.0'}
-    hasBin: true
-    dependencies:
-      '@babel/types': 7.24.0
-    dev: false
-
   /@babel/parser@7.24.5:
     resolution: {integrity: sha512-EOv5IK8arwh3LI47dz1b0tKUb/1uhHAnHJOrjgtQMIpu1uXd9mlFrJg9IUgGUgZ41Ch0K8REPTYpO7B76b4vJg==}
     engines: {node: '>=6.0.0'}
@@ -533,7 +525,7 @@ packages:
       '@babel/helper-function-name': 7.23.0
       '@babel/helper-hoist-variables': 7.22.5
       '@babel/helper-split-export-declaration': 7.22.6
-      '@babel/parser': 7.23.0
+      '@babel/parser': 7.24.5
       '@babel/types': 7.24.0
       debug: 4.3.4
       globals: 11.12.0
