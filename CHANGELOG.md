@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.2-beta.3 (2024-05-23)
+
+
+### Bug Fixes
+
+* ts error ([3708c84](https://github.com/tangbohao37/vitepress-theme-components/commit/3708c841b8d328c73511293b9f4e3d006e4deade))
+
 ### [0.0.2-beta.2](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.0...v0.0.2-beta.2) (2024-05-23)
 
 
