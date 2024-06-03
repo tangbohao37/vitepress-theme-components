@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2-beta.4](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.3...v0.0.2-beta.4) (2024-06-03)
+
+
+### Features
+
+* add customPagePath ([a8edea4](https://github.com/tangbohao37/vitepress-theme-components/commit/a8edea420f5e519694e97831e6eed413a03f68d2))
+
 ### 0.0.2-beta.3 (2024-05-23)
 
 
