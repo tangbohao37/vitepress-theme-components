@@ -28,4 +28,5 @@ export type MdFormat = {
 export interface AdvThemeConfig extends /* @vue-ignore */ DefaultTheme.Config {
   changelog?: IChangelog;
   coverage?: ICoverage;
+  customPagePath?: string;
 }

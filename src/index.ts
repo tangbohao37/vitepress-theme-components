@@ -1,6 +1,6 @@
 import { type Theme } from 'vitepress';
-import BaseLayout from './components/base-layout.vue';
-// import BaseLayout from './components/dynamic-layout.vue';
+// import BaseLayout from './components/base-layout.vue';
+import BaseLayout from './components/dynamic-layout.vue';
 import LiveEditor from './components/live-editor.vue';
 import ApiTable from './components/api-table.vue';
 import { type AdvThemeConfig } from './types';
