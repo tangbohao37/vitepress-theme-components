@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2-beta.6](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.5...v0.0.2-beta.6) (2024-06-04)
+
+
+### Bug Fixes
+
+* live editor border noStyle ([3a605c7](https://github.com/tangbohao37/vitepress-theme-components/commit/3a605c74c9a18c171dc28b3e1487017ffc0a1e59))
+
 ### [0.0.2-beta.5](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.4...v0.0.2-beta.5) (2024-06-03)
 
 ### [0.0.2-beta.4](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.3...v0.0.2-beta.4) (2024-06-03)
