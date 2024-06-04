@@ -1,5 +1,5 @@
 <template>
-  <div class="editor-container vp-raw">
+  <div class="vp-raw" :class="{ 'editor-container': !props.noStyle }">
     <ClientOnly>
       <ReactLivePreview
         :scope="props.scope"
