@@ -5,18 +5,21 @@ import Theme from './base-layout.vue';
 // import FrameDefaultLayout from './frame-default-layout.vue';
 import EmptyLayout from './empty-layout.vue';
 import { AdvThemeConfig } from '../types';
+import { NConfigProvider, darkTheme, NMessageProvider } from 'naive-ui';
 
-const { theme } = useData<AdvThemeConfig>();
+const { theme, isDark } = useData<AdvThemeConfig>();
 const p = theme.value.customPagePath;
 const route = useRoute();
 </script>
 
 <template>
-  <!--
-    replace with the layout entirely for `/frames/default`
-    so we don't inherit from `Theme.Layout`
-  -->
-  <!-- <FrameDefaultLayout v-if="route.path.includes('/frames/default')" /> -->
-  <empty-layout v-if="route.path.includes(p)" />
-  <Theme v-else />
+  <NConfigProvider :theme="isDark ? darkTheme : null">
+    <NMessageProvider>
+      <!-- <FrameDefaultLayout v-if="route.path.includes('frames/default')" /> -->
+      <empty-layout v-if="route.path.includes(p)" />
+      <Theme v-else />
+    </NMessageProvider>
+  </NConfigProvider>
 </template>
+
+<style></style>

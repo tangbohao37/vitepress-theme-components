@@ -3,11 +3,11 @@
 </template>
 
 <script lang="ts" setup>
-import MarkdownIt from './markdown-it.vue'
+import MarkdownIt from './markdown-it.vue';
 
 interface IApiTableProps {
-  path: string
-  content: string
+  path: string;
+  content: string;
 }
-const { content } = defineProps<IApiTableProps>()
+const { content } = defineProps<IApiTableProps>();
 </script>

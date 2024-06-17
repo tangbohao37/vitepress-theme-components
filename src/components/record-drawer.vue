@@ -38,7 +38,7 @@
             </NGradientText>
           </NH3>
           <NUl align-text>
-            <NLi v-for="(value, category) in log.changes" :key="value">
+            <NLi v-for="(value, category) in log.changes" :key="value + ''">
               <div v-show="filterLogsContent(value, category)">
                 <NGradientText type="info">
                   {{ category }}

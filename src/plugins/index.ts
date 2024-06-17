@@ -20,6 +20,7 @@ import {
 import { type ILiveEditor } from '../types';
 
 const LiveEditorTag = 'LiveEditor';
+const LiveEditorMobileTag = 'LiveEditorMobile';
 const ApiTag = 'ApiTable';
 
 const filterJSXComments = (code: string) => {
@@ -166,7 +167,31 @@ export function demoBlockPlugin(md: MarkdownRenderer) {
       const liveEditorReg = new RegExp(`^<${LiveEditorTag}\\s`);
       if (liveEditorReg.test(content)) {
         try {
-          return liveEditorRender(tokens, idx, options, env, self, content);
+          return liveEditorRender(
+            tokens,
+            idx,
+            options,
+            env,
+            self,
+            content,
+            LiveEditorTag
+          );
+        } catch (error) {
+          return defaultRender(tokens, idx, options, env, self);
+        }
+      }
+      const LiveEditorMobileTagReg = new RegExp(`^<${LiveEditorMobileTag}\\s`);
+      if (LiveEditorMobileTagReg.test(content)) {
+        try {
+          return liveEditorRender(
+            tokens,
+            idx,
+            options,
+            env,
+            self,
+            content,
+            LiveEditorMobileTag
+          );
         } catch (error) {
           return defaultRender(tokens, idx, options, env, self);
         }
@@ -190,12 +215,13 @@ const liveEditorTemplate = ({
   sourceCode,
   hideCode,
   noStyle,
-  scope
-}: ILiveEditor) => {
-  return `<LiveEditor :scope="{ ${scope} }" sourceCode="${sourceCode}" :hideCode="${hideCode}" :noStyle="${noStyle}" ></LiveEditor>`;
+  scope,
+  tag
+}: ILiveEditor & { tag: string }) => {
+  return `<${tag} :scope="{ ${scope} }" sourceCode="${sourceCode}" :hideCode="${hideCode}" :noStyle="${noStyle}" ></${tag}>`;
 };
 
-const liveEditorRender = (tokens, idx, options, env, self, content) => {
+const liveEditorRender = (tokens, idx, options, env, self, content, tag) => {
   // 提取参数
   const props = parseProps<IPropsType>(content);
 
@@ -268,13 +294,15 @@ const liveEditorRender = (tokens, idx, options, env, self, content) => {
       sourceCode: sourceFileStr,
       hideCode: props.hideCode,
       noStyle: props.noStyle,
-      scope: _modules.toString() as any
+      scope: _modules.toString() as any,
+      tag
     });
   }
   return liveEditorTemplate({
     sourceCode: sourceFileStr,
     hideCode: props.hideCode,
-    noStyle: props.noStyle
+    noStyle: props.noStyle,
+    tag
   });
 };
 
@@ -282,7 +310,7 @@ const ApiTableRender = (tokens, idx, options, env, self, content) => {
   const props = parseProps<{ path: string }>(content);
   const mdFilePath = path.dirname(env.path); // md 原文件路径
   const p = path.resolve(mdFilePath, props.path); // 引入的 code 原文件路径
-
+  console.log('ApiTable file path:', p);
   const opts: docgen.ParserOptions = {
     savePropValueAsString: false,
     skipChildrenPropWithoutDoc: false,

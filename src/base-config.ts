@@ -1,7 +1,8 @@
 import { demoBlockPlugin } from './plugins/index.js';
 import { defineConfig } from 'vitepress';
-import react from '@vitejs/plugin-react';
 import taskLists from 'markdown-it-task-lists';
+import { whyframe } from '@whyframe/core';
+import { whyframeVue } from '@whyframe/vue';
 
 const deps = [
   'vitepress-theme-components',
@@ -31,7 +32,16 @@ const baseConfig = defineConfig({
     optimizeDeps: {
       include: deps
     },
-    plugins: [react()],
+    plugins: [
+      // Initialize core plugin
+      whyframe({
+        defaultSrc: 'frames/default', // provide our own html
+      }) as any,
+      // Initialize Vue integration plugin
+      whyframeVue({
+        include: /\.(?:vue|md)$/ // also scan in markdown files
+      })
+    ],
     ssr: {
       noExternal: deps
     }

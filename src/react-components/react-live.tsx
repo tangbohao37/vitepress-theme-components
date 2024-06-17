@@ -1,18 +1,22 @@
-import { FC, useMemo } from 'react'
-import { LiveError, LivePreview, LiveProvider } from 'react-live'
-import { importRegex } from '../constant'
-import './react-live.css'
+import { FC, useMemo } from 'react';
+import { LiveError, LivePreview, LiveProvider } from 'react-live';
+import { importRegex } from '../constant';
+import './react-live.css';
 
 export interface IReactLive {
-  sourceCode?: string
-  scope?: Record<string, any>
-  noStyle?: boolean
+  sourceCode?: string;
+  scope?: Record<string, any>;
+  noStyle?: boolean;
 }
 
-export const ReactLive: FC<IReactLive> = ({ sourceCode, scope, noStyle = false }) => {
+export const ReactLive: FC<IReactLive> = ({
+  sourceCode,
+  scope,
+  noStyle = false
+}) => {
   const demoLogicCode = useMemo(() => {
-    return sourceCode?.replace(importRegex, '').trim()
-  }, [sourceCode])
+    return sourceCode?.replace(importRegex, '').trim();
+  }, [sourceCode]);
 
   return (
     <div className="react-live-comp-wrapper">
@@ -23,5 +27,5 @@ export const ReactLive: FC<IReactLive> = ({ sourceCode, scope, noStyle = false }
         </div>
       </LiveProvider>
     </div>
-  )
-}
+  );
+};

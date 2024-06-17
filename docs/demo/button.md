@@ -3,18 +3,20 @@ componentName: Button
 coverage: true
 ---
 
-# Button
+## Button
 
 > 下面的代码都是可以实时编译的
 
-<LiveEditor sourceCodePath="./example/button.jsx"></LiveEditor>
+<LiveEditor sourceCodePath="./example/index.jsx"></LiveEditor>
 
-# Button Icons
+<LiveEditorMobile sourceCodePath="./example/index.jsx"></LiveEditorMobile>
+
+### Button Icons
 
 <LiveEditor sourceCodePath="./example/button-icons.jsx"></LiveEditor>
 
-# Button Status
+### Button Status
 
 <LiveEditor sourceCodePath="./example/button-status.jsx"></LiveEditor>
 
-<ApiTable path="./example/index.tsx"></ApiTable>
+<ApiTable path="./example/types.tsx"></ApiTable>

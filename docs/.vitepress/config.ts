@@ -8,7 +8,7 @@ export default defineConfigWithTheme<AdvThemeConfig>({
   title: 'Vitepress theme components',
   description: 'A vitepress theme for components site',
   extends: baseConfig,
-  base: '/vitepress-theme-components/',
+  // base: '/vitepress-theme-components/',
   themeConfig: {
     // 获取public中的文件。 直接使用站点绝对路径
     changelog: {

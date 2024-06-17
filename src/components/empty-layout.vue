@@ -1,11 +1,5 @@
 <template>
-  <NMessageProvider>
-    <Content> </Content>
-  </NMessageProvider>
+  <Content> </Content>
 </template>
 
-<script setup lang="ts">
-import {
-  NMessageProvider
-} from 'naive-ui';
-</script>
+<script setup lang="ts"></script>
