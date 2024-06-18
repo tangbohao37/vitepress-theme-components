@@ -28,3 +28,6 @@ tsconfig.tsbuildinfo
 lib
 es
 .eslintcache
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
