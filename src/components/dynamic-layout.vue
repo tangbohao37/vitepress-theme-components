@@ -2,7 +2,6 @@
 import { useData, useRoute } from 'vitepress';
 import Theme from './base-layout.vue';
 // the default layout we'll create next
-// import FrameDefaultLayout from './frame-default-layout.vue';
 import EmptyLayout from './empty-layout.vue';
 import { AdvThemeConfig } from '../types';
 import { NConfigProvider, darkTheme, NMessageProvider } from 'naive-ui';
@@ -15,7 +14,6 @@ const route = useRoute();
 <template>
   <NConfigProvider :theme="isDark ? darkTheme : null">
     <NMessageProvider>
-      <!-- <FrameDefaultLayout v-if="route.path.includes('frames/default')" /> -->
       <empty-layout v-if="route.path.includes(p)" />
       <Theme v-else />
     </NMessageProvider>

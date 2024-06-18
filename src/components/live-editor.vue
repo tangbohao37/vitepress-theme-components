@@ -1,19 +1,21 @@
 <template>
-  <div class="vp-raw" :class="{ 'editor-container': !props.noStyle }">
-    <div class="preview-bg">
-      <ReactLivePreview
-        :scope="props.scope"
-        :sourceCode="code || ''"
-        :noStyle="props.noStyle"
+  <ClientOnly>
+    <div class="vp-raw" :class="{ 'editor-container': !props.noStyle }">
+      <div class="preview-bg">
+        <ReactLivePreview
+          :scope="props.scope"
+          :sourceCode="code || ''"
+          :noStyle="props.noStyle"
+        />
+      </div>
+      <CodeWrapper
+        style="height: 500px"
+        v-if="!props.hideCode"
+        v-model="code"
+        :originCode="props.sourceCode"
       />
     </div>
-    <CodeWrapper
-      style="height: 500px"
-      v-if="!props.hideCode"
-      v-model="code"
-      :originCode="props.sourceCode"
-    />
-  </div>
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">

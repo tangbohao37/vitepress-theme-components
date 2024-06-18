@@ -12,25 +12,27 @@ const url = computed(() => {
 </script>
 
 <template>
-  <div class="iframe-wrapper">
-    <div class="iframe-tag">
-      <NPopover trigger="hover" style="width: 150px">
-        <template #trigger>
-          <NButton quaternary type="primary">
-            <template #icon>
-              <QrCode />
-            </template>
-            iframe scope
-          </NButton>
-        </template>
-        <NQrCode :value="url.href" color="#18a058"></NQrCode>
-      </NPopover>
-    </div>
+  <ClientOnly>
+    <div class="iframe-wrapper">
+      <div class="iframe-tag">
+        <NPopover trigger="hover" style="width: 150px">
+          <template #trigger>
+            <NButton quaternary type="primary">
+              <template #icon>
+                <QrCode />
+              </template>
+              iframe scope
+            </NButton>
+          </template>
+          <NQrCode :value="url.href" color="#18a058"></NQrCode>
+        </NPopover>
+      </div>
 
-    <iframe class="iframe-box" ref="iframe" data-why :src="src">
-      <slot />
-    </iframe>
-  </div>
+      <iframe class="iframe-box" ref="iframe" data-why :src="src">
+        <slot />
+      </iframe>
+    </div>
+  </ClientOnly>
 </template>
 
 <style scoped>

@@ -1,46 +1,48 @@
 <template>
-  <div class="live-editor-mobile-wrapper" id="live-editor-mobile-wrapper">
-    <template v-if="isMobile()">
-      <ReactLivePreview
-        :scope="props.scope"
-        :sourceCode="code || ''"
-        :noStyle="props.noStyle"
-      />
-    </template>
-    <template v-else>
-      <MobileScreen class="vp-raw">
+  <ClientOnly>
+    <div class="live-editor-mobile-wrapper" id="live-editor-mobile-wrapper">
+      <template v-if="isMobile()">
         <ReactLivePreview
           :scope="props.scope"
           :sourceCode="code || ''"
           :noStyle="props.noStyle"
         />
-      </MobileScreen>
-      <NButton @click="showDrawer = !showDrawer">
-        <template #icon>
-          <NIcon><LogInOutline /></NIcon>
-        </template>
-        Show Code
-      </NButton>
-      <NDrawer
-        v-model:show="showDrawer"
-        placement="left"
-        width="90%"
-        closable
-        :trap-focus="false"
-        :block-scroll="false"
-        to="#live-editor-mobile-wrapper"
-      >
-        <NDrawerContent>
-          <CodeWrapper
-            class="code-wrapper"
-            v-if="!props.hideCode"
-            v-model="code"
-            :originCode="props.sourceCode"
+      </template>
+      <template v-else>
+        <MobileScreen class="vp-raw">
+          <ReactLivePreview
+            :scope="props.scope"
+            :sourceCode="code || ''"
+            :noStyle="props.noStyle"
           />
-        </NDrawerContent>
-      </NDrawer>
-    </template>
-  </div>
+        </MobileScreen>
+        <NButton @click="showDrawer = !showDrawer">
+          <template #icon>
+            <NIcon><LogInOutline /></NIcon>
+          </template>
+          Show Code
+        </NButton>
+        <NDrawer
+          v-model:show="showDrawer"
+          placement="left"
+          width="90%"
+          closable
+          :trap-focus="false"
+          :block-scroll="false"
+          to="#live-editor-mobile-wrapper"
+        >
+          <NDrawerContent>
+            <CodeWrapper
+              class="code-wrapper"
+              v-if="!props.hideCode"
+              v-model="code"
+              :originCode="props.sourceCode"
+            />
+          </NDrawerContent>
+        </NDrawer>
+      </template>
+    </div>
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">
@@ -64,14 +66,17 @@ const code = ref(props.sourceCode);
 const ReactLivePreview = applyReactInVue(ReactLive);
 
 const isMobile = () => {
-  const userAgent =
-    navigator.userAgent || navigator.vendor || (window as any).opera;
-  const isMobileDevice =
-    /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      userAgent
-    );
-  const isSmallScreen = window.innerWidth <= 800 && window.innerHeight <= 600;
-  return isMobileDevice || isSmallScreen;
+  if (window) {
+    const userAgent =
+      navigator.userAgent || navigator.vendor || (window as any).opera;
+    const isMobileDevice =
+      /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        userAgent
+      );
+    const isSmallScreen = window.innerWidth <= 800 && window.innerHeight <= 600;
+    return isMobileDevice || isSmallScreen;
+  }
+  return false;
 };
 </script>
 
