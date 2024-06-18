@@ -3,6 +3,7 @@ import { defineConfig } from 'vitepress';
 import taskLists from 'markdown-it-task-lists';
 import { whyframe } from '@whyframe/core';
 import { whyframeVue } from '@whyframe/vue';
+import react from '@vitejs/plugin-react';
 
 const deps = [
   'vitepress-theme-components',
@@ -33,9 +34,10 @@ const baseConfig = defineConfig({
       include: deps
     },
     plugins: [
+      react(),
       // Initialize core plugin
       whyframe({
-        defaultSrc: 'frames/default', // provide our own html
+        defaultSrc: 'frames/default' // provide our own html
       }) as any,
       // Initialize Vue integration plugin
       whyframeVue({
