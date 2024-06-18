@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2-beta.7](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.6...v0.0.2-beta.7) (2024-06-18)
+
+
+### Features
+
+* add LiveEditorMobile component ([0f875d7](https://github.com/tangbohao37/vitepress-theme-components/commit/0f875d7bcfb242e7a70111354d437e798080f4ad))
+
+
+### Bug Fixes
+
+*  components add client only render ([3beb2c9](https://github.com/tangbohao37/vitepress-theme-components/commit/3beb2c9e8ef2d8a311f87313ca250454c95c83ad))
+
 ### [0.0.2-beta.6](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.5...v0.0.2-beta.6) (2024-06-04)
 
 
