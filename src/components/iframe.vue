@@ -1,20 +1,32 @@
-<script setup>
-import { NTag } from 'naive-ui';
-import { ref } from 'vue';
-
-defineProps({
-  src: {
-    type: String,
-    default: ''
-  }
-});
-
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { NButton, NPopover, NQrCode } from 'naive-ui';
+import { QrCode } from '@vicons/ionicons5';
+const props = defineProps<{ src: string }>();
 const iframe = ref();
+
+const url = computed(() => {
+  const baseUrl = new URL(location.href);
+  return new URL(props.src, baseUrl);
+});
 </script>
 
 <template>
   <div class="iframe-wrapper">
-    <div class="iframe-tag">iframe scope</div>
+    <div class="iframe-tag">
+      <NPopover trigger="hover" style="width: 150px">
+        <template #trigger>
+          <NButton quaternary type="primary">
+            <template #icon>
+              <QrCode />
+            </template>
+            iframe scope
+          </NButton>
+        </template>
+        <NQrCode :value="url.href" color="#18a058"></NQrCode>
+      </NPopover>
+    </div>
+
     <iframe class="iframe-box" ref="iframe" data-why :src="src">
       <slot />
     </iframe>
