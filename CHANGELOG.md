@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2-beta.14](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.13...v0.0.2-beta.14) (2024-06-20)
+
+
+### Features
+
+* live-editor add switch bg btn ([de1a641](https://github.com/tangbohao37/vitepress-theme-components/commit/de1a6414abe7aa1860e731a16c6a6f127beedc5d))
+
 ### [0.0.2-beta.13](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.12...v0.0.2-beta.13) (2024-06-20)
 
 
