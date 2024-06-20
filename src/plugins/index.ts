@@ -20,7 +20,7 @@ import {
 import { type ILiveEditor } from '../types';
 
 const LiveEditorTag = 'LiveEditor';
-const LiveEditorMobileTag = 'LiveEditorMobile';
+const DrawerLiveEditorTag = 'DrawerLiveEditor';
 const ApiTag = 'ApiTable';
 
 const filterJSXComments = (code: string) => {
@@ -180,8 +180,8 @@ export function demoBlockPlugin(md: MarkdownRenderer) {
           return defaultRender(tokens, idx, options, env, self);
         }
       }
-      const LiveEditorMobileTagReg = new RegExp(`^<${LiveEditorMobileTag}\\s`);
-      if (LiveEditorMobileTagReg.test(content)) {
+      const DrawerLiveEditorTagReg = new RegExp(`^<${DrawerLiveEditorTag}\\s`);
+      if (DrawerLiveEditorTagReg.test(content)) {
         try {
           return liveEditorRender(
             tokens,
@@ -190,7 +190,7 @@ export function demoBlockPlugin(md: MarkdownRenderer) {
             env,
             self,
             content,
-            LiveEditorMobileTag
+            DrawerLiveEditorTag
           );
         } catch (error) {
           return defaultRender(tokens, idx, options, env, self);

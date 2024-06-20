@@ -17,7 +17,6 @@ export default defineConfigWithTheme<AdvThemeConfig>({
     coverage: {
       path: '/coverage-summary.json'
     },
-    customPagePath: '/mobile/example',
     nav: [
       {
         text: `v${pkg.version}`,

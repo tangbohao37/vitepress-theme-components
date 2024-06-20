@@ -1,5 +1,5 @@
 # Components Render Demo
 
-<Iframe data-why  src="./mobile/index"></Iframe>
+<MobileIframe data-why  src="./mobile/index"></MobileIframe>
 
-<LiveEditorMobile sourceCodePath="./example/button.jsx"></LiveEditorMobile>
+<DrawerLiveEditor sourceCodePath="./example/button.jsx"></DrawerLiveEditor>

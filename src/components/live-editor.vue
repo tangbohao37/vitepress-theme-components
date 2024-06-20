@@ -8,12 +8,23 @@
           :noStyle="props.noStyle"
         />
       </div>
-      <CodeWrapper
-        style="height: 500px"
-        v-if="!props.hideCode"
-        v-model="code"
-        :originCode="props.sourceCode"
-      />
+      <NCollapse>
+        <template #header-extra>
+          <NIcon
+            style="margin-right: 10px"
+            size="20"
+            :component="BarcodeOutline"
+          />
+        </template>
+        <NCollapseItem title="Show Code" name="1">
+          <CodeWrapper
+            style="height: 500px"
+            v-if="!props.hideCode"
+            v-model="code"
+            :originCode="props.sourceCode"
+          />
+        </NCollapseItem>
+      </NCollapse>
     </div>
   </ClientOnly>
 </template>
@@ -24,6 +35,8 @@ import CodeWrapper from './code-wrapper.vue';
 import { applyReactInVue } from 'veaury';
 import { ref } from 'vue';
 import { type ILiveEditor } from '../types';
+import { NCollapse, NCollapseItem, NIcon } from 'naive-ui';
+import { BarcodeOutline } from '@vicons/ionicons5';
 
 const props = withDefaults(defineProps<ILiveEditor>(), {
   hideCode: false,

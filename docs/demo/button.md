@@ -9,7 +9,7 @@ coverage: true
 
 <LiveEditor sourceCodePath="./example/index.jsx"></LiveEditor>
 
-<LiveEditorMobile sourceCodePath="./example/index.jsx"></LiveEditorMobile>
+<DrawerLiveEditor sourceCodePath="./example/index.jsx"></DrawerLiveEditor>
 
 ### Button Icons
 

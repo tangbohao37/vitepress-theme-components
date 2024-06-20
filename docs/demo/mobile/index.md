@@ -2,4 +2,4 @@
 layout: false
 ---
 
-<LiveEditorMobile sourceCodePath="../example/index.jsx"></LiveEditorMobile>
+<DrawerLiveEditor sourceCodePath="./index.jsx"></DrawerLiveEditor>

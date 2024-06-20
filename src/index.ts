@@ -1,8 +1,8 @@
 import { type Theme } from 'vitepress';
 import DynamicLayout from './components/dynamic-layout.vue';
 import LiveEditor from './components/live-editor.vue';
-import LiveEditorMobile from './components/live-editor-mobile.vue';
-import Iframe from './components/iframe.vue';
+import DrawerLiveEditor from './components/drawer-live-editor.vue';
+import MobileIframe from './components/mobile-iframe.vue';
 import ApiTable from './components/api-table.vue';
 import { type AdvThemeConfig } from './types';
 // 通用字体
@@ -14,8 +14,8 @@ const theme: Theme = {
   Layout: DynamicLayout,
   enhanceApp(ctx) {
     ctx.app.component('LiveEditor', LiveEditor);
-    ctx.app.component('LiveEditorMobile', LiveEditorMobile);
-    ctx.app.component('Iframe', Iframe);
+    ctx.app.component('DrawerLiveEditor', DrawerLiveEditor);
+    ctx.app.component('MobileIframe', MobileIframe);
     ctx.app.component('ApiTable', ApiTable);
   }
 };
