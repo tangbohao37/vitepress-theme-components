@@ -8,13 +8,14 @@ import { NConfigProvider, darkTheme, NMessageProvider } from 'naive-ui';
 
 const { theme, isDark, frontmatter } = useData<AdvThemeConfig>();
 const p = theme.value.customPagePath;
+
 const route = useRoute();
 </script>
 
 <template>
   <NConfigProvider :theme="isDark ? darkTheme : null">
     <NMessageProvider>
-      <empty-layout v-if="route.path.includes(p)" />
+      <EmptyLayout v-if="route.path.includes(p)" />
       <Theme v-else />
     </NMessageProvider>
   </NConfigProvider>

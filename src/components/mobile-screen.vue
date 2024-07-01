@@ -34,6 +34,7 @@ const showCode = defineModel<boolean>('showCode');
   position: relative;
   background-color: white;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  align-self: center;
 }
 
 .top-notch {
