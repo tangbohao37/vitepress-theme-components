@@ -23,14 +23,14 @@ jobs:
         with:
           version: 8
 
+      - name: Create pnpm-lock.yaml
+        run: |
+          echo '{}' > pnpm-lock.yaml
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
-      
-      - name: Create pnpm-lock.yaml
-        run: |
-          echo '{}' > pnpm-lock.yaml
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
