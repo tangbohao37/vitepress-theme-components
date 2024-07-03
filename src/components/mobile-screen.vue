@@ -66,6 +66,7 @@ const showCode = defineModel<boolean>('showCode');
   background-color: #333;
   border-radius: 10px;
   position: absolute;
+  overflow: auto;
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
