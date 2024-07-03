@@ -20,18 +20,26 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
+        with:
+          version: 8
 
       - uses: actions/setup-node@v3
         with:
           node-version: 20
           cache: pnpm
-      - run: pnpm i
+
+      - name: Install dependencies
+        run: pnpm install
+
       - name: Build
         run: pnpm run build
+
       - uses: actions/configure-pages@v2
+
       - uses: actions/upload-pages-artifact@v1
         with:
           path: docs/.vitepress/dist
+
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v1
