@@ -41,12 +41,11 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      - uses: actions/configure-pages@v2
-
-      - uses: actions/upload-pages-artifact@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: docs/.vitepress/dist
 
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
