@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2-beta.17](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.16...v0.0.2-beta.17) (2024-07-03)
+
+
+### Bug Fixes
+
+* screen scroll ([774d3e4](https://github.com/tangbohao37/vitepress-theme-components/commit/774d3e4d82f0bba8e4e4dec0185638da12223daf))
+
 ### [0.0.2-beta.16](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.15...v0.0.2-beta.16) (2024-07-01)
 
 ### [0.0.2-beta.15](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.14...v0.0.2-beta.15) (2024-06-20)
