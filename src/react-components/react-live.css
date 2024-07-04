@@ -2,7 +2,7 @@
   width: 100%;
   overflow: hidden;
   .react-live-comp-demo-wrapper {
-    overflow: hidden;
+    overflow: auto;
     width: 100%;
     padding: 10px;
   }
