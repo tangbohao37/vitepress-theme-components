@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2-beta.20](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.19...v0.0.2-beta.20) (2024-07-04)
+
+
+### Bug Fixes
+
+* screen height ([3183d1d](https://github.com/tangbohao37/vitepress-theme-components/commit/3183d1d8894e474f8c7ef97110a3789bfce91f34))
+
 ### [0.0.2-beta.19](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.18...v0.0.2-beta.19) (2024-07-04)
 
 
