@@ -56,6 +56,7 @@ const showCode = defineModel<boolean>('showCode');
   width: 100%;
   height: 100%;
   padding: 30px 0 30px;
+  overflow: auto;
   border-radius: 36px;
   box-sizing: border-box;
 }
