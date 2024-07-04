@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2-beta.18](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.17...v0.0.2-beta.18) (2024-07-04)
+
+
+### Bug Fixes
+
+* screen wrapper style ([1d34503](https://github.com/tangbohao37/vitepress-theme-components/commit/1d34503559d30e716a9a0149d093162e5c6cc3b9))
+
 ### [0.0.2-beta.17](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.16...v0.0.2-beta.17) (2024-07-03)
 
 
