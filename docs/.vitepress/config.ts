@@ -10,6 +10,9 @@ export default defineConfigWithTheme<AdvThemeConfig>({
   extends: baseConfig,
   base: '/vitepress-theme-components/',
   themeConfig: {
+    search: {
+      provider: 'local'
+    },
     // 获取public中的文件。 直接使用站点绝对路径
     changelog: {
       path: '/CHANGELOG-test.md'
