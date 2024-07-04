@@ -28,7 +28,7 @@
     "build:plugins": "npx swc ./src --out-dir ./lib/ --ignore ./src/types/* --strip-leading-paths --copy-files -C jsc.transform.react.runtime=automatic",
     "build:tsc": "vue-tsc --project ./tsconfig.json",
     "build:site": "vitepress build docs",
-    "preview:site": "vitepress preview docs",
+    "preview": "vitepress preview docs",
     "version": "pnpm dlx standard-version --prerelease beta"
   },
   "files": [

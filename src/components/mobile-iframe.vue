@@ -85,13 +85,7 @@ watchEffect(
         v-model:active="active"
         v-model:show-code="showCode"
       >
-        <iframe
-          ref="iframe"
-          data-why
-          :src="src"
-          allowtransparency="true"
-          @load="adjustIframeHeight"
-        >
+        <iframe ref="iframe" data-why :src="src" allowtransparency="true">
           <slot />
         </iframe>
       </MobileScreen>
