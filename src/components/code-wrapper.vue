@@ -10,19 +10,6 @@
     <NSpace class="editor-tool">
       <NPopover :delay="500" :show-arrow="false">
         <template #trigger>
-          <NButton size="tiny" text @click="runCode">
-            <template #icon>
-              <NIcon>
-                <CaretForwardCircleOutline />
-              </NIcon>
-            </template>
-            run
-          </NButton>
-        </template>
-        run code
-      </NPopover>
-      <NPopover :delay="500" :show-arrow="false">
-        <template #trigger>
           <NIcon :depth="3" size="18" @click="refresh" class="pointer">
             <Refresh></Refresh>
           </NIcon>
@@ -36,6 +23,19 @@
           </NIcon>
         </template>
         复制
+      </NPopover>
+      <NPopover :delay="500" :show-arrow="false">
+        <template #trigger>
+          <NButton size="tiny" text @click="runCode">
+            <template #icon>
+              <NIcon>
+                <CaretForwardCircleOutline />
+              </NIcon>
+            </template>
+            run
+          </NButton>
+        </template>
+        run code
       </NPopover>
     </NSpace>
   </div>
@@ -101,7 +101,7 @@ const copy = () => {
     height: 25px;
     background-color: var(--vp-c-bg-alt);
     position: absolute;
-    right: 15px;
+    left: 0;
     bottom: 0;
   }
 }
