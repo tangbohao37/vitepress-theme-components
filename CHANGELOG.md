@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2-beta.22](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.21...v0.0.2-beta.22) (2025-07-10)
+
+
+### Features
+
+* pref editor UI ([18c1109](https://github.com/tangbohao37/vitepress-theme-components/commit/18c110936f3a820eb11b478345d76c059bb504bb))
+
 ### [0.0.2-beta.21](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.20...v0.0.2-beta.21) (2025-07-10)
 
 ### [0.0.2-beta.20](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.19...v0.0.2-beta.20) (2024-07-04)
