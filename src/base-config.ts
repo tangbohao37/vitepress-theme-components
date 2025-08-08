@@ -14,7 +14,8 @@ const deps = [
   'date-fns-tz/formatInTimeZone',
   'vueuc',
   'naive-ui',
-  'date-fns'
+  'date-fns',
+  '@mermaid-js/mermaid-zenuml'
 ];
 
 /**
