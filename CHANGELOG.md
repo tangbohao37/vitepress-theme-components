@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2-beta.23](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.22...v0.0.2-beta.23) (2025-08-08)
+
+
+### Features
+
+* support mermaid ([b5c27e7](https://github.com/tangbohao37/vitepress-theme-components/commit/b5c27e7efc92161e632c4f78eb1abd97db4f8f34))
+
 ### [0.0.2-beta.22](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.21...v0.0.2-beta.22) (2025-07-10)
 
 
