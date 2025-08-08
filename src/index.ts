@@ -4,6 +4,7 @@ import LiveEditor from './components/live-editor.vue';
 import DrawerLiveEditor from './components/drawer-live-editor.vue';
 import MobileIframe from './components/mobile-iframe.vue';
 import ApiTable from './components/api-table.vue';
+import Mermaid from './components/mermaid.vue';
 import { type AdvThemeConfig } from './types';
 // 通用字体
 import 'vfonts/Lato.css';
@@ -17,6 +18,7 @@ const theme: Theme = {
     ctx.app.component('DrawerLiveEditor', DrawerLiveEditor);
     ctx.app.component('MobileIframe', MobileIframe);
     ctx.app.component('ApiTable', ApiTable);
+    ctx.app.component('Mermaid', Mermaid);
   }
 };
 

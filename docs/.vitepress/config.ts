@@ -57,7 +57,8 @@ export default defineConfigWithTheme<AdvThemeConfig>({
             items: [
               { text: 'Button', link: 'button' },
               { text: 'Icons', link: 'icons' },
-              { text: 'Custom Component', link: 'custom-component' }
+              { text: 'Custom Component', link: 'custom-component' },
+              { text: 'Mermaid', link: 'mermaid' }
             ]
           }
         ]

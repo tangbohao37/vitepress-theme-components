@@ -1,6 +1,6 @@
 <template>
   <NDrawer v-model:show="isActive" :width="500">
-    <NDrawerContent title="更新记录" class="container">
+    <NDrawerContent title="更新记录" class="record-container">
       <NForm :model="formValue" label-placement="left">
         <NGrid :cols="24" :x-gap="24">
           <NFormItemGi label="版本" :span="10" path="formValue.version1">
@@ -159,7 +159,7 @@ const isActive = computed({
 </script>
 
 <style scoped lang="css">
-.container {
+.record-container {
   display: flex;
   flex-direction: column;
   height: 100%;
