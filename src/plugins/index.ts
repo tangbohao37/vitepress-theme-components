@@ -211,7 +211,7 @@ export function demoBlockPlugin(md: MarkdownRenderer) {
   addRenderRule('html_inline');
   
   // 添加这一行来启用 Mermaid 支持
-  MermaidExample(md);
+  // MermaidExample(md);
 }
 
 const liveEditorTemplate = ({
