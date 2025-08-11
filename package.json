@@ -1,6 +1,6 @@
 {
   "name": "vitepress-theme-components",
-  "version": "0.0.2-beta.27",
+  "version": "0.0.2-beta.28",
   "description": "",
   "type": "module",
   "types": "./lib/index.d.ts",
@@ -29,7 +29,7 @@
     "build:tsc": "vue-tsc --project ./tsconfig.json",
     "build:site": "vitepress build docs",
     "preview": "vitepress preview docs",
-    "version": "pnpm dlx standard-version --prerelease beta"
+    "version": "pnpm run build && pnpm dlx standard-version --prerelease beta"
   },
   "files": [
     "lib",
