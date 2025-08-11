@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2-beta.27](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.26...v0.0.2-beta.27) (2025-08-11)
+
+
+### Bug Fixes
+
+* UMD deps ([62b5463](https://github.com/tangbohao37/vitepress-theme-components/commit/62b5463ebdc201e55fa70ef6bd25eaba6fb8ac16))
+
 ### [0.0.2-beta.26](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.25...v0.0.2-beta.26) (2025-08-08)
 
 ### [0.0.2-beta.25](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.24...v0.0.2-beta.25) (2025-08-08)
