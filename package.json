@@ -45,7 +45,7 @@
     "@swc/cli": "^0.7.7",
     "@swc/core": "1.13.3",
     "@types/node": "^22.9.0",
-    "@types/react": "^18.2.23",
+    "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.6",
     "@vue/component-compiler": "^4.2.4",
     "@vue/eslint-config-prettier": "^10.1.0",
