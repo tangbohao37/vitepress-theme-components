@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2-beta.32](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.31...v0.0.2-beta.32) (2025-08-11)
+
+
+### Bug Fixes
+
+* debug ([45dbf09](https://github.com/tangbohao37/vitepress-theme-components/commit/45dbf09de684fbf569a410add270f4a445e15ae0))
+* mermaid render ([c013dac](https://github.com/tangbohao37/vitepress-theme-components/commit/c013dac45b32282d5839f8bc953584c4dc31a0f8))
+
 ### [0.0.2-beta.31](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.30...v0.0.2-beta.31) (2025-08-11)
 
 ### [0.0.2-beta.30](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.29...v0.0.2-beta.30) (2025-08-11)

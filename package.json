@@ -1,6 +1,6 @@
 {
   "name": "vitepress-theme-components",
-  "version": "0.0.2-beta.31",
+  "version": "0.0.2-beta.32",
   "description": "",
   "type": "module",
   "types": "./lib/index.d.ts",
