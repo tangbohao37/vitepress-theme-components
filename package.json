@@ -1,6 +1,6 @@
 {
   "name": "vitepress-theme-components",
-  "version": "0.0.2-beta.30",
+  "version": "0.0.2-beta.31",
   "description": "",
   "type": "module",
   "types": "./lib/index.d.ts",
@@ -26,12 +26,13 @@
     "dev:types": "pnpm run build:types -w",
     "dev:site": "vitepress dev docs",
     "build": "run-s build:*",
+    "build:lib": "pnpm run build:plugins && pnpm run build:types && pnpm run build:tsc",
     "build:plugins": "npx swc ./src --out-dir ./lib/ --ignore ./src/types/* --strip-leading-paths --copy-files -C jsc.transform.react.runtime=automatic",
     "build:types": "node scripts/build-types.js",
     "build:tsc": "vue-tsc --project ./tsconfig.json",
     "build:site": "vitepress build docs",
     "preview": "vitepress preview docs",
-    "version": "pnpm run build && pnpm dlx standard-version --prerelease beta"
+    "version": "pnpm run build:lib && pnpm dlx standard-version --prerelease beta"
   },
   "files": [
     "lib",
