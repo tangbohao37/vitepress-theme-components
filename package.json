@@ -23,9 +23,11 @@
     "dev": "run-p dev:*",
     "dev:plugins": "pnpm run build:plugins -w",
     "dev:tsc": "pnpm run build:tsc -w",
+    "dev:types": "pnpm run build:types -w",
     "dev:site": "vitepress dev docs",
     "build": "run-s build:*",
     "build:plugins": "npx swc ./src --out-dir ./lib/ --ignore ./src/types/* --strip-leading-paths --copy-files -C jsc.transform.react.runtime=automatic",
+    "build:types": "node scripts/build-types.js",
     "build:tsc": "vue-tsc --project ./tsconfig.json",
     "build:site": "vitepress build docs",
     "preview": "vitepress preview docs",
@@ -87,7 +89,6 @@
     "react-live": "^4.1.5",
     "vfonts": "^0.0.3"
   },
-  "packageManager": "pnpm@8.6.9",
   "volta": {
     "node": "18.17.1"
   },

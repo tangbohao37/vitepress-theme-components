@@ -23,7 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-tsconfig.tsbuildinfo
+*.tsbuildinfo
 **/.vitepress/cache
 lib
 es

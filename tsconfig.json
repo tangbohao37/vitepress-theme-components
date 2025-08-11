@@ -10,6 +10,7 @@
     "jsx": "react-jsx",
     "declaration": true,
     "emitDeclarationOnly": true,
+    "noEmit": false,
     "allowJs": true,
     "downlevelIteration": true,
     "resolveJsonModule": true,

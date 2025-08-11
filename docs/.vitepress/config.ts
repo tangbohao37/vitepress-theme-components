@@ -1,6 +1,8 @@
 import { defineConfigWithTheme } from 'vitepress';
-import { baseConfig } from '../../src/base-config';
-import { type AdvThemeConfig } from '../../src';
+// import { baseConfig } from '../../src/base-config';
+// import { type AdvThemeConfig } from '../../src';
+import { baseConfig } from '../../lib/base-config';
+import { type AdvThemeConfig } from '../../lib';
 import pkg from '../../package.json';
 
 // https://vitepress.dev/reference/site-config
@@ -66,6 +68,9 @@ export default defineConfigWithTheme<AdvThemeConfig>({
     }
   },
   vite: {
+    server: {
+      port: 5174,
+    },
     ssr: {
       noExternal: ['@arco-design/web-react']
     }
