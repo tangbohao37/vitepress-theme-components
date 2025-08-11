@@ -15,7 +15,10 @@ const deps = [
   'vueuc',
   'naive-ui',
   'date-fns',
-  '@mermaid-js/mermaid-zenuml'
+  '@mermaid-js/mermaid-zenuml',
+  'mermaid',
+  'dayjs',
+  '@braintree/sanitize-url'
 ];
 
 /**
@@ -33,6 +36,12 @@ const baseConfig = defineConfig({
   vite: {
     optimizeDeps: {
       include: deps
+    },
+    resolve: {
+      alias: {
+        // 强制使用 dayjs 的 ESM 版本，但保留插件路径
+        'dayjs$': 'dayjs/esm/index.js',
+      },
     },
     plugins: [
       react(),
