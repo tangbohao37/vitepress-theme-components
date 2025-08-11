@@ -211,7 +211,7 @@ export function demoBlockPlugin(md: MarkdownRenderer) {
   addRenderRule('html_inline');
   
   // 添加这一行来启用 Mermaid 支持
-  // MermaidExample(md);
+  renderMermaid(md);
 }
 
 const liveEditorTemplate = ({
@@ -364,7 +364,7 @@ export const parseProps = <T extends Record<string, any> = any>(
   return propsMap as T;
 };
 
-const MermaidExample = (md: MarkdownRenderer) => {
+const renderMermaid = (md: MarkdownRenderer) => {
   const defaultRenderer = md.renderer.rules.fence;
 
   if (!defaultRenderer) {
