@@ -14,7 +14,6 @@ vitepress-theme-components/
 │   ├── components/              # Vue 组件
 │   │   ├── live-editor.vue     # 实时代码编辑器
 │   │   ├── dynamic-layout.vue  # 动态布局组件
-│   │   ├── api-table.vue       # API 文档表格
 │   │   └── ...
 │   ├── react-components/        # React 组件
 │   │   ├── react-live.tsx      # React Live 封装
@@ -135,7 +134,6 @@ const theme: Theme = {
     ctx.app.component('LiveEditor', LiveEditor);
     ctx.app.component('DrawerLiveEditor', DrawerLiveEditor);
     ctx.app.component('MobileIframe', MobileIframe);
-    ctx.app.component('ApiTable', ApiTable);
     ctx.app.component('Mermaid', Mermaid);
   }
 };
@@ -149,7 +147,6 @@ Markdown 插件负责解析自定义组件：
 // src/plugins/index.ts
 export function demoBlockPlugin(md: MarkdownRenderer) {
   // 处理 LiveEditor 组件
-  // 处理 ApiTable 组件
   // 处理 Mermaid 图表
 }
 ```

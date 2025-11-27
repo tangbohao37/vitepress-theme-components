@@ -115,27 +115,6 @@ interface ILiveEditor {
 ></DrawerLiveEditor>
 ```
 
-### ApiTable
-
-API 文档表格组件。
-
-#### Props
-
-| 属性    | 类型     | 默认值 | 说明                     |
-| ------- | -------- | ------ | ------------------------ |
-| path    | `string` | -      | TypeScript 文件路径      |
-| content | `string` | -      | 直接传入的 Markdown 内容 |
-
-#### 使用示例
-
-```md
-<!-- 从文件生成 -->
-<ApiTable path="../demo/example/button.tsx"></ApiTable>
-
-<!-- 直接传入内容 -->
-<ApiTable content="| 属性 | 类型 | 说明 |"></ApiTable>
-```
-
 ### MobileIframe
 
 移动端预览组件。
@@ -259,7 +238,6 @@ function demoBlockPlugin(md: MarkdownRenderer): void
 
 - 解析 `<LiveEditor>` 组件
 - 解析 `<DrawerLiveEditor>` 组件
-- 解析 `<ApiTable>` 组件
 - 处理 Mermaid 图表渲染
 - 支持自定义容器语法
 
@@ -284,8 +262,8 @@ function parseProps<T extends Record<string, any> = any>(
 #### 使用示例
 
 ```typescript
-const props = parseProps<{ path: string }>('<ApiTable path="./button.tsx"></ApiTable>');
-console.log(props.path); // "./button.tsx"
+const props = parseProps<{ sourceCodePath: string }>('<LiveEditor sourceCodePath="./button.jsx"></LiveEditor>');
+console.log(props.sourceCodePath); // "./button.jsx"
 ```
 
 ## 工具函数

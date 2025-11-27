@@ -48,28 +48,6 @@ hideRecord: true
 - 抽屉式界面，节省页面空间
 - 支持全屏编辑模式
 
-## ApiTable - API 文档生成器
-
-基于 TypeScript 类型自动生成 API 文档表格。
-
-### 基本用法
-
-```md
-<ApiTable path="../demo/example/button.tsx"></ApiTable>
-```
-
-### 属性说明
-
-| 属性 | 说明                     | 类型   | 默认值 |
-| ---- | ------------------------ | ------ | ------ |
-| path | TypeScript 文件路径      | string | -      |
-
-### 特性
-
-- **自动解析**：基于 `react-docgen-typescript` 解析 TypeScript 类型
-- **Markdown 渲染**：生成标准的 Markdown 表格
-- **类型推导**：支持复杂类型的文档生成
-
 ## MobileIframe - 移动端预览
 
 提供移动端设备的预览框架。
@@ -127,10 +105,6 @@ graph TD
 # 按钮组件
 
 <LiveEditor sourceCodePath="../demo/example/button.jsx"></LiveEditor>
-
-## API 文档
-
-<ApiTable path="../demo/example/button.tsx"></ApiTable>
 
 ## 移动端预览
 

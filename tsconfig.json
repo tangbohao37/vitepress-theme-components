@@ -21,7 +21,7 @@
       "@/*": ["./*"],
       "vite": ["node_modules/vite"]
     },
-    "types": ["node"]
+    "types": ["node", "vitepress"]
   },
   "exclude": ["./.vitepress/cache", "./lib"],
   "include": ["./src/**/*.ts", "./src/**/*.tsx", "./src/**/*.vue"]

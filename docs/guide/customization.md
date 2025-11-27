@@ -31,7 +31,6 @@ const theme: Theme = {
     ctx.app.component('LiveEditor', LiveEditor);
     ctx.app.component('DrawerLiveEditor', DrawerLiveEditor);
     ctx.app.component('MobileIframe', MobileIframe);
-    ctx.app.component('ApiTable', ApiTable);
     ctx.app.component('Mermaid', Mermaid);
   }
 };
@@ -112,32 +111,6 @@ const theme: Theme = {
     var(--vp-c-bg-soft) 32px,
     var(--vp-c-bg-soft) 64px
   );
-}
-```
-
-#### ApiTable 样式定制
-
-```css
-/* API 表格样式 */
-.api-table {
-  margin: 16px 0;
-}
-
-.api-table table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.api-table th,
-.api-table td {
-  padding: 12px 16px;
-  text-align: left;
-  border-bottom: 1px solid var(--vp-c-border);
-}
-
-.api-table th {
-  background: var(--vp-c-bg-soft);
-  font-weight: 600;
 }
 ```
 

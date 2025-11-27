@@ -182,34 +182,6 @@ const getImportModules = (ast: ParseResult<any>) => {
 };
 ```
 
-## ApiTable 插件详解
-
-### 功能概述
-
-ApiTable 插件基于 `react-docgen-typescript` 自动生成 API 文档。
-
-### 实现细节
-
-```typescript
-const ApiTableRender = (tokens, idx, options, env, self, content) => {
-  const props = parseProps<{ path: string }>(content);
-  const mdFilePath = path.dirname(env.path);
-  const filePath = path.resolve(mdFilePath, props.path);
-  
-  const opts: docgen.ParserOptions = {
-    savePropValueAsString: false,
-    skipChildrenPropWithoutDoc: false,
-    shouldRemoveUndefinedFromOptional: false,
-    shouldExtractValuesFromUnion: false
-  };
-
-  const result = docgen.parse(filePath, opts);
-  const markdownContent = markdownRender(result);
-  
-  return `<ApiTable content='${markdownContent}'></ApiTable>`;
-};
-```
-
 ## Mermaid 插件详解
 
 ### 图表渲染

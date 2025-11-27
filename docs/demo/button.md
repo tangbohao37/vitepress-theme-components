@@ -18,5 +18,3 @@ coverage: true
 ### Button Status
 
 <LiveEditor sourceCodePath="./example/button-status.jsx"></LiveEditor>
-
-<ApiTable path="./example/types.tsx"></ApiTable>
