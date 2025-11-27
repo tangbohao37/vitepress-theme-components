@@ -1,0 +1,62 @@
+---
+alwaysApply: true
+---
+## VitePress 主题组件库项目结构说明
+
+### 核心目录结构
+- **源代码路径**: `src/` - 主题组件源码
+  - `src/components/` - Vue 组件 (主题布局、编辑器等)
+  - `src/react-components/` - React 组件 (实时编辑器等)
+  - `src/plugins/` - VitePress 插件
+  - `src/types/` - TypeScript 类型定义
+  - `src/constant/` - 常量定义
+- **文档站点**: `docs/` - VitePress 文档站点
+  - `docs/demo/` - 组件演示页面
+  - `docs/demo/example/` - 演示代码示例 (React JSX)
+  - `docs/guide/` - 使用指南文档
+  - `docs/.vitepress/` - VitePress 配置
+- **构建输出**: `lib/` - 编译后的发布文件
+- **脚本工具**: `scripts/` - 构建和工具脚本
+
+### 项目技术栈
+- **主框架**: VitePress (Vue 3 + Vite)
+- **组件库**: 支持 React 组件演示 (通过 react-live)
+- **UI 库**: Arco Design, Naive UI
+- **样式**: CSS Modules + PostCSS
+- **构建工具**: SWC, TypeScript, Vue TSC
+- **开发工具**: ESLint, Prettier
+
+### 文档编写规范
+- **演示页面**: 放在 `docs/demo/` 目录下，使用 `.md` 格式
+- **示例代码**: 放在 `docs/demo/example/` 目录下，使用 `.jsx` 格式
+- **组件文档**: 使用 `LiveEditor` 和 `DrawerLiveEditor` 组件展示可编辑代码
+- **API 文档**: 使用 `ApiTable` 组件自动生成 API 表格
+- **移动端预览**: 使用 `MobileIframe` 组件
+
+### 示例代码编写规范
+- **文件位置**: `docs/demo/example/*.jsx`
+- **导入方式**: 直接使用第三方库导入 (如 `@arco-design/web-react`)
+- **代码结构**: 
+  ```jsx
+  import { Component } from 'library';
+  
+  const Example = () => {
+    return <Component />;
+  };
+  
+  render(<Example />);
+  ```
+- **样式处理**: 可以使用 `docs/demo/example/index.css` 全局样式
+
+### 主题组件开发规范
+- **Vue 组件**: 放在 `src/components/` 目录
+- **React 组件**: 放在 `src/react-components/` 目录  
+- **样式文件**: 使用 CSS 文件，放在对应组件目录
+- **类型定义**: 统一放在 `src/types/` 目录
+- **插件开发**: 放在 `src/plugins/` 目录
+
+### 构建和发布
+- **开发模式**: `pnpm dev` - 同时启动构建监听和文档站点
+- **构建库**: `pnpm build:lib` - 构建主题库文件到 `lib/`
+- **构建文档**: `pnpm build:site` - 构建文档站点
+- **发布文件**: 只发布 `lib/` 目录和类型定义文件
