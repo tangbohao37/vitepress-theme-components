@@ -46,7 +46,7 @@
   "devDependencies": {
     "@arco-design/web-react": "^2.59.1",
     "@swc/cli": "^0.7.7",
-    "@swc/core": "1.13.3",
+    "@swc/core": "1.15.3",
     "@types/node": "^22.9.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.1.6",
