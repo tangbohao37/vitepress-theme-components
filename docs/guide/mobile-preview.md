@@ -86,7 +86,7 @@ render(<MobileApp />);
 ## 示例
 
 ### 完整移动应用
-<SandpackEditor path="mobile-app.jsx"></SandpackEditor>
+<SandpackEditor path="button-status.jsx"></SandpackEditor>
 
 ### 按钮组件
 <SandpackEditor path="button.jsx"></SandpackEditor>

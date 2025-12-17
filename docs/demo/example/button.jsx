@@ -1,7 +1,7 @@
 import { Button, Space } from '@arco-design/web-react';
 import '@arco-design/web-react/dist/css/arco.css';
 
-export default function Example() {
+function Example() {
   return (
     <Space size="large">
       <Button type="primary">Primary</Button>
@@ -12,3 +12,5 @@ export default function Example() {
     </Space>
   );
 };
+
+render(<Example />);

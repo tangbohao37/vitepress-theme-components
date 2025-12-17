@@ -119,7 +119,7 @@ graph TD
 
 ## 基础用法
 
-<LiveEditor sourceCodePath="../demo/example/button.jsx"></LiveEditor>
+<LiveEditor sourceCodePath="../demo/example/index.jsx"></LiveEditor>
 
 ## 架构设计
 
@@ -151,11 +151,11 @@ flowchart TD
 
 ## 代码示例
 
-<LiveEditor sourceCodePath="../demo/example/hooks-demo.jsx"></LiveEditor>
+<LiveEditor sourceCodePath="../demo/example/button.jsx"></LiveEditor>
 
 ## 移动端体验
 
-<SandpackEditor path="hooks-mobile.jsx"></SandpackEditor>
+<SandpackEditor path="button-status.jsx"></SandpackEditor>
 ```
 
 ### 示例 3：API 文档
@@ -179,7 +179,7 @@ sequenceDiagram
 
 ## 调用示例
 
-<LiveEditor sourceCodePath="../demo/example/api-call.jsx"></LiveEditor>
+<LiveEditor sourceCodePath="../demo/example/button-icons.jsx"></LiveEditor>
 ```
 
 ## 最佳实践
@@ -250,7 +250,7 @@ render(<Example />); // 必须使用 render() // [!code highlight]
 
 #### 默认收起编辑器
 
-```md
+```
 <!-- ✅ 推荐：默认收起 -->
 <SandpackEditor path="app.jsx"></SandpackEditor>
 
@@ -260,7 +260,7 @@ render(<Example />); // 必须使用 render() // [!code highlight]
 
 #### 使用 hideCode 简化界面
 
-```md
+```
 <!-- 只显示预览，隐藏代码 -->
 <LiveEditor sourceCodePath="../demo/example/button.jsx" hideCode></LiveEditor>
 ```

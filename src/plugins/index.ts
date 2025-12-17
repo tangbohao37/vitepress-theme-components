@@ -161,7 +161,20 @@ export function demoBlockPlugin(md: MarkdownRenderer) {
       const token = tokens[idx];
       const content = token.content.trim();
       const liveEditorReg = new RegExp(`^<${LiveEditorTag}\\s`);
-      if (liveEditorReg.test(content)) {
+      
+      // 检查当前 token 是否在代码块内
+      // 通过检查前面的 token 来判断是否在 fence/code_inline 块中
+      let inCodeBlock = false;
+      if (idx > 0) {
+        const prevToken = tokens[idx - 1];
+        // 如果前一个 token 是 code_inline 的开始标记，说明当前在行内代码中
+        if (prevToken && prevToken.type === 'code_inline') {
+          inCodeBlock = true;
+        }
+      }
+      
+      // 只处理不在代码块内的 LiveEditor 标签
+      if (liveEditorReg.test(content) && !inCodeBlock) {
         try {
           return liveEditorRender(
             tokens,

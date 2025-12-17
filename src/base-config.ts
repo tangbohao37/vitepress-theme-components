@@ -161,16 +161,30 @@ const baseConfig = defineConfig({
   },
   vite: {
     optimizeDeps: {
-      include: deps
+      include: [
+        ...deps,
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
+        'react-live'
+      ]
     },
     resolve: {
       alias: {
         // 强制使用 dayjs 的 ESM 版本，但保留插件路径
-        dayjs$: 'dayjs/esm/index.js'
-      }
+        dayjs$: 'dayjs/esm/index.js',
+        // 确保 React 使用正确的版本
+        'react': 'react',
+        'react-dom': 'react-dom'
+      },
+      dedupe: ['react', 'react-dom']
     },
     plugins: [
-      react(),
+      react({
+        jsxRuntime: 'automatic',
+        jsxImportSource: 'react'
+      }),
       // 自动复制示例文件到 public 目录
       createCopyExamplePlugin()
     ],

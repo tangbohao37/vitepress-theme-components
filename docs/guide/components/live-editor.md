@@ -7,10 +7,10 @@
 在 Markdown 文档中直接使用 `LiveEditor` 组件：
 
 ```md
-<LiveEditor sourceCodePath="../demo/example/button.jsx"></LiveEditor>
+<LiveEditor sourceCodePath="../../demo/example/button.jsx"></LiveEditor>
 ```
 
-<LiveEditor sourceCodePath="../demo/example/button.jsx"></LiveEditor>
+<LiveEditor sourceCodePath="../../demo/example/button.jsx"></LiveEditor>
 
 ::: tip
 代码文件需要放在 `docs/demo/example/` 目录下，并使用相对路径引用。
@@ -44,7 +44,7 @@ render(<Button type='primary'>点击我</Button>);
 **方式 2：通过文件路径加载**（推荐）
 
 ```md
-<LiveEditor sourceCodePath="../demo/example/button.jsx"></LiveEditor>
+<LiveEditor sourceCodePath="../../demo/example/button.jsx"></LiveEditor>
 ```
 
 ::: tip 推荐使用 sourceCodePath
@@ -59,7 +59,7 @@ render(<Button type='primary'>点击我</Button>);
 
 ```md
 <!-- 隐藏代码，只显示预览 -->
-<LiveEditor sourceCodePath="../demo/example/button.jsx" hideCode></LiveEditor>
+<LiveEditor sourceCodePath="../../demo/example/button.jsx" hideCode></LiveEditor>
 ```
 
 适用场景：
@@ -72,7 +72,7 @@ render(<Button type='primary'>点击我</Button>);
 移除组件默认的边框和内边距样式：
 
 ```md
-<LiveEditor sourceCodePath="../demo/example/button.jsx" noStyle></LiveEditor>
+<LiveEditor sourceCodePath="../../demo/example/button.jsx" noStyle></LiveEditor>
 ```
 
 适用场景：
@@ -383,13 +383,13 @@ export interface ILiveEditor {
 ### 示例 1：基础按钮
 
 ```md
-<LiveEditor sourceCodePath="../demo/example/button.jsx"></LiveEditor>
+<LiveEditor sourceCodePath="../../demo/example/button.jsx"></LiveEditor>
 ```
 
 ### 示例 2：隐藏代码的纯展示
 
 ```md
-<LiveEditor sourceCodePath="../demo/example/button-status.jsx" hideCode></LiveEditor>
+<LiveEditor sourceCodePath="../../demo/example/button-status.jsx" hideCode></LiveEditor>
 ```
 
 ### 示例 3：自定义作用域
@@ -444,7 +444,7 @@ render(<Example />);
 ```
 
 ```md
-<LiveEditor sourceCodePath="../demo/example/button-icons.jsx"></LiveEditor>
+<LiveEditor sourceCodePath="../../demo/example/button-icons.jsx"></LiveEditor>
 ```
 
 ## 最佳实践
