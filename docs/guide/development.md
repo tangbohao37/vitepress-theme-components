@@ -132,8 +132,6 @@ const theme: Theme = {
   enhanceApp(ctx) {
     // 注册全局组件
     ctx.app.component('LiveEditor', LiveEditor);
-    ctx.app.component('DrawerLiveEditor', DrawerLiveEditor);
-    ctx.app.component('MobileIframe', MobileIframe);
     ctx.app.component('Mermaid', Mermaid);
   }
 };

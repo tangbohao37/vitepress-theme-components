@@ -18,7 +18,6 @@ import {
 import { type ILiveEditor } from '../types';
 
 const LiveEditorTag = 'LiveEditor';
-const DrawerLiveEditorTag = 'DrawerLiveEditor';
 
 const filterJSXComments = (code: string) => {
   const commentRegex = /{\/\*[\s\S]*?\*\/}|\/\/.*/g;
@@ -172,23 +171,6 @@ export function demoBlockPlugin(md: MarkdownRenderer) {
             self,
             content,
             LiveEditorTag
-          );
-        } catch (error) {
-          console.error('LiveEditor render error:', error);
-          return defaultRender(tokens, idx, options, env, self);
-        }
-      }
-      const DrawerLiveEditorTagReg = new RegExp(`^<${DrawerLiveEditorTag}\\s`);
-      if (DrawerLiveEditorTagReg.test(content)) {
-        try {
-          return liveEditorRender(
-            tokens,
-            idx,
-            options,
-            env,
-            self,
-            content,
-            DrawerLiveEditorTag
           );
         } catch (error) {
           console.error('LiveEditor render error:', error);

@@ -5,7 +5,12 @@
     "module": "ESNext",
     "target": "ESNext",
     "moduleResolution": "Node",
-    "lib": ["ESNext", "DOM", "DOM.Iterable", "ES2015"],
+    "lib": [
+      "ESNext",
+      "DOM",
+      "DOM.Iterable",
+      "ES2015"
+    ],
     "baseUrl": ".",
     "jsx": "react-jsx",
     "declaration": true,
@@ -18,11 +23,27 @@
     "skipLibCheck": true,
     "outDir": "./lib",
     "paths": {
-      "@/*": ["./*"],
-      "vite": ["node_modules/vite"]
+      "@/*": [
+        "./*"
+      ],
+      "vite": [
+        "node_modules/vite"
+      ]
     },
-    "types": ["node", "vitepress"]
+    "types": [
+      "node",
+      "vitepress",
+      "sandpack-vue3",
+      "vite/client"
+    ]
   },
-  "exclude": ["./.vitepress/cache", "./lib"],
-  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./src/**/*.vue"]
+  "exclude": [
+    "./.vitepress/cache",
+    "./lib"
+  ],
+  "include": [
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
+    "./src/**/*.vue"
+  ]
 }

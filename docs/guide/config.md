@@ -117,6 +117,68 @@ themeConfig: {
 
 当页面路径包含指定前缀时，将使用 `EmptyLayout` 而不是默认的 `BaseLayout`。
 
+## exampleDir
+
+- Type: `string`
+- Default: `'/example/'`
+
+配置 `SandpackEditor` 组件加载示例文件的目录路径（相对于 `public` 目录）：
+
+```js
+themeConfig: {
+  // 默认配置
+  exampleDir: '/example/'
+  
+  // 或使用自定义目录
+  // exampleDir: '/demos/'
+  // exampleDir: '/code-samples/'
+}
+```
+
+::: info 使用说明
+- 路径相对于 `docs/public/` 目录
+- 路径会自动标准化（确保以 `/` 开头和结尾）
+- 示例文件实际位置：`docs/public/{exampleDir}/`
+- 在 `SandpackEditor` 组件中使用 `path` 属性引用示例文件时，会自动从此目录加载
+:::
+
+### 示例
+
+配置自定义目录：
+
+```ts
+// .vitepress/config.ts
+export default defineConfig<AdvThemeConfig>({
+  themeConfig: {
+    exampleDir: '/demos/'
+  }
+});
+```
+
+目录结构：
+
+```
+docs/
+├── public/
+│   └── demos/              # 自定义的示例目录
+│       ├── button.jsx
+│       ├── counter.jsx
+│       └── components/
+│           └── header.jsx
+└── demo/
+    └── button.md
+```
+
+在文档中使用：
+
+```md
+<!-- 会从 docs/public/demos/ 目录加载 -->
+<SandpackEditor path="button.jsx"></SandpackEditor>
+
+<!-- 支持子目录 -->
+<SandpackEditor path="components/header.jsx"></SandpackEditor>
+```
+
 ## 完整配置示例
 
 ```ts
@@ -167,7 +229,10 @@ export default defineConfigWithTheme<AdvThemeConfig>({
       }
     },
     
-    customPagePath: '/mobile'
+    customPagePath: '/mobile',
+    
+    // 示例文件目录配置
+    exampleDir: '/example/'
   }
 });
 ```

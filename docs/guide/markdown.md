@@ -7,8 +7,6 @@ hideRecord: true
 本主题在 VitePress 原有 Markdown 功能基础上，扩展了以下功能：
 
 - `<LiveEditor></LiveEditor>` : 实时渲染组件 Demo
-- `<DrawerLiveEditor></DrawerLiveEditor>` : 抽屉式代码编辑器
-- `<MobileIframe></MobileIframe>` : 移动端预览框架
 - `<Mermaid></Mermaid>` : 图表渲染支持
 - 支持 Task List 语法
 - 支持自定义容器扩展
@@ -35,40 +33,6 @@ hideRecord: true
 
 > 渲染如下: :point_down: :point_down: 可以试试编辑，会实时编译渲染
 > <LiveEditor sourceCodePath="../demo/example/index.jsx"></LiveEditor>
-
-## DrawerLiveEditor 使用
-
-抽屉式代码编辑器，适用于复杂的代码演示：
-
-```md
-<DrawerLiveEditor sourceCodePath="../demo/example/complex.jsx"></DrawerLiveEditor>
-```
-
-#### DrawerLiveEditor 属性:
-
-继承 `LiveEditor` 的所有属性，额外提供：
-
-| 属性  | 说明     | 类型   | 默认值       |
-| ----- | -------- | ------ | ------------ |
-| title | 抽屉标题 | string | '代码编辑器' |
-| width | 抽屉宽度 | number | 800          |
-
-## MobileIframe 使用
-
-移动端预览组件，用于展示移动端效果：
-
-```md
-<MobileIframe src="/demo/mobile/button" width="375" height="667"></MobileIframe>
-```
-
-#### MobileIframe 属性:
-
-| 属性   | 说明         | 类型   | 默认值           |
-| ------ | ------------ | ------ | ---------------- |
-| src    | 预览页面地址 | string | -                |
-| width  | 设备宽度     | number | 375              |
-| height | 设备高度     | number | 667              |
-| title  | 设备标题     | string | 'Mobile Preview' |
 
 ## Mermaid 图表
 
@@ -172,11 +136,7 @@ graph LR
 
 ## 不同状态
 
-<DrawerLiveEditor sourceCodePath="../demo/example/button-states.jsx"></DrawerLiveEditor>
-
-## 移动端效果
-
-<MobileIframe src="/demo/mobile/button"></MobileIframe>
+<LiveEditor sourceCodePath="../demo/example/button-states.jsx"></LiveEditor>
 ```
 
 ### 代码块增强

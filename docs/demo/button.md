@@ -9,8 +9,6 @@ coverage: true
 
 <LiveEditor sourceCodePath="./example/index.jsx"></LiveEditor>
 
-<DrawerLiveEditor sourceCodePath="./example/index.jsx"></DrawerLiveEditor>
-
 ### Button Icons
 
 <LiveEditor sourceCodePath="./example/button-icons.jsx"></LiveEditor>

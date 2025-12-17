@@ -94,55 +94,6 @@ interface ILiveEditor {
 <LiveEditor sourceCodePath="../demo/example/button.jsx" :noStyle="true"></LiveEditor>
 ```
 
-### DrawerLiveEditor
-
-抽屉式代码编辑器组件，继承 `LiveEditor` 的所有属性。
-
-#### 额外 Props
-
-| 属性  | 类型     | 默认值       | 说明     |
-| ----- | -------- | ------------ | -------- |
-| title | `string` | '代码编辑器' | 抽屉标题 |
-| width | `number` | `800`        | 抽屉宽度 |
-
-#### 使用示例
-
-```md
-<DrawerLiveEditor 
-  sourceCodePath="../demo/example/complex.jsx"
-  title="复杂组件演示"
-  :width="1000"
-></DrawerLiveEditor>
-```
-
-### MobileIframe
-
-移动端预览组件。
-
-#### Props
-
-| 属性   | 类型     | 默认值           | 说明         |
-| ------ | -------- | ---------------- | ------------ |
-| src    | `string` | -                | 预览页面地址 |
-| width  | `number` | `375`            | 设备宽度     |
-| height | `number` | `667`            | 设备高度     |
-| title  | `string` | 'Mobile Preview' | 设备标题     |
-
-#### 使用示例
-
-```md
-<!-- 基础用法 -->
-<MobileIframe src="/demo/mobile/button"></MobileIframe>
-
-<!-- 自定义尺寸 -->
-<MobileIframe 
-  src="/demo/mobile/button" 
-  :width="414" 
-  :height="896"
-  title="iPhone XR"
-></MobileIframe>
-```
-
 ### Mermaid
 
 图表渲染组件。
@@ -237,7 +188,6 @@ function demoBlockPlugin(md: MarkdownRenderer): void
 #### 功能
 
 - 解析 `<LiveEditor>` 组件
-- 解析 `<DrawerLiveEditor>` 组件
 - 处理 Mermaid 图表渲染
 - 支持自定义容器语法
 

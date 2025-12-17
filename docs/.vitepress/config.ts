@@ -1,12 +1,13 @@
-import { defineConfigWithTheme } from 'vitepress';
+import { defineConfig } from 'vitepress';
 // import { baseConfig } from '../../src/base-config';
 // import { type AdvThemeConfig } from '../../src';
 import { baseConfig } from '../../lib/base-config';
 import { type AdvThemeConfig } from '../../lib';
 import pkg from '../../package.json';
+import { EXAMPLE_DIR } from './theme-config';
 
 // https://vitepress.dev/reference/site-config
-export default defineConfigWithTheme<AdvThemeConfig>({
+export default defineConfig<AdvThemeConfig>({
   title: 'Vitepress theme components',
   description: 'A vitepress theme for components site',
   extends: baseConfig,
@@ -22,6 +23,9 @@ export default defineConfigWithTheme<AdvThemeConfig>({
     coverage: {
       path: '/coverage-summary.json'
     },
+    // 示例文件目录配置（从 theme-config.ts 导入）
+    // 源文件位于 docs/{EXAMPLE_DIR}/，通过插件自动复制到 docs/public/{EXAMPLE_DIR}/
+    exampleDir: EXAMPLE_DIR,
     nav: [
       {
         text: `v${pkg.version}`,
@@ -44,10 +48,26 @@ export default defineConfigWithTheme<AdvThemeConfig>({
           {
             text: '基础使用',
             items: [
-              { text: '组件使用指南', link: 'components' },
+              {
+                text: '组件使用指南',
+                link: 'components',
+                collapsed: false,
+                items: [
+                  {
+                    text: 'LiveEditor - 实时代码编辑器',
+                    link: 'components/live-editor'
+                  },
+                  {
+                    text: 'SandpackEditor - 在线编辑器',
+                    link: 'components/sandpack-editor'
+                  },
+                  { text: 'Mermaid - 图表渲染', link: 'components/mermaid' }
+                ]
+              },
               { text: 'Markdown 扩展', link: 'markdown' },
               { text: '配置选项', link: 'config' },
-              { text: 'Frontmatter 扩展', link: 'frontmatter' }
+              { text: 'Frontmatter 扩展', link: 'frontmatter' },
+              { text: '移动设备预览', link: 'mobile-preview' }
             ]
           },
           {
@@ -76,7 +96,9 @@ export default defineConfigWithTheme<AdvThemeConfig>({
               { text: 'Button', link: 'button' },
               { text: 'Icons', link: 'icons' },
               { text: 'Custom Component', link: 'custom-component' },
-              { text: 'Mermaid', link: 'mermaid' }
+              { text: 'Mermaid', link: 'mermaid' },
+              { text: 'SandpackEditor', link: 'sandpack' },
+              { text: 'DeviceFrame', link: 'device-frame-test' }
             ]
           }
         ]
@@ -84,11 +106,16 @@ export default defineConfigWithTheme<AdvThemeConfig>({
     }
   },
   vite: {
+    // 传递配置给插件（通过自定义字段）
+    // @ts-ignore - vitepress 是自定义配置字段
+    vitepress: {
+      exampleDir: EXAMPLE_DIR  // 示例文件目录配置
+    },
     server: {
-      port: 5174,
+      port: 5174
     },
     ssr: {
-      noExternal: ['@arco-design/web-react']
+      noExternal: ['@arco-design/web-react', 'sandpack-vue3', 'devices.css']
     }
   }
 });
