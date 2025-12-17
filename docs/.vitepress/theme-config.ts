@@ -19,7 +19,7 @@
  * '/demos/' - 自定义示例目录
  * '/code-samples/' - 另一个示例
  */
-export const EXAMPLE_DIR = '../example3/';
+export const EXAMPLE_DIR = '/sandpack-example';
 
 /**
  * 其他主题配置可以在这里添加...
