@@ -1016,5 +1016,5 @@ render(<App />);
 ## 相关组件
 
 - [LiveEditor](./live-editor.md) - 标准代码编辑器
-- [DeviceFrame](./device-frame.md) - 设备框架组件（由 PreviewSectionWrapper 内部使用）
+- [DeviceFrame](../../demo/device-frame-test.md) - 设备框架组件（由 PreviewSectionWrapper 内部使用）
 
