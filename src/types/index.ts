@@ -37,5 +37,4 @@ export interface AdvThemeConfig extends /* @vue-ignore */ DefaultTheme.Config {
   changelog?: IChangelog;
   coverage?: ICoverage;
   customPagePath?: string;
-  exampleDir?: string; // 示例文件的目录路径（相对于 public 目录，默认 '/example/'）
 }

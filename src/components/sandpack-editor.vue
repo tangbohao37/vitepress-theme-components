@@ -9,12 +9,7 @@
     <div v-else-if="error" class="error-container">
       <NResult status="error" title="加载失败" :description="error">
         <template #footer>
-          <NSpace vertical>
-            <div class="error-path">
-              文件路径：<code>{{ props.path }}</code>
-            </div>
-            <NButton type="primary" @click="loadCode"> 重试加载 </NButton>
-          </NSpace>
+          <NButton type="primary" @click="loadCode"> 重试 </NButton>
         </template>
       </NResult>
     </div>
@@ -104,29 +99,11 @@ import {
 } from '@vicons/ionicons5';
 import PreviewSectionWrapper from './preview-section-wrapper.vue';
 import type { DeviceType } from '../types';
-import { useData } from 'vitepress';
-import { basename, join, resolve, dirname, extname, normalize } from 'pathe';
-
-// 获取主题配置
-const { theme } = useData();
-
-// 从配置中获取 exampleDir，默认为 '/example/'
-const exampleDir = computed(() => {
-  const dir = theme.value.exampleDir || '/example/';
-  // 使用 pathe 的 normalize 标准化路径，并确保以 / 开头和结尾
-  let normalized = normalize(dir);
-  if (!normalized.startsWith('/')) {
-    normalized = `/${normalized}`;
-  }
-  if (!normalized.endsWith('/')) {
-    normalized = `${normalized}/`;
-  }
-  return normalized;
-});
 
 // Props
 const props = defineProps<{
-  path: string; // 相对于 exampleDir 的文件路径，如 "button.jsx" 或 "components/button.jsx"
+  code: string; // 主文件代码内容（必需）
+  files?: Record<string, string>; // 可选的额外文件，如 { '/styles.css': 'css内容', '/utils.js': 'js内容' }
   defaultExpanded?: boolean; // 默认是否展开编辑器
   readOnly?: boolean; // 是否为只读模式，使用 SandpackCodeViewer
 }>();
@@ -235,199 +212,23 @@ const setup = computed(() => ({
   }
 }));
 
-/**
- * 构建完整的文件 URL，使用 pathe 的 basename 和 join API
- * @param relativePath - 相对于 exampleDir 的文件路径
- * @returns 完整的可访问 URL 路径
- */
-function buildFileUrl(relativePath: string): string {
-  const base = import.meta.env.BASE_URL || '/';
-  // 使用 pathe 的 basename 提取目录名
-  const name = basename(exampleDir.value);
-  // 使用 pathe 的 join 拼接路径（自动处理多余的斜杠）
-  const fullPath = join(base, name, relativePath);
-
-  return fullPath;
-}
-
-// 使用 fetch 加载文件内容
-async function fetchFileContent(relativePath: string): Promise<string> {
-  const url = buildFileUrl(relativePath);
-
-  console.log(`尝试加载文件: ${relativePath} -> ${url}`);
-
-  try {
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-    }
-
-    const content = await response.text();
-    console.log(`✓ 文件加载成功: ${relativePath}`);
-    return content;
-  } catch (err) {
-    throw new Error(
-      `无法加载文件 ${relativePath}: ${
-        err instanceof Error ? err.message : '未知错误'
-      }`
-    );
-  }
-}
-
-// 解析代码中的 import 语句，提取相对路径的文件
-function parseImports(code: string): string[] {
-  const imports: string[] = [];
-
-  // 匹配 import 语句：import xxx from './xxx' 或 import './xxx'
-  // 支持单引号、双引号
-  const importRegex = /import\s+(?:[\w\s{},*]+\s+from\s+)?['"](.+?)['"]/g;
-
-  let match;
-  while ((match = importRegex.exec(code)) !== null) {
-    const importPath = match[1];
-
-    // 只处理相对路径（以 ./ 或 ../ 开头）
-    if (importPath.startsWith('./') || importPath.startsWith('../')) {
-      imports.push(importPath);
-    }
-  }
-
-  return imports;
-}
-
-/**
- * 解析相对路径，使用 pathe 的 resolve 和 dirname API
- * @param basePath - 基准文件路径
- * @param relativePath - 相对路径（如 './file.js' 或 '../utils/helper.js'）
- * @returns 解析后的绝对路径
- */
-function resolveRelativePath(basePath: string, relativePath: string): string {
-  // 使用 pathe 的 dirname 获取基准路径的目录部分
-  const baseDir = dirname(basePath);
-  // 使用 pathe 的 resolve 解析相对路径（会自动处理 . 和 ..）
-  return resolve(baseDir, relativePath);
-}
-
-/**
- * 尝试解析文件扩展名，使用 pathe 的 extname API
- * @param filePath - 文件路径
- * @returns 解析后的完整文件路径，如果无法解析返回 null
- */
-async function tryResolveExtension(filePath: string): Promise<string | null> {
-  // 使用 pathe 的 extname 检查是否已经有扩展名
-  if (extname(filePath)) {
-    try {
-      await fetchFileContent(filePath);
-      return filePath;
-    } catch {
-      return null;
-    }
-  }
-
-  // 尝试常见扩展名
-  const extensions = ['.js', '.jsx', '.ts', '.tsx', '.css'];
-
-  for (const ext of extensions) {
-    try {
-      const pathWithExt = `${filePath}${ext}`;
-      await fetchFileContent(pathWithExt);
-      return pathWithExt;
-    } catch {
-      continue;
-    }
-  }
-
-  return null;
-}
-
-// 递归加载文件及其依赖
-async function loadFileWithDependencies(
-  filePath: string,
-  basePath: string,
-  loadedFiles: Record<string, string> = {},
-  visited: Set<string> = new Set()
-): Promise<Record<string, string>> {
-  const resolvedPath = resolveRelativePath(basePath, filePath);
-
-  // 避免循环依赖
-  if (visited.has(resolvedPath)) {
-    return loadedFiles;
-  }
-  visited.add(resolvedPath);
-
-  try {
-    const resolvedFile = await tryResolveExtension(resolvedPath);
-
-    if (!resolvedFile) {
-      console.warn(`文件不存在: ${resolvedPath}`);
-      return loadedFiles;
-    }
-    const content = await fetchFileContent(resolvedFile);
-
-    // 使用 pathe 的 basename 提取文件名作为 Sandpack 路径
-    const fileName = basename(resolvedFile);
-    const sandpackPath = `/${fileName}`;
-
-    loadedFiles[sandpackPath] = content;
-    console.log(`✓ 已加载依赖: ${sandpackPath}`);
-
-    // 使用 pathe 的 extname 获取文件扩展名（包含点号）
-    const ext = extname(fileName).slice(1).toLowerCase(); // 去掉开头的点号
-    if (['js', 'jsx', 'ts', 'tsx'].includes(ext)) {
-      const imports = parseImports(content);
-
-      // 递归加载所有依赖
-      for (const importPath of imports) {
-        await loadFileWithDependencies(
-          importPath,
-          resolvedFile,
-          loadedFiles,
-          visited
-        );
-      }
-    }
-  } catch (err) {
-    console.error(`加载文件失败: ${filePath}`, err);
-  }
-
-  return loadedFiles;
-}
-
-// 加载代码文件（使用 fetch 动态加载）
+// 加载代码
 async function loadCode() {
   try {
     loading.value = true;
     error.value = '';
     additionalFiles.value = {};
 
-    console.log('========================================');
-    console.log('开始加载文件:', props.path);
-
-    // 加载主文件内容
-    const fileContent = await fetchFileContent(props.path);
-    code.value = fileContent.trim();
-    console.log('✓ 主文件加载成功');
-
-    // 解析并递归加载所有依赖文件
-    console.log('开始解析依赖文件...');
-    const imports = parseImports(code.value);
-    console.log('发现导入语句:', imports);
-
-    if (imports.length > 0) {
-      const loadedFiles: Record<string, string> = {};
-
-      for (const importPath of imports) {
-        await loadFileWithDependencies(importPath, props.path, loadedFiles);
-      }
-
-      additionalFiles.value = loadedFiles;
-      console.log('✓ 所有依赖文件加载完成:', Object.keys(loadedFiles));
+    // 直接使用传入的代码
+    code.value = props.code.trim();
+    
+    // 如果提供了额外文件，直接使用
+    if (props.files) {
+      additionalFiles.value = props.files;
+      console.log('✓ 代码加载成功，包含额外文件:', Object.keys(props.files));
     } else {
-      console.log('未发现依赖文件');
+      console.log('✓ 代码加载成功');
     }
-
-    console.log('========================================');
   } catch (err) {
     console.error('加载代码失败:', err);
     error.value = err instanceof Error ? err.message : '未知错误';

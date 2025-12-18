@@ -4,7 +4,7 @@ import { defineConfig } from 'vitepress';
 import { baseConfig } from '../../lib/base-config';
 import { type AdvThemeConfig } from '../../lib';
 import pkg from '../../package.json';
-import { EXAMPLE_DIR } from './theme-config';
+
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig<AdvThemeConfig>({
@@ -23,9 +23,6 @@ export default defineConfig<AdvThemeConfig>({
     coverage: {
       path: '/coverage-summary.json'
     },
-    // 示例文件目录配置（从 theme-config.ts 导入）
-    // 源文件位于 docs/{EXAMPLE_DIR}/，通过插件自动复制到 docs/public/{EXAMPLE_DIR}/
-    exampleDir: EXAMPLE_DIR,
     nav: [
       {
         text: `v${pkg.version}`,
@@ -106,11 +103,6 @@ export default defineConfig<AdvThemeConfig>({
     }
   },
   vite: {
-    // 传递配置给插件（通过自定义字段）
-    // @ts-ignore - vitepress 是自定义配置字段
-    vitepress: {
-      exampleDir: EXAMPLE_DIR  // 示例文件目录配置
-    },
     server: {
       port: 5174
     },

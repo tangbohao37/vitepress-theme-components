@@ -26,35 +26,36 @@ componentName: SandpackEditor
 
 ### 默认展开编辑器
 
-设置 `defaultExpanded` 为 `true` 可以让编辑器默认展开
-<SandpackEditor path="button.jsx" defaultExpanded></SandpackEditor>
+<script setup>
+import buttonCode from './example/sandpack-button.jsx?raw'
+import  customComponentCode from './example/sandpack-custom-component.jsx?raw'
+import  customComponentStylesCode from './example/index.css?raw'
+</script>
+
+<SandpackEditor :code="buttonCode" defaultExpanded></SandpackEditor>
+
+<SandpackEditor :code="customComponentCode" :files="{'/index.css': customComponentStylesCode}" defaultExpanded readOnly></SandpackEditor>
 
 ### 只读代码查看器
 
 设置 `readOnly` 为 `true` 使用只读的代码查看器，用户无法编辑代码，适合展示参考代码
-<SandpackEditor path="button.jsx" readOnly defaultExpanded></SandpackEditor>
 
-### 其他示例
+```vue
+<script setup>
+import buttonCode from './example/button.jsx?raw';
+</script>
 
-#### 按钮图标示例
-
-<SandpackEditor path="icons.jsx"></SandpackEditor>
-
-#### 按钮状态示例
-
-<SandpackEditor path="button-status.jsx"></SandpackEditor>
-
-#### 自定义组件示例（井字游戏）
-
-<SandpackEditor path="custom-component.jsx"></SandpackEditor>
+<SandpackEditor :code="buttonCode" readOnly defaultExpanded />
+```
 
 ## API
 
-| 属性            | 类型    | 默认值  | 说明                                         |
-| --------------- | ------- | ------- | -------------------------------------------- |
-| path            | string  | -       | example 目录下的文件路径，如 "button.jsx"    |
-| defaultExpanded | boolean | `false` | 是否默认展开代码编辑器                       |
-| readOnly        | boolean | `false` | 是否为只读模式，使用 SandpackCodeViewer 组件 |
+| 属性            | 类型                   | 默认值  | 说明                                                                     |
+| --------------- | ---------------------- | ------- | ------------------------------------------------------------------------ |
+| code            | string                 | -       | 主文件代码内容（必需）                                                   |
+| files           | Record<string, string> | -       | 可选的额外文件，如 `{ '/styles.css': 'css内容', '/utils.js': 'js内容' }` |
+| defaultExpanded | boolean                | `false` | 是否默认展开代码编辑器                                                   |
+| readOnly        | boolean                | `false` | 是否为只读模式，使用 SandpackCodeViewer 组件                             |
 
 ## 设备预览
 
@@ -76,9 +77,37 @@ SandpackEditor 内置了移动设备预览框架：
 
 ## 使用说明
 
-1. 将 React 代码文件放在 `docs/public/example/` 目录下
-2. 在 markdown 中使用 `<SandpackEditor path="文件名.jsx"></SandpackEditor>`
-3. 组件会自动加载文件并渲染为可编辑的 Sandpack 编辑器
+### 基础用法
+
+1. 在 markdown 文件的 `<script setup>` 中导入代码文件（使用 `?raw` 后缀）
+2. 将代码字符串传递给 `<SandpackEditor>` 组件的 `code` 属性
+
+```vue
+<script setup>
+import buttonCode from './example/sandpack-button.jsx?raw';
+</script>
+
+<SandpackEditor :code="buttonCode" />
+```
+
+### 多文件用法
+
+如果你的代码需要额外的文件（如样式文件、工具函数等），可以使用 `files` 属性：
+
+```vue
+<script setup>
+import mainCode from './example/app.jsx?raw';
+import stylesCode from './example/styles.css?raw';
+import utilsCode from './example/utils.js?raw';
+
+const additionalFiles = {
+  '/styles.css': stylesCode,
+  '/utils.js': utilsCode
+};
+</script>
+
+<SandpackEditor :code="mainCode" :files="additionalFiles" />
+```
 
 ### 编辑器交互
 
@@ -122,54 +151,68 @@ function MyComponent() {
 
 ## 错误处理
 
-### 文件不存在示例
-
-<SandpackEditor path="non-existent.jsx"></SandpackEditor>
+如果传入的代码有语法错误或运行时错误，Sandpack 会在预览区域显示错误信息。
 
 ## 详细说明
 
-### 文件加载机制
+### 代码导入机制
 
-SandpackEditor 支持自动解析和加载代码文件的依赖关系。当你在代码中使用相对路径导入其他文件时，组件会递归加载所有依赖文件。
+SandpackEditor 使用 Vite 的 `?raw` 导入功能来加载代码文件内容。这是一种静态导入方式，在构建时就会将文件内容作为字符串打包进来。
 
 #### 支持的导入格式
 
-```js
-// 相对路径导入 - 会被自动加载
-import MyComponent from './my-component';
-import { helper } from './utils';
-import './styles.css';
+```vue
+<script setup>
+// 导入单个文件
+import buttonCode from './example/button.jsx?raw';
 
-// npm 包导入 - 由 Sandpack 处理
-import { Button } from '@arco-design/web-react';
+// 导入多个文件
+import mainCode from './example/app.jsx?raw';
+import stylesCode from './example/styles.css?raw';
+import utilsCode from './example/utils.js?raw';
+</script>
 ```
 
-::: tip 自动依赖解析
-组件会自动：
+::: tip ?raw 后缀的作用
+`?raw` 后缀告诉 Vite 将文件内容作为字符串导入，而不是执行或解析文件。这对于代码编辑器组件非常有用。
+:::
 
-1. 解析主文件中的 `import` 语句
-2. 识别相对路径导入（以 `./` 或 `../` 开头）
-3. 递归加载所有依赖文件（支持 `.js`, `.jsx`, `.ts`, `.tsx`, `.css`, `.scss`, `.less`）
-4. 自动补全文件扩展名（如果 `import` 语句中未指定）
-5. 避免循环依赖
-   :::
+#### 示例：多文件项目
 
-#### 示例：多文件项目结构
+如果你的示例代码需要多个文件，可以这样组织：
 
-假设你有如下文件结构：
+**文件结构：**
 
 ```
-docs/public/example/
+docs/demo/example/
   ├── app.jsx          # 主文件
   ├── components.jsx   # 组件文件
   └── styles.css       # 样式文件
 ```
 
-**app.jsx**:
+**在 markdown 中使用：**
+
+```vue
+<script setup>
+import appCode from './example/app.jsx?raw';
+import componentsCode from './example/components.jsx?raw';
+import stylesCode from './example/styles.css?raw';
+
+const files = {
+  '/components.jsx': componentsCode,
+  '/styles.css': stylesCode
+};
+</script>
+
+<SandpackEditor :code="appCode" :files="files" />
+```
+
+**app.jsx 中的导入：**
 
 ```jsx
-import MyButton from './components'; // [!code highlight]
-import './styles.css'; // [!code highlight]
+// 使用绝对路径导入（相对于 Sandpack 虚拟文件系统根目录）
+import MyButton from '/components.jsx';
+import '/styles.css';
 
 const App = () => {
   return <MyButton>Click Me</MyButton>;
@@ -178,19 +221,11 @@ const App = () => {
 render(<App />);
 ```
 
-只需在文档中引用主文件：
+::: warning 导入路径注意事项
 
-```md
-<SandpackEditor path="app.jsx"></SandpackEditor>
-```
-
-组件会自动加载 `components.jsx` 和 `styles.css`。
-
-::: warning 路径注意事项
-
-- 只支持相对路径导入（`./` 或 `../`）
-- 文件必须位于 `docs/public/example/` 目录下
-- 如果导入路径没有扩展名，组件会尝试常见扩展名（`.js`, `.jsx`, `.ts`, `.tsx`, `.css` 等）
+- 在 `files` 对象中，文件路径必须以 `/` 开头（Sandpack 虚拟文件系统的绝对路径）
+- 在代码中导入这些文件时，也要使用相同的路径（如 `import X from '/components.jsx'`）
+- npm 包导入（如 `import { Button } from '@arco-design/web-react'`）由 Sandpack 自动处理
   :::
 
 ### 预览区域高度调整
@@ -274,100 +309,44 @@ SandpackEditor 基于以下技术栈：
 - **Naive UI**: 提供加载状态（`NSpin`）、错误提示（`NResult`）、按钮等 UI 组件
 - **PreviewSectionWrapper**: 自定义预览区域组件，集成设备框架和预览功能
 
-### 文件加载流程
+### 代码加载流程
 
 ::: info 加载流程
 
-1. **组件挂载** → 触发 `loadCode()` 函数
-2. **加载主文件** → 从 `/vitepress-theme-components/example/` 路径获取
-3. **解析 import** → 使用正则表达式提取相对路径导入
-4. **递归加载依赖** → `loadFileWithDependencies()` 递归加载所有依赖
-5. **扩展名补全** → 自动尝试 `.js`, `.jsx`, `.ts`, `.tsx`, `.css` 等扩展名
-6. **避免循环依赖** → 使用 `visited` Set 记录已加载文件
-7. **组装文件对象** → 将所有文件传递给 Sandpack
+1. **静态导入** → 使用 `import code from './file.jsx?raw'` 在构建时导入代码
+2. **传递给组件** → 将代码字符串通过 `code` 属性传递给 `<SandpackEditor>`
+3. **组件挂载** → 组件接收代码并初始化 Sandpack
+4. **渲染预览** → Sandpack 在虚拟环境中执行代码并显示结果
    :::
 
-**核心代码实现**：
+**核心实现**：
 
 ```ts
-// 解析代码中的 import 语句，提取相对路径的文件
-function parseImports(code: string): string[] {
-  const imports: string[] = [];
+// 加载代码
+async function loadCode() {
+  try {
+    loading.value = true;
+    error.value = '';
+    additionalFiles.value = {};
 
-  // 匹配 import 语句：import xxx from './xxx' 或 import './xxx'
-  // 支持单引号、双引号
-  const importRegex = /import\s+(?:[\w\s{},*]+\s+from\s+)?['"](.+?)['"]/g; // [!code highlight]
+    // 直接使用传入的代码
+    code.value = props.code.trim();
 
-  let match;
-  while ((match = importRegex.exec(code)) !== null) {
-    const importPath = match[1];
-
-    // 只处理相对路径（以 ./ 或 ../ 开头） // [!code highlight]
-    if (importPath.startsWith('./') || importPath.startsWith('../')) {
-      // [!code highlight]
-      imports.push(importPath);
+    // 如果提供了额外文件，直接使用
+    if (props.files) {
+      additionalFiles.value = props.files;
+      console.log('✓ 代码加载成功，包含额外文件:', Object.keys(props.files));
+    } else {
+      console.log('✓ 代码加载成功');
     }
-  }
-
-  return imports;
-}
-```
-
-::: warning 循环依赖检测
-递归加载时使用 `visited` Set 避免循环依赖：
-
-```ts
-async function loadFileWithDependencies(
-  filePath: string,
-  loadedFiles: Record<string, string> = {},
-  visited: Set<string> = new Set() // [!code highlight]
-): Promise<Record<string, string>> {
-  const normalizedPath = normalizePath(filePath);
-
-  // 避免循环依赖 // [!code highlight]
-  if (visited.has(normalizedPath)) {
-    // [!code highlight]
-    return loadedFiles; // [!code highlight]
-  } // [!code highlight]
-  visited.add(normalizedPath);
-
-  // ... 加载文件逻辑
-}
-```
-
-:::
-
-### 扩展名智能补全
-
-当 `import` 语句没有指定文件扩展名时，组件会自动尝试常见扩展名：
-
-```ts{7-17}
-// 如果 import 路径没有扩展名，尝试添加常见扩展名
-if (!resolvedPath.match(/\.\w+$/)) {
-  // 尝试常见的扩展名
-  const possibleExts = ['js', 'jsx', 'ts', 'tsx', 'css', 'scss', 'less']
-  let found = false
-
-  for (const ext of possibleExts) {
-    const pathWithExt = `${resolvedPath}.${ext}`
-    try {
-      const testPath = `/vitepress-theme-components/example/${pathWithExt}`
-      const testResponse = await fetch(testPath, { method: 'HEAD' })
-      if (testResponse.ok) {
-        resolvedPath = pathWithExt
-        found = true
-        break
-      }
-    } catch {
-      // 继续尝试下一个扩展名
-    }
+  } catch (err) {
+    console.error('加载代码失败:', err);
+    error.value = err instanceof Error ? err.message : '未知错误';
+  } finally {
+    loading.value = false;
   }
 }
 ```
-
-::: tip HEAD 请求优化
-使用 `fetch` 的 `HEAD` 方法检测文件是否存在，避免下载完整文件内容，提升性能。
-:::
 
 ### Sandpack 配置
 
@@ -512,24 +491,45 @@ const previewSectionRef = ref<HTMLElement | null>(null);
 
 ### 如何加载多个依赖文件？
 
-只需在主文件中使用相对路径导入，组件会自动递归加载：
+使用 `files` 属性传入额外的文件：
+
+```vue
+<script setup>
+import mainCode from './example/main.jsx?raw';
+import buttonCode from './example/button.jsx?raw';
+import inputCode from './example/input.jsx?raw';
+import mainCss from './example/main.css?raw';
+import themeCss from './example/theme.css?raw';
+
+const files = {
+  '/button.jsx': buttonCode,
+  '/input.jsx': inputCode,
+  '/main.css': mainCss,
+  '/theme.css': themeCss
+};
+</script>
+
+<SandpackEditor :code="mainCode" :files="files" />
+```
+
+然后在主文件中使用绝对路径导入：
 
 ```jsx
 // main.jsx
-import Button from './components/button';
-import Input from './components/input';
-import './styles/main.css';
-import './styles/theme.css';
+import Button from '/button.jsx';
+import Input from '/input.jsx';
+import '/main.css';
+import '/theme.css';
 ```
 
-### 为什么我的导入没有被加载？
+### 为什么我的导入没有生效？
 
 检查以下几点：
 
-1. 导入路径必须是相对路径（以 `./` 或 `../` 开头）
-2. 文件必须存在于 `docs/public/example/` 目录
-3. 检查浏览器控制台的加载日志
-4. 如果未指定扩展名，确保文件扩展名在支持列表中（`.js`, `.jsx`, `.ts`, `.tsx`, `.css`, `.scss`, `.less`）
+1. **在 `<script setup>` 中**：确保使用 `?raw` 后缀导入文件
+2. **在 `files` 对象中**：文件路径必须以 `/` 开头
+3. **在代码中导入时**：使用与 `files` 对象中相同的路径（如 `import X from '/file.jsx'`）
+4. **npm 包导入**：直接使用包名即可（如 `import { Button } from '@arco-design/web-react'`）
 
 ### 如何自定义 Sandpack 依赖？
 
@@ -538,3 +538,10 @@ import './styles/theme.css';
 ### 预览区域可以自定义尺寸吗？
 
 预览区域的高度可以通过拖动分隔条调整（`200px` - `1000px`），设备框架尺寸是固定的（基于真实设备尺寸）。
+
+### ?raw 导入和普通导入有什么区别？
+
+- **普通导入** (`import X from './file.jsx'`)：Vite 会解析并执行文件
+- **?raw 导入** (`import X from './file.jsx?raw'`)：Vite 将文件内容作为字符串导入，不进行解析
+
+对于代码编辑器组件，我们需要原始的代码字符串，所以必须使用 `?raw` 后缀。
