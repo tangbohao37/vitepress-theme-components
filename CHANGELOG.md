@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2-beta.33](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.32...v0.0.2-beta.33) (2025-12-18)
+
+
+### Features
+
+* add comprehensive documentation for vitepress-theme-components ([c612482](https://github.com/tangbohao37/vitepress-theme-components/commit/c612482907c9a067d287c6736569406d20854df2))
+* enhance documentation and components for mobile device previews ([5b3990d](https://github.com/tangbohao37/vitepress-theme-components/commit/5b3990d1401e4f78c6d5bc9211e138ae6f3958b1))
+
 ### [0.0.2-beta.32](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.31...v0.0.2-beta.32) (2025-08-11)
 
 
