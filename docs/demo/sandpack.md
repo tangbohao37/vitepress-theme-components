@@ -2,6 +2,19 @@
 componentName: SandpackEditor
 ---
 
+<!--
+LiveEditor：智能组件，自动处理一切，会自动注入/合并 <script setup>
+SandpackEditor：传统组件，需要手动在 <script setup> 中导入代码
+同时使用两者：必须在文件开头提供一个 <script setup>，LiveEditor 会将它的依赖合并进去
+ -->
+<script setup>
+import buttonCode from './example/sandpack-button.jsx?raw'
+import  customComponentCode from './example/sandpack-custom-component.jsx?raw'
+import  customComponentStylesCode from './example/index.css?raw'
+</script>
+
+<LiveEditor sourceCodePath="./example/index.jsx"></LiveEditor>
+
 # SandpackEditor
 
 > 带移动设备预览的 Sandpack React 代码编辑器组件，从 public/example 目录加载代码文件并渲染
@@ -25,12 +38,6 @@ componentName: SandpackEditor
 展示完整的移动端 UI，支持设备切换。默认收起代码编辑器，点击"代码示例"可展开查看和编辑。
 
 ### 默认展开编辑器
-
-<script setup>
-import buttonCode from './example/sandpack-button.jsx?raw'
-import  customComponentCode from './example/sandpack-custom-component.jsx?raw'
-import  customComponentStylesCode from './example/index.css?raw'
-</script>
 
 <SandpackEditor :code="buttonCode" defaultExpanded></SandpackEditor>
 
