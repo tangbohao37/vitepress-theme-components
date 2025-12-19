@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3-beta.1](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.0...v0.0.3-beta.1) (2025-12-19)
+
+
+### Features
+
+* add package.json generation and improve export handling in LocalComponentLoader ([c421673](https://github.com/tangbohao37/vitepress-theme-components/commit/c4216732f9c278883d82eae02cd25729a9ef1683))
+
 ### [0.0.3-beta.0](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.36...v0.0.3-beta.0) (2025-12-19)
 
 
