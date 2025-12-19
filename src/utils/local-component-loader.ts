@@ -147,23 +147,39 @@ export class LocalComponentLoader {
       return `// No exports configured for ${packageName}\nexport {}`
     }
 
-    // 使用 export * 来保留模块的所有导出，包括对象属性
-    const exportStatements = exports.map(({ componentName, importPath }) => {
-      // 确保 importPath 以 / 开头
+    // 按 importPath 分组，同一个文件的多个导出一起处理
+    const pathToComponents = new Map<string, string[]>()
+    
+    for (const { componentName, importPath } of exports) {
       const normalizedPath = importPath.startsWith('/')
         ? importPath
         : `/${importPath}`
+      const fullPath = `/node_modules/${packageName}${normalizedPath}`
+      
+      if (!pathToComponents.has(fullPath)) {
+        pathToComponents.set(fullPath, [])
+      }
+      pathToComponents.get(fullPath)!.push(componentName)
+    }
 
-      // 使用 export * 而不是 export { name }，这样可以保留对象上的属性
-      return `export * from '/node_modules/${packageName}${normalizedPath}'`
-    })
-
-    // 去重
-    const uniqueExports = [...new Set(exportStatements)]
+    // 使用 import + export 来确保对象属性被保留
+    // export * 是静态的，不会保留运行时添加的对象属性（如 Form.useRhForm）
+    const statements: string[] = []
+    
+    for (const [path, components] of pathToComponents) {
+      const importList = components.join(', ')
+      statements.push(`import { ${importList} } from '${path}'`)
+    }
+    
+    statements.push('') // 空行分隔
+    
+    // 重新导出所有组件
+    const allComponents = [...pathToComponents.values()].flat()
+    statements.push(`export { ${allComponents.join(', ')} }`)
 
     return [
       `// Auto-generated entry file for ${packageName}`,
-      ...uniqueExports,
+      ...statements,
     ].join('\n')
   }
 
