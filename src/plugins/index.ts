@@ -315,11 +315,13 @@ export const parseProps = <T extends Record<string, any> = any>(
               if (prop.type === 7) {
                 const propName = prop.arg?.loc.source;
                 const propVal = prop.exp?.loc.source;
-                let v = false;
+                let v: any = propVal; // 默认使用原始字符串值
+                console.log(propName, propVal);
                 try {
                   v = JSON.parse(propVal || '');
                 } catch {
-                  v = false;
+                  // JSON 解析失败时,保留原始字符串值而不是设置为 false
+                  v = propVal;
                 }
                 if (propName) {
                   propsMap[propName] = v;
