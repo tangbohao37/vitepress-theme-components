@@ -28,4 +28,12 @@ const theme: Theme = {
 
 export type { ISandpackEditor, AdvThemeConfig } from './types';
 
+// 导出本地组件加载器工具
+export {
+  LocalComponentLoader,
+  processGlobModules,
+  createVirtualFileSystem
+} from './utils/local-component-loader';
+export type { LocalComponentLoaderConfig } from './utils/local-component-loader';
+
 export default theme;
