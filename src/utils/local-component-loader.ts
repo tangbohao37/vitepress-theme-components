@@ -147,18 +147,23 @@ export class LocalComponentLoader {
       return `// No exports configured for ${packageName}\nexport {}`
     }
 
+    // 使用 export * 来保留模块的所有导出，包括对象属性
     const exportStatements = exports.map(({ componentName, importPath }) => {
       // 确保 importPath 以 / 开头
       const normalizedPath = importPath.startsWith('/')
         ? importPath
         : `/${importPath}`
 
-      return `export { ${componentName} } from '/node_modules/${packageName}${normalizedPath}'`
+      // 使用 export * 而不是 export { name }，这样可以保留对象上的属性
+      return `export * from '/node_modules/${packageName}${normalizedPath}'`
     })
+
+    // 去重
+    const uniqueExports = [...new Set(exportStatements)]
 
     return [
       `// Auto-generated entry file for ${packageName}`,
-      ...exportStatements,
+      ...uniqueExports,
     ].join('\n')
   }
 
@@ -183,6 +188,46 @@ export class LocalComponentLoader {
       `// Auto-generated style file for ${packageName}`,
       ...importStatements,
     ].join('\n')
+  }
+
+  /**
+   * 生成 package.json 文件内容
+   * 为虚拟包创建必要的 package.json，让 Sandpack 能够正确解析包
+   */
+  generatePackageJson(): string {
+    const { packageName, exports = [], styleFiles = [] } = this.config
+    
+    const packageJsonObj: Record<string, any> = {
+      name: packageName,
+      version: '0.0.0-local',
+    }
+
+    // 如果没有配置 exports，说明是预打包的库（如 @atome/icons）
+    // 使用默认的 index.js
+    if (exports.length === 0) {
+      packageJsonObj.main = './index.js'
+      packageJsonObj.module = './index.js'
+      packageJsonObj.type = 'module'
+    } else {
+      // 有 exports 配置，使用配置的入口
+      const mainExport = exports.find(exp => exp.componentName === 'index') || exports[0]
+      if (mainExport) {
+        const mainPath = mainExport.importPath.startsWith('/')
+          ? mainExport.importPath
+          : `/${mainExport.importPath}`
+        packageJsonObj.main = `.${mainPath}`
+        packageJsonObj.module = `.${mainPath}`
+      }
+    }
+
+    // 设置样式入口
+    if (styleFiles.length > 0) {
+      const styleExport = styleFiles[0]
+      const stylePath = styleExport.startsWith('/') ? styleExport : `/${styleExport}`
+      packageJsonObj.style = `.${stylePath}`
+    }
+
+    return JSON.stringify(packageJsonObj, null, 2)
   }
 
   /**
@@ -263,23 +308,39 @@ export function createVirtualFileSystem(
   fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'local-component-loader.ts:186',message:'createVirtualFileSystem called',data:{packageName,moduleCount:Object.keys(modules).length,firstModulePath:Object.keys(modules)[0],resolvedPathPrefix:config.resolvedPathPrefix},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A,D'})}).catch(()=>{});
   // #endregion
   
-  const entryFile = loader.generateEntryFile()
-  const styleFile = loader.generateStyleFile()
   const processedModules = processGlobModules(modules, loader)
+  const hasExports = config.exports && config.exports.length > 0
   
   console.log('[DEBUG] processedModules keys (first 3):', Object.keys(processedModules).slice(0, 3))
+  console.log('[DEBUG] hasExports:', hasExports)
   
   // #region agent log
-  fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'local-component-loader.ts:196',message:'generated files',data:{entryFileLength:entryFile.length,entryFilePreview:entryFile.substring(0,500),processedModuleCount:Object.keys(processedModules).length,firstProcessedPath:Object.keys(processedModules)[0],processedSample:Object.keys(processedModules).slice(0,5)},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B,D'})}).catch(()=>{});
+  fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'local-component-loader.ts:196',message:'generated files',data:{hasExports,processedModuleCount:Object.keys(processedModules).length,firstProcessedPath:Object.keys(processedModules)[0],processedSample:Object.keys(processedModules).slice(0,5)},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B,D'})}).catch(()=>{});
   // #endregion
 
-  const result = {
-    // 入口文件
-    [`/node_modules/${packageName}/index.js`]: entryFile,
-    // 样式文件
-    [`/node_modules/${packageName}/style.js`]: styleFile,
+  // 生成虚拟 package.json
+  const packageJson = loader.generatePackageJson()
+
+  const result: Record<string, string> = {
+    // package.json (Sandpack 需要这个来识别包)
+    [`/node_modules/${packageName}/package.json`]: packageJson,
     // 所有组件文件
     ...processedModules,
+  }
+  
+  // 只有当配置了 exports 时才生成自定义的入口文件
+  if (hasExports) {
+    const entryFile = loader.generateEntryFile()
+    const styleFile = loader.generateStyleFile()
+    result[`/node_modules/${packageName}/index.js`] = entryFile
+    result[`/node_modules/${packageName}/style.js`] = styleFile
+  } else {
+    // 对于预打包的库，将 index.esm.js 重命名为 index.js
+    const esmIndexPath = `/node_modules/${packageName}/index.esm.js`
+    if (processedModules[esmIndexPath]) {
+      result[`/node_modules/${packageName}/index.js`] = processedModules[esmIndexPath]
+      console.log('[DEBUG] Renamed index.esm.js to index.js for pre-bundled library')
+    }
   }
   
   console.log('[DEBUG] createVirtualFileSystem RESULT keys (first 5):', Object.keys(result).slice(0, 5))

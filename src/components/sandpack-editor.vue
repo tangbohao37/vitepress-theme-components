@@ -1,8 +1,5 @@
 <template>
   <div class="sandpack-editor-wrapper">
-    {{ JSON.stringify(setup, null, 2) }}
-    <hr>
-    {{ JSON.stringify(files, null, 2) }}
     <!-- 加载状态 - 使用 Naive UI NSpin -->
     <div v-if="loading" class="loading">
       <NSpin size="large" description="正在加载示例代码..." />
