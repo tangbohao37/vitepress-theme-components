@@ -96,23 +96,38 @@ export class LocalComponentLoader {
   transformPath(originalPath: string): string {
     const { componentLibraryAlias, packageName, resolvedPathPrefix } = this.config
 
+    // #region agent log
+    fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'local-component-loader.ts:96',message:'transformPath called',data:{originalPath,resolvedPathPrefix,componentLibraryAlias,packageName},timestamp:Date.now(),sessionId:'debug-session',runId:'initial',hypothesisId:'A,E'})}).catch(()=>{});
+    // #endregion
+
     // 如果提供了解析后的路径前缀（Vite 解析 alias 后的实际路径）
     if (resolvedPathPrefix && originalPath.includes(resolvedPathPrefix)) {
-      return originalPath.replace(
+      const transformed = originalPath.replace(
         resolvedPathPrefix,
         `/node_modules/${packageName}/`,
       )
+      // #region agent log
+      fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'local-component-loader.ts:108',message:'transformPath - resolvedPathPrefix matched',data:{originalPath,transformed},timestamp:Date.now(),sessionId:'debug-session',runId:'initial',hypothesisId:'A'})}).catch(()=>{});
+      // #endregion
+      return transformed
     }
 
     // 否则尝试替换 alias（兼容旧行为）
     if (originalPath.includes(componentLibraryAlias)) {
-      return originalPath.replace(
+      const transformed = originalPath.replace(
         componentLibraryAlias,
         `/node_modules/${packageName}`,
       )
+      // #region agent log
+      fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'local-component-loader.ts:121',message:'transformPath - componentLibraryAlias matched',data:{originalPath,transformed},timestamp:Date.now(),sessionId:'debug-session',runId:'initial',hypothesisId:'A'})}).catch(()=>{});
+      // #endregion
+      return transformed
     }
 
     // 如果都不匹配，返回原路径
+    // #region agent log
+    fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'local-component-loader.ts:130',message:'transformPath - no match, returning original',data:{originalPath},timestamp:Date.now(),sessionId:'debug-session',runId:'initial',hypothesisId:'A'})}).catch(()=>{});
+    // #endregion
     return originalPath
   }
 
@@ -275,11 +290,19 @@ export function createVirtualFileSystem(
   const packageName = loader.getPackageName()
   const config = (loader as any).config
   
+  // #region agent log
+  fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'local-component-loader.ts:271',message:'createVirtualFileSystem entry',data:{packageName,moduleCount:Object.keys(modules).length,hasExports:config.exports?.length>0},timestamp:Date.now(),sessionId:'debug-session',runId:'initial',hypothesisId:'A,D,E'})}).catch(()=>{});
+  // #endregion
+  
   const processedModules = processGlobModules(modules, loader)
   const hasExports = config.exports && config.exports.length > 0
 
   // 生成虚拟 package.json
   const packageJson = loader.generatePackageJson()
+  
+  // #region agent log
+  fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'local-component-loader.ts:283',message:'processedModules created',data:{processedModuleCount:Object.keys(processedModules).length,samplePaths:Object.keys(processedModules).slice(0,10),hasLoadingModule:Object.keys(processedModules).some(k=>k.includes('loading')),hasIconsModule:Object.keys(processedModules).some(k=>k.includes('icons'))},timestamp:Date.now(),sessionId:'debug-session',runId:'initial',hypothesisId:'A,B,E'})}).catch(()=>{});
+  // #endregion
 
   const result: Record<string, string> = {
     // package.json (Sandpack 需要这个来识别包)
@@ -294,6 +317,10 @@ export function createVirtualFileSystem(
     const styleFile = loader.generateStyleFile()
     result[`/node_modules/${packageName}/index.js`] = entryFile
     result[`/node_modules/${packageName}/style.js`] = styleFile
+    
+    // #region agent log
+    fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'local-component-loader.ts:296',message:'generated entry files',data:{entryFileLength:entryFile.length,entryFilePreview:entryFile.substring(0,500),packageJsonContent:packageJson},timestamp:Date.now(),sessionId:'debug-session',runId:'initial',hypothesisId:'C,D'})}).catch(()=>{});
+    // #endregion
   } else {
     // 对于预打包的库，将 index.esm.js 重命名为 index.js
     const esmIndexPath = `/node_modules/${packageName}/index.esm.js`
@@ -301,6 +328,10 @@ export function createVirtualFileSystem(
       result[`/node_modules/${packageName}/index.js`] = processedModules[esmIndexPath]
     }
   }
+  
+  // #region agent log
+  fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'local-component-loader.ts:310',message:'final result files',data:{totalFiles:Object.keys(result).length,allFilePaths:Object.keys(result),loadingRelatedFiles:Object.keys(result).filter(k=>k.includes('loading')),iconsRelatedFiles:Object.keys(result).filter(k=>k.includes('icons')).slice(0,20)},timestamp:Date.now(),sessionId:'debug-session',runId:'initial',hypothesisId:'A,B'})}).catch(()=>{});
+  // #endregion
   
   return result
 }
