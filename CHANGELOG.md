@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3-beta.4](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.3...v0.0.3-beta.4) (2025-12-20)
+
+
+### Features
+
+* add logging for transformPath and createVirtualFileSystem in LocalComponentLoader ([8989c40](https://github.com/tangbohao37/vitepress-theme-components/commit/8989c401fb670504e2821cee8ecdb5a1cd71bd95))
+
 ### [0.0.3-beta.3](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.2...v0.0.3-beta.3) (2025-12-20)
 
 ### [0.0.3-beta.2](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.1...v0.0.3-beta.2) (2025-12-20)
