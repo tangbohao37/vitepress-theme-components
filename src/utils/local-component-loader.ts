@@ -94,45 +94,25 @@ export class LocalComponentLoader {
    * 或：  ../es/button/index.js -> /node_modules/@atome/design/button/index.js
    */
   transformPath(originalPath: string): string {
-    // #region agent log
-    fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'transformPath:CALLED', message: 'transformPath called', data: { originalPath, resolvedPathPrefix: this.config.resolvedPathPrefix }, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId: 'TRANSFORM_CALL' }) }).catch(() => {})
-    // #endregion
-    
     const { componentLibraryAlias, packageName, resolvedPathPrefix } = this.config
 
     // 如果提供了解析后的路径前缀（Vite 解析 alias 后的实际路径）
     if (resolvedPathPrefix && originalPath.includes(resolvedPathPrefix)) {
-      const result = originalPath.replace(
+      return originalPath.replace(
         resolvedPathPrefix,
         `/node_modules/${packageName}/`,
       )
-      
-      // #region agent log
-      fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'transformPath:PREFIX_MATCH', message: 'prefix matched and transformed', data: { originalPath, result, prefix: resolvedPathPrefix }, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId: 'TRANSFORM_SUCCESS' }) }).catch(() => {})
-      // #endregion
-      
-      return result
     }
 
     // 否则尝试替换 alias（兼容旧行为）
     if (originalPath.includes(componentLibraryAlias)) {
-      const result = originalPath.replace(
+      return originalPath.replace(
         componentLibraryAlias,
         `/node_modules/${packageName}`,
       )
-      
-      // #region agent log
-      fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'transformPath:ALIAS_MATCH', message: 'alias matched and transformed', data: { originalPath, result, alias: componentLibraryAlias }, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId: 'TRANSFORM_SUCCESS' }) }).catch(() => {})
-      // #endregion
-      
-      return result
     }
 
-    // 如果都不匹配，返回原路径（可能需要在调试时添加警告）
-    // #region agent log
-    fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'transformPath:NO_MATCH', message: 'no match, returning original', data: { originalPath, resolvedPathPrefix, componentLibraryAlias }, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId: 'TRANSFORM_FAIL' }) }).catch(() => {})
-    // #endregion
-    
+    // 如果都不匹配，返回原路径
     return originalPath
   }
 
@@ -162,24 +142,34 @@ export class LocalComponentLoader {
       pathToComponents.get(fullPath)!.push(componentName)
     }
 
-    // 使用 import + export 来确保对象属性被保留
-    // export * 是静态的，不会保留运行时添加的对象属性（如 Form.useRhForm）
-    const statements: string[] = []
+    // 使用 import + export 的两步策略来保持对象完整性
+    // 这确保运行时添加的属性（如 Form.useRhForm）能被正确保留
+    const importStatements: string[] = []
+    const exportStatements: string[] = []
     
-    for (const [path, components] of pathToComponents) {
-      const importList = components.join(', ')
-      statements.push(`import { ${importList} } from '${path}'`)
+    // 创建去重的路径集合
+    const uniquePaths = new Set(pathToComponents.keys())
+    
+    let importIndex = 0
+    for (const path of uniquePaths) {
+      const components = pathToComponents.get(path) || []
+      if (components.length > 0) {
+        // 为每个组件生成独立的 import 和 export
+        for (const componentName of components) {
+          const varName = `_${componentName}_${importIndex}`
+          importStatements.push(`import { ${componentName} as ${varName} } from '${path}'`)
+          exportStatements.push(`export const ${componentName} = ${varName}`)
+          importIndex++
+        }
+      }
     }
-    
-    statements.push('') // 空行分隔
-    
-    // 重新导出所有组件
-    const allComponents = [...pathToComponents.values()].flat()
-    statements.push(`export { ${allComponents.join(', ')} }`)
 
     return [
       `// Auto-generated entry file for ${packageName}`,
-      ...statements,
+      `// Using import + export strategy to preserve runtime-added properties (e.g., Form.useRhForm)`,
+      ...importStatements,
+      '',
+      ...exportStatements,
     ].join('\n')
   }
 
@@ -225,15 +215,10 @@ export class LocalComponentLoader {
       packageJsonObj.module = './index.js'
       packageJsonObj.type = 'module'
     } else {
-      // 有 exports 配置，使用配置的入口
-      const mainExport = exports.find(exp => exp.componentName === 'index') || exports[0]
-      if (mainExport) {
-        const mainPath = mainExport.importPath.startsWith('/')
-          ? mainExport.importPath
-          : `/${mainExport.importPath}`
-        packageJsonObj.main = `.${mainPath}`
-        packageJsonObj.module = `.${mainPath}`
-      }
+      // 有 exports 配置，使用我们生成的 index.js 入口文件
+      packageJsonObj.main = './index.js'
+      packageJsonObj.module = './index.js'
+      packageJsonObj.type = 'module'
     }
 
     // 设置样式入口
@@ -269,36 +254,13 @@ export function processGlobModules(
   modules: Record<string, any>,
   loader: LocalComponentLoader,
 ): Record<string, string> {
-  // #region agent log - 记录函数被调用
-  fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'processGlobModules:START', message: 'processGlobModules called', data: { moduleCount: Object.keys(modules).length, firstKey: Object.keys(modules)[0] }, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId: 'PROCESS' }) }).catch(() => {})
-  // #endregion
-  
   const files: Record<string, string> = {}
 
-  let count = 0
   for (const [path, content] of Object.entries(modules)) {
-    count++
-    
-    // #region agent log - 记录转换前
-    if (count <= 3) {
-      fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: `processGlobModules:BEFORE-${count}`, message: 'before transform', data: { originalPath: path }, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId: 'TRANSFORM' }) }).catch(() => {})
-    }
-    // #endregion
-    
     const virtualPath = loader.transformPath(path)
     files[virtualPath] = content as string
-    
-    // #region agent log - 记录转换后
-    if (count <= 3) {
-      fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: `processGlobModules:AFTER-${count}`, message: 'after transform', data: { originalPath: path, transformedPath: virtualPath }, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId: 'TRANSFORM' }) }).catch(() => {})
-    }
-    // #endregion
   }
 
-  // #region agent log - 记录函数结束
-  fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'processGlobModules:END', message: 'processGlobModules done', data: { filesCount: Object.keys(files).length, first3Keys: Object.keys(files).slice(0, 3) }, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId: 'PROCESS' }) }).catch(() => {})
-  // #endregion
-  
   return files
 }
 
@@ -312,27 +274,9 @@ export function createVirtualFileSystem(
 ): Record<string, string> {
   const packageName = loader.getPackageName()
   const config = (loader as any).config
-  const firstThreeModules = Object.keys(modules).slice(0, 3)
-  
-  console.log('[DEBUG] createVirtualFileSystem START')
-  console.log('[DEBUG] packageName:', packageName)
-  console.log('[DEBUG] moduleCount:', Object.keys(modules).length)
-  console.log('[DEBUG] first 3 modules:', firstThreeModules)
-  console.log('[DEBUG] config.resolvedPathPrefix:', config.resolvedPathPrefix)
-  
-  // #region agent log
-  fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'local-component-loader.ts:186',message:'createVirtualFileSystem called',data:{packageName,moduleCount:Object.keys(modules).length,firstModulePath:Object.keys(modules)[0],resolvedPathPrefix:config.resolvedPathPrefix},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'A,D'})}).catch(()=>{});
-  // #endregion
   
   const processedModules = processGlobModules(modules, loader)
   const hasExports = config.exports && config.exports.length > 0
-  
-  console.log('[DEBUG] processedModules keys (first 3):', Object.keys(processedModules).slice(0, 3))
-  console.log('[DEBUG] hasExports:', hasExports)
-  
-  // #region agent log
-  fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'local-component-loader.ts:196',message:'generated files',data:{hasExports,processedModuleCount:Object.keys(processedModules).length,firstProcessedPath:Object.keys(processedModules)[0],processedSample:Object.keys(processedModules).slice(0,5)},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'B,D'})}).catch(()=>{});
-  // #endregion
 
   // 生成虚拟 package.json
   const packageJson = loader.generatePackageJson()
@@ -355,11 +299,8 @@ export function createVirtualFileSystem(
     const esmIndexPath = `/node_modules/${packageName}/index.esm.js`
     if (processedModules[esmIndexPath]) {
       result[`/node_modules/${packageName}/index.js`] = processedModules[esmIndexPath]
-      console.log('[DEBUG] Renamed index.esm.js to index.js for pre-bundled library')
     }
   }
-  
-  console.log('[DEBUG] createVirtualFileSystem RESULT keys (first 5):', Object.keys(result).slice(0, 5))
   
   return result
 }
