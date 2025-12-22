@@ -72,7 +72,6 @@
               <SandpackCodeViewer
                 v-if="props.readOnly"
                 :show-line-numbers="true"
-                :show-tabs="false"
               />
               <!-- 编辑模式：使用 SandpackCodeEditor -->
               <SandpackCodeEditor v-else :show-line-numbers="true" />
@@ -202,7 +201,7 @@ const files = computed(() => {
   const result: Record<string, string> = {
     '/App.js': code.value,
     // 合并所有文件（包括示例文件、node_modules 虚拟包等）
-    ...additionalFiles.value,
+    ...additionalFiles.value
   };
 
   return result;
@@ -211,7 +210,6 @@ const files = computed(() => {
 const setup = computed(() => {
   const config: Record<string, any> = {
     dependencies: {
-      '@arco-design/web-react': '^2.63.0',
       react: '^18.2.0',
       'react-dom': '^18.2.0',
       // 合并用户自定义依赖
@@ -236,7 +234,7 @@ async function loadCode() {
 
     // 检查 code 是否存在
     if (!props.code) {
-      throw new Error('代码内容不能为空，请检查 :code prop 是否正确传递')
+      throw new Error('代码内容不能为空，请检查 :code prop 是否正确传递');
     }
 
     // 直接使用传入的代码
@@ -245,24 +243,24 @@ async function loadCode() {
     // 如果提供了额外文件，直接使用
     if (props.files) {
       additionalFiles.value = props.files;
-      
+
       // 统计文件类型
       const fileTypes = {
         nodeModules: 0,
         examples: 0,
         others: 0
-      }
-      
-      Object.keys(props.files).forEach(path => {
+      };
+
+      Object.keys(props.files).forEach((path) => {
         if (path.startsWith('/node_modules/')) {
-          fileTypes.nodeModules++
+          fileTypes.nodeModules++;
         } else if (path.startsWith('/')) {
-          fileTypes.examples++
+          fileTypes.examples++;
         } else {
-          fileTypes.others++
+          fileTypes.others++;
         }
-      })
-      
+      });
+
       console.log('✅ Sandpack 文件加载成功:', {
         总文件数: Object.keys(props.files).length,
         虚拟包文件: fileTypes.nodeModules,

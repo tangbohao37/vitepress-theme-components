@@ -13,7 +13,6 @@ import  customComponentCode from './example/sandpack-custom-component.jsx?raw'
 import  customComponentStylesCode from './example/index.css?raw'
 </script>
 
-<LiveEditor sourceCodePath="./example/index.jsx"></LiveEditor>
 
 # SandpackEditor
 
@@ -39,7 +38,10 @@ import  customComponentStylesCode from './example/index.css?raw'
 
 ### 默认展开编辑器
 
-<SandpackEditor :code="buttonCode" defaultExpanded></SandpackEditor>
+<SandpackEditor :code="buttonCode" defaultExpanded :dependencies="{ '@arco-design/web-react': '^2.63.0', }"></SandpackEditor>
+
+<LiveEditor sourceCodePath="./example/index.jsx"></LiveEditor>
+
 
 <SandpackEditor :code="customComponentCode" :files="{'/index.css': customComponentStylesCode}" defaultExpanded readOnly></SandpackEditor>
 
