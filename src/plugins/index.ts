@@ -238,14 +238,37 @@ const liveEditorRender = (tokens, idx, options, env, self, content, tag) => {
         !scriptClientRE.test(tag.content)
     );
     let _code = demoImportCodeStr;
+    let nonImportCode = ''; // 保存非 import 语句的代码
+    
     // FIXME： 切换文件后需要清空缓存的 import 语句
     if (existingSetupScriptIndex > -1) {
       // 如果 script 中还有其他引入
       const tagSrc = tags[existingSetupScriptIndex];
       const [, c] = tagSrc.content.match(scriptRegex);
+      
+      // 分离 import 语句和非 import 语句
+      const lines = c.split('\n');
+      const importLines = [];
+      const nonImportLines = [];
+      
+      for (const line of lines) {
+        const trimmedLine = line.trim();
+        // 判断是否是 import 语句（包括多行 import）
+        if (trimmedLine.startsWith('import ') || 
+            (importLines.length > 0 && !importLines[importLines.length - 1].includes('from'))) {
+          importLines.push(line);
+        } else if (trimmedLine) {
+          nonImportLines.push(line);
+        }
+      }
+      
+      // 保存非 import 的代码
+      nonImportCode = nonImportLines.join(os.EOL).trim();
+      
+      const existingImports = importLines.join(os.EOL);
       const componentRegisStatement = demoImportCodeArr.join(os.EOL).trim();
       // 将 react-live 所需 scope 添加在script 之中
-      _code = [c, componentRegisStatement].join(os.EOL);
+      _code = [existingImports, componentRegisStatement].join(os.EOL);
     }
     /**
      * 重新处理添加 scope 之后的代码片段，以obj形式输出所需依赖的scope
@@ -259,12 +282,17 @@ const liveEditorRender = (tokens, idx, options, env, self, content, tag) => {
     const importStatementCode = buildImportStatement(statementObj)
       .join(os.EOL)
       .trim();
-    const finalCode = [importStatementCode, ...directImportRecord]
+    const finalImportCode = [importStatementCode, ...directImportRecord]
       .join(os.EOL)
       .trim();
+    
+    // 合并 import 语句和非 import 语句
+    const finalCode = nonImportCode 
+      ? [finalImportCode, '', nonImportCode].join(os.EOL) 
+      : finalImportCode;
 
     // babel 重新编译,形成正确的 import 语句片段
-    const ast = parse(finalCode, {
+    const ast = parse(finalImportCode, {
       sourceType: 'module',
       plugins: ['typescript']
     });

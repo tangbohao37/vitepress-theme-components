@@ -34,3 +34,4 @@ package-lock.json
 
 # 自动复制的示例文件目录（源文件在 docs/example1）
 docs/public/sandpack-example
+*.code-workspace

@@ -103,14 +103,12 @@ import type { DeviceType } from '../types';
 // Props
 const props = defineProps<{
   code: string; // 主文件代码内容（必需）
-  files?: Record<string, string>; // 可选的额外文件，如 { '/styles.css': 'css内容', '/utils.js': 'js内容' }
+  files?: Record<string, string>; // 所有文件，包括示例代码、node_modules 虚拟文件等
   defaultExpanded?: boolean; // 默认是否展开编辑器
   readOnly?: boolean; // 是否为只读模式，使用 SandpackCodeViewer
-  // 新增：虚拟文件系统（用于注入本地组件库）
-  virtualFiles?: Record<string, string>;
-  // 新增：自定义依赖配置
+  // 自定义依赖配置
   dependencies?: Record<string, string>;
-  // 新增：外部资源（CSS、JS 等）
+  // 外部资源（CSS、JS 等）
   externalResources?: string[];
 }>();
 
@@ -203,35 +201,9 @@ const files = computed(() => {
 
   const result: Record<string, string> = {
     '/App.js': code.value,
-    // 合并所有额外加载的文件（CSS、其他 JS 等）
+    // 合并所有文件（包括示例文件、node_modules 虚拟包等）
     ...additionalFiles.value,
-    // 合并虚拟文件系统（本地组件库）
-    ...props.virtualFiles
   };
-
-  // #region agent log
-  fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      location: 'sandpack-editor.vue:211',
-      message: 'files computed',
-      data: {
-        totalFileCount: Object.keys(result).length,
-        hasVirtualFiles: !!props.virtualFiles,
-        virtualFilesCount: props.virtualFiles
-          ? Object.keys(props.virtualFiles).length
-          : 0,
-        hasAtomeEntry: !!result['/node_modules/@atome/design/index.js'],
-        fileKeys: Object.keys(result).filter((k) => k.includes('node_modules')),
-        allFileKeys: Object.keys(result).slice(0, 20)
-      },
-      timestamp: Date.now(),
-      sessionId: 'debug-session',
-      hypothesisId: 'C,D'
-    })
-  }).catch(() => {});
-  // #endregion
 
   return result;
 });
@@ -252,25 +224,6 @@ const setup = computed(() => {
     config.externalResources = props.externalResources;
   }
 
-  // #region agent log
-  fetch('http://127.0.0.1:7243/ingest/9c8568a4-454b-4585-a3c0-629497234be0', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      location: 'sandpack-editor.vue:232',
-      message: 'setup computed',
-      data: {
-        dependencies: Object.keys(config.dependencies),
-        hasAtomeDesign: !!config.dependencies['@atome/design'],
-        propsDepsKeys: props.dependencies ? Object.keys(props.dependencies) : []
-      },
-      timestamp: Date.now(),
-      sessionId: 'debug-session',
-      hypothesisId: 'E'
-    })
-  }).catch(() => {});
-  // #endregion
-
   return config;
 });
 
@@ -281,18 +234,46 @@ async function loadCode() {
     error.value = '';
     additionalFiles.value = {};
 
+    // 检查 code 是否存在
+    if (!props.code) {
+      throw new Error('代码内容不能为空，请检查 :code prop 是否正确传递')
+    }
+
     // 直接使用传入的代码
     code.value = props.code.trim();
 
     // 如果提供了额外文件，直接使用
     if (props.files) {
       additionalFiles.value = props.files;
-      console.log('✓ 代码加载成功，包含额外文件:', Object.keys(props.files));
+      
+      // 统计文件类型
+      const fileTypes = {
+        nodeModules: 0,
+        examples: 0,
+        others: 0
+      }
+      
+      Object.keys(props.files).forEach(path => {
+        if (path.startsWith('/node_modules/')) {
+          fileTypes.nodeModules++
+        } else if (path.startsWith('/')) {
+          fileTypes.examples++
+        } else {
+          fileTypes.others++
+        }
+      })
+      
+      console.log('✅ Sandpack 文件加载成功:', {
+        总文件数: Object.keys(props.files).length,
+        虚拟包文件: fileTypes.nodeModules,
+        示例文件: fileTypes.examples,
+        其他文件: fileTypes.others
+      });
     } else {
-      console.log('✓ 代码加载成功');
+      console.log('✅ 代码加载成功（无额外文件）');
     }
   } catch (err) {
-    console.error('加载代码失败:', err);
+    console.error('❌ 加载代码失败:', err);
     error.value = err instanceof Error ? err.message : '未知错误';
   } finally {
     loading.value = false;
