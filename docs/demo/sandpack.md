@@ -8,8 +8,8 @@ SandpackEditor：传统组件，需要手动在 <script setup> 中导入代码
 同时使用两者：必须在文件开头提供一个 <script setup>，LiveEditor 会将它的依赖合并进去
  -->
 <script setup>
-import buttonCode from './example/sandpack-button.jsx?raw'
-import  customComponentCode from './example/sandpack-custom-component.jsx?raw'
+import buttonCode from './example/sandpack-button.tsx?raw'
+import  customComponentCode from './example/sandpack-custom-component.tsx?raw'
 import  customComponentStylesCode from './example/index.css?raw'
 </script>
 

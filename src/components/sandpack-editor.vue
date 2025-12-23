@@ -16,7 +16,7 @@
 
     <!-- Sandpack 编辑器 -->
     <div v-else class="sandpack-container">
-      <SandpackProvider template="react" :files="files" :custom-setup="setup">
+      <SandpackProvider :template="props.template || 'vite-react-ts'" :files="files" :custom-setup="setup">
         <!-- 预览区域包装器 -->
         <PreviewSectionWrapper
           :is-resizing="isResizing"
@@ -88,7 +88,8 @@ import { ref, onMounted, computed } from 'vue';
 import {
   SandpackProvider,
   SandpackCodeEditor,
-  SandpackCodeViewer
+  SandpackCodeViewer,
+  SandpackPredefinedTemplate
 } from 'sandpack-vue3';
 import { NSpin, NButton, NResult, NIcon } from 'naive-ui';
 import {
@@ -109,6 +110,7 @@ const props = defineProps<{
   dependencies?: Record<string, string>;
   // 外部资源（CSS、JS 等）
   externalResources?: string[];
+  template?: SandpackPredefinedTemplate
 }>();
 
 // 状态
@@ -199,7 +201,7 @@ const files = computed(() => {
   }
 
   const result: Record<string, string> = {
-    '/App.js': code.value,
+    '/App.tsx': code.value,
     // 合并所有文件（包括示例文件、node_modules 虚拟包等）
     ...additionalFiles.value
   };
