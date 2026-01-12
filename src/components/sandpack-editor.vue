@@ -1,27 +1,20 @@
 <template>
   <div class="sandpack-editor-wrapper">
-    <!-- 加载状态 - 使用 Naive UI NSpin -->
-    <div v-if="loading" class="loading">
-      <NSpin size="large" description="正在加载示例代码..." />
-    </div>
-
-    <!-- 错误状态 - 使用 Naive UI NResult -->
-    <div v-else-if="error" class="error-container">
-      <NResult status="error" title="加载失败" :description="error">
-        <template #footer>
-          <NButton type="primary" @click="loadCode"> 重试 </NButton>
-        </template>
-      </NResult>
-    </div>
-
     <!-- Sandpack 编辑器 -->
-    <div v-else class="sandpack-container">
-      <SandpackProvider :template="props.template || 'vite-react-ts'" :files="files" :custom-setup="setup">
+    <div class="sandpack-container">
+      <SandpackProvider
+        :template="props.template || DEFAULT_TEMPLATE"
+        :files="files"
+        :custom-setup="setup"
+      >
         <!-- 预览区域包装器 -->
         <PreviewSectionWrapper
           :is-resizing="isResizing"
           :preview-height="previewHeight"
           :selected-device="selectedDevice"
+          :show-refresh-button="props.showRefreshButton"
+          :show-restart-button="props.showRestartButton"
+          :show-sandpack-error-overlay="props.showSandpackErrorOverlay"
           @update:selected-device="selectedDevice = $event"
         />
 
@@ -91,7 +84,7 @@ import {
   SandpackCodeViewer,
   SandpackPredefinedTemplate
 } from 'sandpack-vue3';
-import { NSpin, NButton, NResult, NIcon } from 'naive-ui';
+import { NButton, NResult, NIcon } from 'naive-ui';
 import {
   ReorderThreeOutline as ReorderIcon,
   CodeSlashOutline as CodeIcon,
@@ -101,21 +94,31 @@ import PreviewSectionWrapper from './preview-section-wrapper.vue';
 import type { DeviceType } from '../types';
 
 // Props
-const props = defineProps<{
-  code: string; // 主文件代码内容（必需）
-  files?: Record<string, string>; // 所有文件，包括示例代码、node_modules 虚拟文件等
-  defaultExpanded?: boolean; // 默认是否展开编辑器
-  readOnly?: boolean; // 是否为只读模式，使用 SandpackCodeViewer
-  // 自定义依赖配置
-  dependencies?: Record<string, string>;
-  // 外部资源（CSS、JS 等）
-  externalResources?: string[];
-  template?: SandpackPredefinedTemplate
-}>();
+const props = withDefaults(
+  defineProps<{
+    code: string; // 主文件代码内容（必需）
+    files?: Record<string, string>; // 所有文件，包括示例代码、node_modules 虚拟文件等
+    defaultExpanded?: boolean; // 默认是否展开编辑器
+    readOnly?: boolean; // 是否为只读模式，使用 SandpackCodeViewer
+    // 自定义依赖配置
+    dependencies?: Record<string, string>;
+    // 外部资源（CSS、JS 等）
+    externalResources?: string[];
+    template?: SandpackPredefinedTemplate;
+    // 预览控制按钮
+    showRefreshButton?: boolean; // 显示刷新按钮
+    showRestartButton?: boolean; // 显示重启按钮
+    showSandpackErrorOverlay?: boolean; // 显示错误覆盖层
+  }>(),
+  {
+    showRefreshButton: true,
+    showRestartButton: true,
+    showSandpackErrorOverlay: true
+  }
+);
 
+const DEFAULT_TEMPLATE: SandpackPredefinedTemplate = 'react';
 // 状态
-const loading = ref(true);
-const error = ref('');
 const code = ref('');
 const additionalFiles = ref<Record<string, string>>({}); // 额外的文件（CSS、其他 JS 等）
 const selectedDevice = ref<DeviceType>('iphone');
@@ -127,6 +130,19 @@ const isResizing = ref(false);
 function toggleEditor() {
   isEditorExpanded.value = !isEditorExpanded.value;
 }
+
+const getMainFilePath = (template?: SandpackPredefinedTemplate): string => {
+  const templateType = template || DEFAULT_TEMPLATE;
+
+  const mainFileMap: Record<string, string> = {
+    react: '/App.js',
+    'react-ts': '/App.tsx',
+    'vite-react': '/App.jsx',
+    'vite-react-ts': '/App.tsx'
+  };
+
+  return mainFileMap[templateType] || '/App.jsx';
+};
 
 // 开始调整大小
 function startResize(event: MouseEvent) {
@@ -200,8 +216,10 @@ const files = computed(() => {
     return {};
   }
 
+  const mainFilePath = getMainFilePath(props.template);
+
   const result: Record<string, string> = {
-    '/App.tsx': code.value,
+    [mainFilePath]: code.value,
     // 合并所有文件（包括示例文件、node_modules 虚拟包等）
     ...additionalFiles.value
   };
@@ -230,8 +248,6 @@ const setup = computed(() => {
 // 加载代码
 async function loadCode() {
   try {
-    loading.value = true;
-    error.value = '';
     additionalFiles.value = {};
 
     // 检查 code 是否存在
@@ -274,9 +290,6 @@ async function loadCode() {
     }
   } catch (err) {
     console.error('❌ 加载代码失败:', err);
-    error.value = err instanceof Error ? err.message : '未知错误';
-  } finally {
-    loading.value = false;
   }
 }
 
@@ -289,42 +302,6 @@ onMounted(loadCode);
   margin: 16px 0;
   border-radius: 8px;
   overflow: hidden;
-}
-
-/* 使用 Naive UI 的加载和错误组件 */
-.loading {
-  padding: 60px 40px;
-  text-align: center;
-  background: var(--vp-c-bg-soft);
-  border: 1px solid var(--vp-c-border);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.error-container {
-  padding: 40px 20px;
-  background: var(--vp-c-bg-soft);
-  border: 1px solid var(--vp-c-border);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.error-path {
-  font-size: 14px;
-  color: var(--vp-c-text-2);
-  margin-top: 8px;
-}
-
-.error-path code {
-  background: var(--vp-c-bg-mute);
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-family: var(--vp-font-family-mono);
-  color: var(--vp-c-text-1);
 }
 
 /* 容器样式 */

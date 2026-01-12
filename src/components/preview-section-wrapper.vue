@@ -3,8 +3,7 @@
     ref="previewSectionRef"
     class="preview-section"
     :class="{
-      'is-resizing': isResizing,
-      'is-loading': shouldDisableScroll
+      'is-resizing': isResizing
     }"
     :style="{ height: `${previewHeight}px` }"
   >
@@ -14,29 +13,39 @@
         :model-value="selectedDevice"
         @update:model-value="handleDeviceChange"
       >
-        <SandpackPreview style="width: 100%; height: 100%" />
+        <SandpackPreview
+          style="width: 100%; height: 100%"
+          :show-refresh-button="props.showRefreshButton"
+          :show-restart-button="props.showRestartButton"
+          :show-sandpack-error-overlay="props.showSandpackErrorOverlay"
+        />
       </DeviceFramePreview>
     </div>
   </SandpackLayout>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
-import {
-  useSandpack,
-  SandpackPreview,
-  useSandpackShell,
-  SandpackLayout
-} from 'sandpack-vue3';
+import { ref, watch } from 'vue';
+import { SandpackPreview, SandpackLayout } from 'sandpack-vue3';
 import DeviceFramePreview from './device-frame-preview.vue';
 import type { DeviceType } from '../types';
 
 // Props
-const props = defineProps<{
-  isResizing: boolean;
-  previewHeight: number;
-  selectedDevice: DeviceType;
-}>();
+const props = withDefaults(
+  defineProps<{
+    isResizing: boolean;
+    previewHeight: number;
+    selectedDevice: DeviceType;
+    showRefreshButton?: boolean;
+    showRestartButton?: boolean;
+    showSandpackErrorOverlay?: boolean;
+  }>(),
+  {
+    showRefreshButton: true,
+    showRestartButton: true,
+    showSandpackErrorOverlay: true
+  }
+);
 
 // Emits
 const emit = defineEmits<{
@@ -44,40 +53,8 @@ const emit = defineEmits<{
   'set-ref': [el: HTMLElement | null];
 }>();
 
-// Sandpack 状态
-const { sandpack } = useSandpack();
-const { restart } = useSandpackShell();
-
 // Ref
 const previewSectionRef = ref<HTMLElement | null>(null);
-
-// 计算状态
-const status = computed(() => sandpack.status);
-
-// 监听 status 变化并打印
-watch(
-  status,
-  (newStatus, oldStatus) => {
-    console.log('Sandpack status 更新:', {
-      旧值: oldStatus,
-      新值: newStatus,
-      时间: new Date().toLocaleTimeString()
-    });
-  },
-  { immediate: true }
-);
-
-// 📌 重要说明：Sandpack 在实时预览场景的状态流转
-// 正常流程：initial → idle → running → idle (循环)
-// 'done' 状态通常不会出现在实时预览中，它主要用于：
-//   - SandpackTests 测试完成
-//   - 一次性构建任务完成
-// 实时预览编译完成后会直接回到 'idle' 状态，而不是 'done'
-const isLoading = computed(() => status.value === 'initial');
-const isTimeout = computed(() => status.value === 'timeout');
-const isIdle = computed(() => status.value === 'idle');
-
-const shouldDisableScroll = computed(() => isLoading.value || isTimeout.value);
 
 // 处理设备切换
 const handleDeviceChange = (val: DeviceType) => {
@@ -103,11 +80,6 @@ watch(
   transition: height 0.15s ease-out;
   scrollbar-width: thin;
   scrollbar-color: var(--vp-c-divider) transparent;
-}
-
-/* 加载状态时禁用滚动 */
-.preview-section.is-loading {
-  overflow: hidden;
 }
 
 /* 拖动时禁用transition，确保丝滑体验 */
