@@ -344,7 +344,6 @@ export const parseProps = <T extends Record<string, any> = any>(
                 const propName = prop.arg?.loc.source;
                 const propVal = prop.exp?.loc.source;
                 let v: any = propVal; // 默认使用原始字符串值
-                console.log(propName, propVal);
                 try {
                   v = JSON.parse(propVal || '');
                 } catch {
