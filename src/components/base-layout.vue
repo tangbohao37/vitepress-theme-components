@@ -5,24 +5,36 @@
         <NSpace v-if="isShowCoverage">
           <img
             alt="Static Badge"
+            class="coverage-badge"
+            height="20"
+            decoding="async"
             :src="`https://img.shields.io/badge/lines-${currentSummary?.lines?.pct || 0}%25-${getColorByCoverage(
               currentSummary?.lines?.pct || 0
             )}`"
           />
           <img
             alt="Static Badge"
+            class="coverage-badge"
+            height="20"
+            decoding="async"
             :src="`https://img.shields.io/badge/statements-${currentSummary?.statements?.pct || 0}%25-${getColorByCoverage(
               currentSummary?.statements?.pct || 0
             )}`"
           />
           <img
             alt="Static Badge"
+            class="coverage-badge"
+            height="20"
+            decoding="async"
             :src="`https://img.shields.io/badge/functions-${currentSummary?.functions?.pct || 0}%25-${getColorByCoverage(
               currentSummary?.functions?.pct || 0
             )}`"
           />
           <img
             alt="Static Badge"
+            class="coverage-badge"
+            height="20"
+            decoding="async"
             :src="`https://img.shields.io/badge/branches-${currentSummary?.branches?.pct || 0}%25-${getColorByCoverage(
               currentSummary?.branches?.pct || 0
             )}`"
@@ -32,8 +44,8 @@
         <NButton
           text
           type="primary"
-          v-if="isShowChangeLog"
-          @click="active = true"
+          v-if="canShowChangeLogButton"
+          @click="handleOpenChangeLog"
           >更新记录</NButton
         >
       </NSpace>
@@ -51,7 +63,7 @@ import DefaultTheme from 'vitepress/theme-without-fonts';
 import RecordDrawer from './record-drawer.vue';
 import { NSpace, NButton, NDivider } from 'naive-ui';
 import { useData, useRoute, withBase } from 'vitepress';
-import { ref, onMounted, computed, watchEffect } from 'vue';
+import { ref, computed, watch, watchEffect } from 'vue';
 import { type AdvThemeConfig } from '../types';
 import { readFileAsync } from './tools';
 
@@ -70,11 +82,17 @@ const { Layout } = DefaultTheme;
 const active = ref(false);
 const changelogContent = ref('');
 const summaryContent = ref('');
+const hasLoadedChangelog = ref(false);
+const hasLoadedCoverage = ref(false);
 const { theme, frontmatter } = useData<AdvThemeConfig>();
 const currentSummary = ref<any>();
 
+const canShowChangeLogButton = computed(() => {
+  return !frontmatter.value.hideRecord && Boolean(theme.value.changelog?.path);
+});
+
 const isShowChangeLog = computed(() => {
-  return changelogContent.value && !frontmatter.value.hideRecord;
+  return canShowChangeLogButton.value && Boolean(changelogContent.value);
 });
 
 const isShowCoverage = computed(() => {
@@ -96,13 +114,24 @@ function getColorByCoverage(coverage) {
 }
 
 const readChangelog = async () => {
+  if (hasLoadedChangelog.value) {
+    return;
+  }
   const changelog = theme.value.changelog;
   if (!changelog?.path) {
     return;
   }
-  const content = await readFileAsync(withBase(changelog?.path));
-  const data = await content.text();
-  changelogContent.value = data;
+  try {
+    const content = await readFileAsync(withBase(changelog.path));
+    if (!content.ok) {
+      return;
+    }
+    const data = await content.text();
+    changelogContent.value = data;
+    hasLoadedChangelog.value = true;
+  } catch (error) {
+    console.warn('[base-layout] failed to load changelog', error);
+  }
 };
 
 watchEffect(() => {
@@ -117,17 +146,50 @@ watchEffect(() => {
 });
 
 const readCoverage = async () => {
+  if (hasLoadedCoverage.value) {
+    return;
+  }
   const coverage = theme.value.coverage;
   if (!coverage?.path) {
     return;
   }
-  const content = await readFileAsync(withBase(coverage?.path));
-  const data = await content.json();
-  summaryContent.value = data;
+  try {
+    const content = await readFileAsync(withBase(coverage.path));
+    if (!content.ok) {
+      return;
+    }
+    const data = await content.json();
+    summaryContent.value = data;
+    hasLoadedCoverage.value = true;
+  } catch (error) {
+    console.warn('[base-layout] failed to load coverage summary', error);
+  }
 };
 
-onMounted(() => {
-  readChangelog();
-  readCoverage();
+const handleOpenChangeLog = async () => {
+  active.value = true;
+  await readChangelog();
+};
+
+watch(() => frontmatter.value.coverage, (shouldLoadCoverage) => {
+  if (shouldLoadCoverage) {
+    void readCoverage();
+  }
+}, { immediate: true });
+
+watch(() => route.path, () => {
+  if (!frontmatter.value.coverage) {
+    return;
+  }
+  hasLoadedCoverage.value = false;
+  void readCoverage();
 });
 </script>
+
+<style scoped>
+.coverage-badge {
+  display: block;
+  height: 20px;
+  width: auto;
+}
+</style>
