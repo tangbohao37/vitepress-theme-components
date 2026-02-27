@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3-beta.5](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.4...v0.0.3-beta.5) (2026-02-27)
+
+
+### Features
+
+* add sandpack example files and enhance sandpack-editor ([51b9fc3](https://github.com/tangbohao37/vitepress-theme-components/commit/51b9fc3abc8f728cb7d819a227891a3fd6d3989f))
+* enhance base-layout and sandpack-editor components ([8a98495](https://github.com/tangbohao37/vitepress-theme-components/commit/8a984955f060e83c284ec62b3fa77ec9100be8a6))
+* enhance sandpack-editor placeholder interaction ([52201ba](https://github.com/tangbohao37/vitepress-theme-components/commit/52201bad7ecfc440ef612eecd8bcb2659d6b4fa6))
+* update sandpack examples to TypeScript and enhance sandpack-editor ([5292553](https://github.com/tangbohao37/vitepress-theme-components/commit/529255359f4c402a8ad8423ae44562be146dda79))
+
 ### [0.0.3-beta.4](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.3...v0.0.3-beta.4) (2025-12-20)
 
 
