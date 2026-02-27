@@ -2,20 +2,19 @@
   <div class="sandpack-editor-wrapper">
     <!-- Sandpack 编辑器 -->
     <div ref="containerRef" class="sandpack-container">
-      <div v-if="!shouldMountSandpack" class="sandpack-placeholder">
+      <div
+        v-if="!shouldMountSandpack"
+        class="sandpack-placeholder"
+        :class="{ 'is-clickable': canActivateFromPlaceholder }"
+        :role="canActivateFromPlaceholder ? 'button' : undefined"
+        :tabindex="canActivateFromPlaceholder ? 0 : undefined"
+        @click="handlePlaceholderActivate"
+        @keydown.enter.prevent="handlePlaceholderActivate"
+        @keydown.space.prevent="handlePlaceholderActivate"
+      >
         <div class="placeholder-text">
           {{ placeholderText }}
         </div>
-        <NButton
-          v-if="props.manualStart || activationState === 'error'"
-          size="small"
-          type="primary"
-          :loading="activationState === 'starting'"
-          :disabled="activationState === 'starting' || activationState === 'running'"
-          @click="activateSandpack"
-        >
-          {{ activationState === 'error' ? '重试运行' : '运行示例' }}
-        </NButton>
       </div>
       <SandpackProvider
         v-else
@@ -315,15 +314,27 @@ let warmupTimeoutId: number | null = null;
 const shouldMountSandpack = computed(() => {
   return isSandpackActivated.value;
 });
+const canActivateFromPlaceholder = computed(() => {
+  return (props.manualStart || activationState.value === 'error') &&
+    activationState.value !== 'starting' &&
+    activationState.value !== 'running';
+});
 const placeholderText = computed(() => {
   if (activationState.value === 'starting') {
     return '示例启动中，请稍候...';
   }
   if (activationState.value === 'error') {
-    return `示例启动失败：${activationErrorMessage.value || '请稍后重试'}`;
+    return `示例启动失败：${activationErrorMessage.value || '请稍后重试'}（点击蒙层重试）`;
   }
-  return props.manualStart ? '点击运行示例' : '示例即将加载...';
+  return props.manualStart ? '点击蒙层运行示例' : '示例即将加载...';
 });
+
+function handlePlaceholderActivate() {
+  if (!canActivateFromPlaceholder.value) {
+    return;
+  }
+  void activateSandpack();
+}
 
 // 切换编辑器展开/收起
 function toggleEditor() {
@@ -745,6 +756,20 @@ onBeforeUnmount(() => {
   gap: 12px;
   color: var(--vp-c-text-2);
   background: var(--vp-c-bg-soft);
+}
+
+.sandpack-placeholder.is-clickable {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.sandpack-placeholder.is-clickable:hover {
+  background: var(--vp-c-bg-mute);
+}
+
+.sandpack-placeholder.is-clickable:focus-visible {
+  outline: 2px solid var(--vp-c-brand);
+  outline-offset: -2px;
 }
 
 .placeholder-text {
