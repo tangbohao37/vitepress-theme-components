@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3-beta.6](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.5...v0.0.3-beta.6) (2026-03-19)
+
+
+### Features
+
+* enhance markdown rendering and improve changelog loading ([44d0f84](https://github.com/tangbohao37/vitepress-theme-components/commit/44d0f84217c6ebb1200ce5437d1a65b0903dd492))
+
 ### [0.0.3-beta.5](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.4...v0.0.3-beta.5) (2026-02-27)
 
 
