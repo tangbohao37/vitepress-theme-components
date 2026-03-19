@@ -30,6 +30,10 @@ const baseConfig = defineConfig({
   markdown: {
     config(md) {
       md.use(demoBlockPlugin).use(taskLists);
+      md.renderer.rules.code_inline = (tokens, index) => {
+        const escapedContent = md.utils.escapeHtml(tokens[index].content);
+        return `<code v-pre>${escapedContent}</code>`;
+      };
     }
   },
   vite: {

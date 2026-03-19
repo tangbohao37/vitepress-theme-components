@@ -114,6 +114,9 @@ function getColorByCoverage(coverage) {
 }
 
 const readChangelog = async () => {
+  if (import.meta.env.SSR) {
+    return;
+  }
   if (hasLoadedChangelog.value) {
     return;
   }
@@ -146,6 +149,9 @@ watchEffect(() => {
 });
 
 const readCoverage = async () => {
+  if (import.meta.env.SSR) {
+    return;
+  }
   if (hasLoadedCoverage.value) {
     return;
   }
