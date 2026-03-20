@@ -15,6 +15,25 @@ import { ref } from 'vue';
 import { DeviceFrame } from '../../src/components';
 
 const device = ref('iphone');
+const deviceFrameDemoCode = `import React from 'react'
+
+export default function App() {
+  return (
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '8px',
+      color: '#fff',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+    }}>
+      <h1 style={{ margin: 0 }}>Hello Sandpack</h1>
+      <p style={{ margin: 0 }}>预览会自动显示在设备框架中</p>
+    </div>
+  )
+}`
 </script>
 
 <DeviceFrame v-model="device">
@@ -28,7 +47,7 @@ const device = ref('iphone');
 
 SandpackEditor 组件已经内置了 DeviceFrame，预览会自动显示在设备框架中：
 
-<SandpackEditor path="button.jsx"></SandpackEditor>
+<SandpackEditor :code="deviceFrameDemoCode"></SandpackEditor>
 
 ## API
 

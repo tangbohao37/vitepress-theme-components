@@ -288,6 +288,8 @@ const props = withDefaults(
 
 const DEFAULT_TEMPLATE: SandpackPredefinedTemplate = 'react';
 type ActivationState = 'idle' | 'starting' | 'running' | 'error'
+const MIN_PREVIEW_HEIGHT = 200;
+const MAX_PREVIEW_HEIGHT = 1000;
 // 状态
 const containerRef = ref<HTMLElement | null>(null);
 const code = ref('');
@@ -297,7 +299,7 @@ const runtimeExternalResources = ref<string[]>([]);
 const resolvedTemplate = ref<SandpackPredefinedTemplate>(props.template || DEFAULT_TEMPLATE);
 const selectedDevice = ref<DeviceType>('iphone');
 const isEditorExpanded = ref(props.defaultExpanded ?? false);
-const previewHeight = ref(600); // 默认预览区域高度
+const previewHeight = ref(MAX_PREVIEW_HEIGHT); // 默认预览区域高度（分割条置于最低端）
 const isResizing = ref(false);
 const isSandpackActivated = ref(false);
 const hasLoadedCode = ref(false);
@@ -371,7 +373,7 @@ function startResize(event: MouseEvent) {
     }
 
     const deltaY = latestMouseEvent.clientY - startY;
-    const newHeight = Math.max(200, Math.min(1000, startHeight + deltaY));
+    const newHeight = Math.max(MIN_PREVIEW_HEIGHT, Math.min(MAX_PREVIEW_HEIGHT, startHeight + deltaY));
     previewHeight.value = newHeight;
 
     latestMouseEvent = null;
@@ -417,7 +419,7 @@ function startResize(event: MouseEvent) {
 
 // 重置预览高度
 function resetPreviewHeight() {
-  previewHeight.value = 600; // 重置为默认高度
+  previewHeight.value = MAX_PREVIEW_HEIGHT; // 重置为默认高度
 }
 
 // 计算属性
