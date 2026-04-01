@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3-beta.9](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.8...v0.0.3-beta.9) (2026-04-01)
+
+
+### Features
+
+* enhance coverage display and management in base-layout component ([4c563f7](https://github.com/tangbohao37/vitepress-theme-components/commit/4c563f77c8c3c8910be161017476e32df81ee6ca))
+
 ### [0.0.3-beta.8](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.7...v0.0.3-beta.8) (2026-03-20)
 
 
