@@ -7,6 +7,8 @@
             <NSelect
               key="version1"
               v-model:value="formValue.version1"
+              filterable
+              clearable
               :options="logsOptions"
             />
           </NFormItemGi>
@@ -14,7 +16,9 @@
             <NSelect
               key="version2"
               v-model:value="formValue.version2"
-              :options="logsOptions?.reverse()"
+              filterable
+              clearable
+              :options="reversedLogsOptions"
             />
           </NFormItemGi>
         </NGrid>
@@ -26,12 +30,18 @@
           />
         </NFormItem>
       </NForm>
-      <div
-        style="margin-top: 10px"
-        v-for="log in logContent"
-        :key="log.version"
-      >
-        <NCard v-show="filterVersions(log)">
+      <NEmpty
+        v-if="!canSearch"
+        style="margin-top: 16px"
+        description="请选择版本区间和类型后再搜索"
+      />
+      <NEmpty
+        v-else-if="searchedLogs.length === 0"
+        style="margin-top: 16px"
+        description="当前筛选条件下暂无更新记录"
+      />
+      <div style="margin-top: 10px" v-for="log in searchedLogs" :key="log.version">
+        <NCard>
           <NH3 prefix="bar">
             <NGradientText>
               {{ log.version }}
@@ -39,7 +49,7 @@
           </NH3>
           <NUl align-text>
             <NLi v-for="(value, category) in log.changes" :key="value + ''">
-              <div v-show="filterLogsContent(value, category)">
+              <div>
                 <NGradientText type="info">
                   {{ category }}
                 </NGradientText>
@@ -55,7 +65,13 @@
 
 <script setup lang="ts">
 import { computed, ref, watchEffect } from 'vue';
-import { parseChangelog, type IChangelog } from './tools';
+import {
+  getChangelogMeta,
+  searchChangelogByRange,
+  type IChangelog,
+  type IChangelogBlock,
+  type IChangelogSearchParams
+} from './tools';
 import { useData } from 'vitepress';
 import {
   NDrawer,
@@ -69,9 +85,9 @@ import {
   NGradientText,
   NH3,
   NUl,
-  NLi
+  NLi,
+  NEmpty
 } from 'naive-ui';
-import * as semver from 'semver';
 import MarkdownIt from './markdown-it.vue';
 import { type MdFormat } from '../types';
 
@@ -80,7 +96,10 @@ interface IRecordDrawer {
   changelogContent: string;
 }
 
-const logContent = ref<IChangelog[]>();
+const selectedLogContent = ref<IChangelog[]>([]);
+const changelogBlocks = ref<IChangelogBlock[]>([]);
+const allSections = ref<string[]>([]);
+
 const formValue = ref({
   version1: '',
   version2: '',
@@ -90,45 +109,45 @@ const formValue = ref({
 const { frontmatter } = useData<MdFormat>();
 
 const logsOptions = computed(() =>
-  logContent.value?.map((log: any) => ({
-    label: log.version,
-    value: log.version
+  changelogBlocks.value.map((block) => ({
+    label: block.version,
+    value: block.version
   }))
 );
 
 const logsTypeOptions = computed(() => {
-  const type = logContent.value.flatMap((l) => Object.keys(l.changes));
-  const options = Array.from(new Set(type)).map((category: any) => ({
+  const options = allSections.value.map((category) => ({
     label: category,
     value: category
   }));
   return options;
 });
 
-const filterVersions = (log: any) => {
-  const [v1, v2] = [formValue.value.version1, formValue.value.version2].sort(
-    // @ts-ignore
-    semver.compare
-  );
-  return semver.satisfies(log.version, `>=${v1} <=${v2}`);
-};
+const reversedLogsOptions = computed(() => [...logsOptions.value].reverse());
 
 const toCamelCase = (str) => {
+  if (!str) {
+    return '';
+  }
   return str
     .split('-') // 按照破折号拆分字符串
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // 将每个单词的首字母大写
     .join(''); // 合并单词
 };
 
-const filterLogsContent = (content: string[], category) => {
-  return (
-    formValue.value.type.includes(category) &&
-    content
-      .join('')
-      .toUpperCase()
-      .includes(toCamelCase(frontmatter.value?.componentName)?.toUpperCase())
+const canSearch = computed(() => {
+  return Boolean(
+    formValue.value.version1 &&
+      formValue.value.version2 &&
+      formValue.value.type.length
   );
-};
+});
+
+const componentKeyword = computed(() => {
+  return toCamelCase(frontmatter.value?.componentName).toUpperCase();
+});
+
+const searchedLogs = computed(() => selectedLogContent.value);
 
 const props = defineProps<IRecordDrawer>();
 
@@ -136,13 +155,29 @@ watchEffect(async () => {
   if (!props.changelogContent) {
     return;
   }
-  const result: IChangelog[] = parseChangelog(props.changelogContent);
-  logContent.value = result;
+  const { blocks, sections } = getChangelogMeta(props.changelogContent);
+  changelogBlocks.value = blocks;
+  allSections.value = sections;
   formValue.value = {
-    version1: logsOptions?.value?.[0]?.value,
-    version2: logsOptions?.value?.reverse()?.[0]?.value,
-    type: logsTypeOptions?.value?.map((o: any) => o.value) || []
+    version1: logsOptions.value[0]?.value || '',
+    version2: reversedLogsOptions.value[0]?.value || '',
+    type: []
   };
+  selectedLogContent.value = [];
+});
+
+watchEffect(() => {
+  if (!props.changelogContent || !canSearch.value) {
+    selectedLogContent.value = [];
+    return;
+  }
+  const params: IChangelogSearchParams = {
+    versionFrom: formValue.value.version1,
+    versionTo: formValue.value.version2,
+    sections: formValue.value.type,
+    componentKeyword: componentKeyword.value
+  };
+  selectedLogContent.value = searchChangelogByRange(props.changelogContent, params);
 });
 
 const emit = defineEmits<{

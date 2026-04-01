@@ -10,9 +10,9 @@
             decoding="async"
             loading="lazy"
             fetchpriority="low"
-            :src="`https://img.shields.io/badge/lines-${currentSummary?.lines?.pct || 0}%25-${getColorByCoverage(
+            :src="`https://img.shields.io/badge/lines-${
               currentSummary?.lines?.pct || 0
-            )}`"
+            }%25-${getColorByCoverage(currentSummary?.lines?.pct || 0)}`"
           />
           <img
             alt="Static Badge"
@@ -21,9 +21,9 @@
             decoding="async"
             loading="lazy"
             fetchpriority="low"
-            :src="`https://img.shields.io/badge/statements-${currentSummary?.statements?.pct || 0}%25-${getColorByCoverage(
+            :src="`https://img.shields.io/badge/statements-${
               currentSummary?.statements?.pct || 0
-            )}`"
+            }%25-${getColorByCoverage(currentSummary?.statements?.pct || 0)}`"
           />
           <img
             alt="Static Badge"
@@ -32,9 +32,9 @@
             decoding="async"
             loading="lazy"
             fetchpriority="low"
-            :src="`https://img.shields.io/badge/functions-${currentSummary?.functions?.pct || 0}%25-${getColorByCoverage(
+            :src="`https://img.shields.io/badge/functions-${
               currentSummary?.functions?.pct || 0
-            )}`"
+            }%25-${getColorByCoverage(currentSummary?.functions?.pct || 0)}`"
           />
           <img
             alt="Static Badge"
@@ -43,9 +43,9 @@
             decoding="async"
             loading="lazy"
             fetchpriority="low"
-            :src="`https://img.shields.io/badge/branches-${currentSummary?.branches?.pct || 0}%25-${getColorByCoverage(
+            :src="`https://img.shields.io/badge/branches-${
               currentSummary?.branches?.pct || 0
-            )}`"
+            }%25-${getColorByCoverage(currentSummary?.branches?.pct || 0)}`"
           />
         </NSpace>
         <div v-else></div>
@@ -54,8 +54,9 @@
           type="primary"
           v-if="canShowChangeLogButton"
           @click="handleOpenChangeLog"
-          >更新记录</NButton
         >
+          更新记录
+        </NButton>
       </NSpace>
       <NDivider v-if="isShowChangeLog || isShowCoverage" />
     </template>
@@ -185,19 +186,26 @@ const handleOpenChangeLog = async () => {
   await readChangelog();
 };
 
-watch(() => frontmatter.value.coverage, (shouldLoadCoverage) => {
-  if (shouldLoadCoverage) {
+watch(
+  () => frontmatter.value.coverage,
+  (shouldLoadCoverage) => {
+    if (shouldLoadCoverage) {
+      void readCoverage();
+    }
+  },
+  { immediate: true }
+);
+
+watch(
+  () => route.path,
+  () => {
+    if (!frontmatter.value.coverage) {
+      return;
+    }
+    hasLoadedCoverage.value = false;
     void readCoverage();
   }
-}, { immediate: true });
-
-watch(() => route.path, () => {
-  if (!frontmatter.value.coverage) {
-    return;
-  }
-  hasLoadedCoverage.value = false;
-  void readCoverage();
-});
+);
 </script>
 
 <style scoped>
