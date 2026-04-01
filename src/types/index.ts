@@ -23,6 +23,8 @@ type IChangelog = {
 type ICoverage = {
   path: string;
   parse?: (content: string) => void;
+  mode?: 'off' | 'collapsed' | 'eager';
+  cacheTtlMs?: number;
 };
 
 export type MdFormat = {
