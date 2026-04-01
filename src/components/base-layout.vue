@@ -2,28 +2,51 @@
   <Layout>
     <template #doc-before>
       <NSpace justify="space-between" align="center">
-        <NSpace v-if="isShowCoveragePanel" align="center">
-          <NButton
-            text
-            type="primary"
-            @click="handleToggleCoverage"
-          >
-            {{ isCoverageExpanded ? '隐藏覆盖率' : '显示覆盖率' }}
-          </NButton>
-          <NSpace v-if="isCoverageExpanded && currentSummary" size="small">
-            <span class="coverage-badge" :style="getBadgeStyle(currentSummary?.lines?.pct || 0)">
-              lines {{ currentSummary?.lines?.pct || 0 }}%
-            </span>
-            <span class="coverage-badge" :style="getBadgeStyle(currentSummary?.statements?.pct || 0)">
-              statements {{ currentSummary?.statements?.pct || 0 }}%
-            </span>
-            <span class="coverage-badge" :style="getBadgeStyle(currentSummary?.functions?.pct || 0)">
-              functions {{ currentSummary?.functions?.pct || 0 }}%
-            </span>
-            <span class="coverage-badge" :style="getBadgeStyle(currentSummary?.branches?.pct || 0)">
-              branches {{ currentSummary?.branches?.pct || 0 }}%
-            </span>
-          </NSpace>
+        <NSpace v-if="isShowCoverage">
+          <img
+            alt="Static Badge"
+            class="coverage-badge"
+            height="20"
+            decoding="async"
+            loading="lazy"
+            fetchpriority="low"
+            :src="`https://img.shields.io/badge/lines-${currentSummary?.lines?.pct || 0}%25-${getColorByCoverage(
+              currentSummary?.lines?.pct || 0
+            )}`"
+          />
+          <img
+            alt="Static Badge"
+            class="coverage-badge"
+            height="20"
+            decoding="async"
+            loading="lazy"
+            fetchpriority="low"
+            :src="`https://img.shields.io/badge/statements-${currentSummary?.statements?.pct || 0}%25-${getColorByCoverage(
+              currentSummary?.statements?.pct || 0
+            )}`"
+          />
+          <img
+            alt="Static Badge"
+            class="coverage-badge"
+            height="20"
+            decoding="async"
+            loading="lazy"
+            fetchpriority="low"
+            :src="`https://img.shields.io/badge/functions-${currentSummary?.functions?.pct || 0}%25-${getColorByCoverage(
+              currentSummary?.functions?.pct || 0
+            )}`"
+          />
+          <img
+            alt="Static Badge"
+            class="coverage-badge"
+            height="20"
+            decoding="async"
+            loading="lazy"
+            fetchpriority="low"
+            :src="`https://img.shields.io/badge/branches-${currentSummary?.branches?.pct || 0}%25-${getColorByCoverage(
+              currentSummary?.branches?.pct || 0
+            )}`"
+          />
         </NSpace>
         <div v-else></div>
         <NButton
@@ -34,7 +57,7 @@
           >更新记录</NButton
         >
       </NSpace>
-      <NDivider v-if="isShowChangeLog || isShowCoveragePanel" />
+      <NDivider v-if="isShowChangeLog || isShowCoverage" />
     </template>
   </Layout>
   <record-drawer
@@ -51,7 +74,6 @@ import { useData, useRoute, withBase } from 'vitepress';
 import { ref, computed, watch, watchEffect } from 'vue';
 import { type AdvThemeConfig } from '../types';
 import { readFileAsync } from './tools';
-import { getCoverageSummary } from './coverage-store';
 
 const coverageColorMap = {
   100: 'lime',
@@ -72,7 +94,6 @@ const hasLoadedChangelog = ref(false);
 const hasLoadedCoverage = ref(false);
 const { theme, frontmatter } = useData<AdvThemeConfig>();
 const currentSummary = ref<any>();
-const isCoverageExpanded = ref(false);
 
 const canShowChangeLogButton = computed(() => {
   return !frontmatter.value.hideRecord && Boolean(theme.value.changelog?.path);
@@ -82,12 +103,8 @@ const isShowChangeLog = computed(() => {
   return canShowChangeLogButton.value && Boolean(changelogContent.value);
 });
 
-const coverageMode = computed(() => {
-  return theme.value.coverage?.mode || 'eager';
-});
-
-const isShowCoveragePanel = computed(() => {
-  return frontmatter.value.coverage && coverageMode.value !== 'off';
+const isShowCoverage = computed(() => {
+  return frontmatter.value.coverage;
 });
 
 function getColorByCoverage(coverage) {
@@ -102,13 +119,6 @@ function getColorByCoverage(coverage) {
   }
   // 如果没有匹配的覆盖率范围，则返回默认颜色（可根据需要自定义）
   return coverageColorMap[sortedKeys[sortedKeys.length - 1]];
-}
-
-function getBadgeStyle(coverage: number) {
-  const color = getColorByCoverage(coverage);
-  return {
-    '--coverage-badge-color': color,
-  };
 }
 
 const readChangelog = async () => {
@@ -158,8 +168,11 @@ const readCoverage = async () => {
     return;
   }
   try {
-    const data = await getCoverageSummary(withBase(coverage.path), coverage.cacheTtlMs);
-    if (!data) return;
+    const content = await readFileAsync(withBase(coverage.path));
+    if (!content.ok) {
+      return;
+    }
+    const data = await content.json();
     summaryContent.value = data;
     hasLoadedCoverage.value = true;
   } catch (error) {
@@ -172,51 +185,25 @@ const handleOpenChangeLog = async () => {
   await readChangelog();
 };
 
-const handleToggleCoverage = async () => {
-  isCoverageExpanded.value = !isCoverageExpanded.value;
-  if (!isCoverageExpanded.value || hasLoadedCoverage.value) {
-    return;
-  }
-  await readCoverage();
-};
-
 watch(() => frontmatter.value.coverage, (shouldLoadCoverage) => {
-  if (!shouldLoadCoverage || coverageMode.value === 'off') {
-    return;
-  }
-  if (coverageMode.value === 'eager') {
+  if (shouldLoadCoverage) {
     void readCoverage();
-    isCoverageExpanded.value = true;
-    return;
   }
-  isCoverageExpanded.value = false;
 }, { immediate: true });
 
 watch(() => route.path, () => {
-  if (!frontmatter.value.coverage || coverageMode.value === 'off') {
+  if (!frontmatter.value.coverage) {
     return;
   }
   hasLoadedCoverage.value = false;
-  if (coverageMode.value === 'eager') {
-    void readCoverage();
-    isCoverageExpanded.value = true;
-    return;
-  }
-  isCoverageExpanded.value = false;
+  void readCoverage();
 });
 </script>
 
 <style scoped>
 .coverage-badge {
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid var(--coverage-badge-color);
-  color: var(--coverage-badge-color);
-  border-radius: 999px;
-  padding: 2px 8px;
-  font-size: 12px;
-  line-height: 16px;
+  display: block;
   height: 20px;
-  width: fit-content;
+  width: auto;
 }
 </style>

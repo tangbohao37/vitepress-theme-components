@@ -15,18 +15,6 @@
         <div class="placeholder-text">
           {{ placeholderText }}
         </div>
-        <NButton
-          v-if="activationState === 'degraded' || activationState === 'error'"
-          type="primary"
-          size="small"
-          @click.stop="handlePlaceholderActivate"
-        >
-          重试运行示例
-        </NButton>
-        <pre
-          v-if="activationState === 'degraded' && fallbackCodePreview"
-          class="degraded-code-preview"
-        >{{ fallbackCodePreview }}</pre>
       </div>
       <SandpackProvider
         v-else
@@ -283,10 +271,6 @@ const props = withDefaults(
     manualStart?: boolean; // 是否手动启动示例
     warmup?: boolean; // 手动模式下是否开启预热
     prefetchRuntime?: boolean; // 自动示例是否预取关键运行时
-    warmupTimeoutMs?: number; // warmup 阶段超时
-    activationSoftTimeoutMs?: number; // 激活软超时提示
-    activationHardTimeoutMs?: number; // 激活硬超时（进入降级）
-    enableDegradedFallback?: boolean; // 是否开启超时降级
     demoLoader?: () => Promise<SandpackDemoLoaderResult> | SandpackDemoLoaderResult; // 懒加载 demo 数据
     demoLoaderMaxRetries?: number; // demoLoader 最大重试次数
   }>(),
@@ -298,16 +282,12 @@ const props = withDefaults(
     manualStart: false,
     warmup: true,
     prefetchRuntime: true,
-    warmupTimeoutMs: 2000,
-    activationSoftTimeoutMs: 3000,
-    activationHardTimeoutMs: 6000,
-    enableDegradedFallback: true,
     demoLoaderMaxRetries: 1
   }
 );
 
 const DEFAULT_TEMPLATE: SandpackPredefinedTemplate = 'react';
-type ActivationState = 'idle' | 'starting' | 'running' | 'degraded' | 'error'
+type ActivationState = 'idle' | 'starting' | 'running' | 'error'
 const MIN_PREVIEW_HEIGHT = 200;
 const MAX_PREVIEW_HEIGHT = 1000;
 // 状态
@@ -337,7 +317,7 @@ const shouldMountSandpack = computed(() => {
   return isSandpackActivated.value;
 });
 const canActivateFromPlaceholder = computed(() => {
-  return (props.manualStart || activationState.value === 'error' || activationState.value === 'degraded') &&
+  return (props.manualStart || activationState.value === 'error') &&
     activationState.value !== 'starting' &&
     activationState.value !== 'running';
 });
@@ -345,24 +325,10 @@ const placeholderText = computed(() => {
   if (activationState.value === 'starting') {
     return '示例启动中，请稍候...';
   }
-  if (activationState.value === 'degraded') {
-    return `示例加载超时，已降级为静态代码：${activationErrorMessage.value || '可点击重试'}`;
-  }
   if (activationState.value === 'error') {
     return `示例启动失败：${activationErrorMessage.value || '请稍后重试'}（点击蒙层重试）`;
   }
   return props.manualStart ? '点击蒙层运行示例' : '示例即将加载...';
-});
-const fallbackCodePreview = computed(() => {
-  const rawCode = (code.value || props.code || '').trim();
-  if (!rawCode) {
-    return '';
-  }
-  const previewLength = 1200;
-  if (rawCode.length <= previewLength) {
-    return rawCode;
-  }
-  return `${rawCode.slice(0, previewLength)}\n...`;
 });
 
 function handlePlaceholderActivate() {
@@ -600,43 +566,17 @@ async function activateSandpack() {
       if (isUnmounted.value) {
         return;
       }
-      const softTimeoutId = window.setTimeout(() => {
-        if (activationState.value === 'starting') {
-          console.warn('[Sandpack] 激活进入软超时窗口', {
-            timeoutMs: props.activationSoftTimeoutMs
-          });
-        }
-      }, props.activationSoftTimeoutMs);
 
-      try {
-        await Promise.race([
-          loadCode(),
-          new Promise<void>((_, reject) => {
-            window.setTimeout(() => {
-              reject(new Error(`激活超时（>${props.activationHardTimeoutMs}ms）`));
-            }, props.activationHardTimeoutMs);
-          })
-        ]);
-      } finally {
-        window.clearTimeout(softTimeoutId);
-      }
-
+      await loadCode();
       if (!isUnmounted.value) {
         isSandpackActivated.value = true;
         activationState.value = 'running';
       }
     } catch (err) {
       hasLoadedCode.value = false;
-      const errorMessage = err instanceof Error ? err.message : '未知错误';
-      if (props.enableDegradedFallback && errorMessage.includes('激活超时')) {
-        activationState.value = 'degraded';
-        activationErrorMessage.value = errorMessage;
-        console.warn('⚠️ Sandpack 激活超时，进入降级模式:', err);
-      } else {
-        activationState.value = 'error';
-        activationErrorMessage.value = errorMessage;
-        console.error('❌ 激活 Sandpack 失败:', err);
-      }
+      activationState.value = 'error';
+      activationErrorMessage.value = err instanceof Error ? err.message : '未知错误';
+      console.error('❌ 激活 Sandpack 失败:', err);
     } finally {
       if (isUnmounted.value) {
         activationState.value = 'idle';
@@ -711,14 +651,14 @@ function scheduleWarmup() {
     warmupIdleId = requestIdleCallback(() => {
       warmupIdleId = null;
       executeWarmupRequests();
-    }, { timeout: props.warmupTimeoutMs });
+    }, { timeout: 1500 });
     return;
   }
 
   warmupTimeoutId = window.setTimeout(() => {
     warmupTimeoutId = null;
     executeWarmupRequests();
-  }, Math.min(300, props.warmupTimeoutMs));
+  }, 200);
 }
 
 function scheduleCriticalRuntimePrefetch() {
@@ -836,18 +776,6 @@ onBeforeUnmount(() => {
 
 .placeholder-text {
   font-size: 13px;
-}
-
-.degraded-code-preview {
-  width: min(100%, 760px);
-  margin: 8px 12px 0;
-  padding: 12px;
-  border-radius: 8px;
-  background: var(--vp-code-block-bg);
-  color: var(--vp-c-text-1);
-  font-size: 12px;
-  line-height: 1.6;
-  overflow: auto;
 }
 
 /* 可拖动的分隔条 */
