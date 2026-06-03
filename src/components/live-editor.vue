@@ -51,7 +51,7 @@ const props = withDefaults(defineProps<ILiveEditor>(), {
 const code = ref(props.sourceCode);
 const showSvgBg = ref(false);
 // 转换为 Vue 组件
-const ReactLivePreview = applyReactInVue(ReactLive);
+const ReactLivePreview = applyReactInVue(ReactLive) as any;
 </script>
 
 <style scoped>

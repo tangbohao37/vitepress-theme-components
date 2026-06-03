@@ -2,6 +2,92 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3-beta.11](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.10...v0.0.3-beta.11) (2026-04-01)
+
+### [0.0.3-beta.10](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.9...v0.0.3-beta.10) (2026-04-01)
+
+### [0.0.3-beta.9](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.8...v0.0.3-beta.9) (2026-04-01)
+
+
+### Features
+
+* enhance coverage display and management in base-layout component ([4c563f7](https://github.com/tangbohao37/vitepress-theme-components/commit/4c563f77c8c3c8910be161017476e32df81ee6ca))
+
+### [0.0.3-beta.8](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.7...v0.0.3-beta.8) (2026-03-20)
+
+
+### Features
+
+* enhance device-frame demo and sandpack-editor functionality ([87ab5ae](https://github.com/tangbohao37/vitepress-theme-components/commit/87ab5ae1ff2408efdd7fe9426eb89ce259de7bf1))
+
+### [0.0.3-beta.7](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.5...v0.0.3-beta.7) (2026-03-19)
+
+
+### Features
+
+* enhance markdown rendering and improve changelog loading ([44d0f84](https://github.com/tangbohao37/vitepress-theme-components/commit/44d0f84217c6ebb1200ce5437d1a65b0903dd492))
+
+### [0.0.3-beta.6](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.5...v0.0.3-beta.6) (2026-03-19)
+
+
+### Features
+
+* enhance markdown rendering and improve changelog loading ([44d0f84](https://github.com/tangbohao37/vitepress-theme-components/commit/44d0f84217c6ebb1200ce5437d1a65b0903dd492))
+
+### [0.0.3-beta.5](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.4...v0.0.3-beta.5) (2026-02-27)
+
+
+### Features
+
+* add sandpack example files and enhance sandpack-editor ([51b9fc3](https://github.com/tangbohao37/vitepress-theme-components/commit/51b9fc3abc8f728cb7d819a227891a3fd6d3989f))
+* enhance base-layout and sandpack-editor components ([8a98495](https://github.com/tangbohao37/vitepress-theme-components/commit/8a984955f060e83c284ec62b3fa77ec9100be8a6))
+* enhance sandpack-editor placeholder interaction ([52201ba](https://github.com/tangbohao37/vitepress-theme-components/commit/52201bad7ecfc440ef612eecd8bcb2659d6b4fa6))
+* update sandpack examples to TypeScript and enhance sandpack-editor ([5292553](https://github.com/tangbohao37/vitepress-theme-components/commit/529255359f4c402a8ad8423ae44562be146dda79))
+
+### [0.0.3-beta.4](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.3...v0.0.3-beta.4) (2025-12-20)
+
+
+### Features
+
+* add logging for transformPath and createVirtualFileSystem in LocalComponentLoader ([8989c40](https://github.com/tangbohao37/vitepress-theme-components/commit/8989c401fb670504e2821cee8ecdb5a1cd71bd95))
+
+### [0.0.3-beta.3](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.2...v0.0.3-beta.3) (2025-12-20)
+
+### [0.0.3-beta.2](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.1...v0.0.3-beta.2) (2025-12-20)
+
+### [0.0.3-beta.1](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.3-beta.0...v0.0.3-beta.1) (2025-12-19)
+
+
+### Features
+
+* add package.json generation and improve export handling in LocalComponentLoader ([c421673](https://github.com/tangbohao37/vitepress-theme-components/commit/c4216732f9c278883d82eae02cd25729a9ef1683))
+
+### [0.0.3-beta.0](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.36...v0.0.3-beta.0) (2025-12-19)
+
+
+### Bug Fixes
+
+* debug ([de207f9](https://github.com/tangbohao37/vitepress-theme-components/commit/de207f9059d96ec14bdd916c111f10f2731093ac))
+
+### [0.0.2-beta.36](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.35...v0.0.2-beta.36) (2025-12-19)
+
+### [0.0.2-beta.35](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.34...v0.0.2-beta.35) (2025-12-19)
+
+
+### Bug Fixes
+
+* update button example and code-wrapper component ([0fffe8c](https://github.com/tangbohao37/vitepress-theme-components/commit/0fffe8c6aef7d31a1c44cc3083772b62b80ba5f7))
+
+### [0.0.2-beta.34](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.33...v0.0.2-beta.34) (2025-12-18)
+
+### [0.0.2-beta.33](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.32...v0.0.2-beta.33) (2025-12-18)
+
+
+### Features
+
+* add comprehensive documentation for vitepress-theme-components ([c612482](https://github.com/tangbohao37/vitepress-theme-components/commit/c612482907c9a067d287c6736569406d20854df2))
+* enhance documentation and components for mobile device previews ([5b3990d](https://github.com/tangbohao37/vitepress-theme-components/commit/5b3990d1401e4f78c6d5bc9211e138ae6f3958b1))
+
 ### [0.0.2-beta.32](https://github.com/tangbohao37/vitepress-theme-components/compare/v0.0.2-beta.31...v0.0.2-beta.32) (2025-08-11)
 
 

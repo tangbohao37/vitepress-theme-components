@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, shallowRef, defineModel } from 'vue';
+import { ref, shallowRef } from 'vue';
 import { useData } from 'vitepress';
 import { NIcon, NSpace, NButton, NPopover, useMessage } from 'naive-ui';
 import VueMonacoEditor, { type EditorProps } from '@guolao/vue-monaco-editor';
@@ -65,7 +65,7 @@ const MONACO_EDITOR_OPTIONS: EditorProps['options'] = {
   formatOnType: true,
   formatOnPaste: true,
   minimap: {
-    autohide: true
+    autohide: 'mouseover'
   }
 };
 const handleMount = (editor: any) => (editorRef.value = editor);

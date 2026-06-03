@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { FC, useMemo } from 'react';
 import { LiveError, LivePreview, LiveProvider } from 'react-live';
 import { importRegex } from '../constant';

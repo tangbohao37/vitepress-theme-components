@@ -4,8 +4,6 @@ import { baseParse, transform } from '@vue/compiler-core';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
-import * as docgen from 'react-docgen-typescript';
-import { markdownRender } from 'react-docgen-typescript-markdown-render';
 import { type MarkdownRenderer } from 'vitepress';
 /**
  * It runs in Node.js.
@@ -20,8 +18,6 @@ import {
 import { type ILiveEditor } from '../types';
 
 const LiveEditorTag = 'LiveEditor';
-const DrawerLiveEditorTag = 'DrawerLiveEditor';
-const ApiTag = 'ApiTable';
 
 const filterJSXComments = (code: string) => {
   const commentRegex = /{\/\*[\s\S]*?\*\/}|\/\/.*/g;
@@ -165,7 +161,20 @@ export function demoBlockPlugin(md: MarkdownRenderer) {
       const token = tokens[idx];
       const content = token.content.trim();
       const liveEditorReg = new RegExp(`^<${LiveEditorTag}\\s`);
-      if (liveEditorReg.test(content)) {
+      
+      // 检查当前 token 是否在代码块内
+      // 通过检查前面的 token 来判断是否在 fence/code_inline 块中
+      let inCodeBlock = false;
+      if (idx > 0) {
+        const prevToken = tokens[idx - 1];
+        // 如果前一个 token 是 code_inline 的开始标记，说明当前在行内代码中
+        if (prevToken && prevToken.type === 'code_inline') {
+          inCodeBlock = true;
+        }
+      }
+      
+      // 只处理不在代码块内的 LiveEditor 标签
+      if (liveEditorReg.test(content) && !inCodeBlock) {
         try {
           return liveEditorRender(
             tokens,
@@ -177,30 +186,7 @@ export function demoBlockPlugin(md: MarkdownRenderer) {
             LiveEditorTag
           );
         } catch (error) {
-          return defaultRender(tokens, idx, options, env, self);
-        }
-      }
-      const DrawerLiveEditorTagReg = new RegExp(`^<${DrawerLiveEditorTag}\\s`);
-      if (DrawerLiveEditorTagReg.test(content)) {
-        try {
-          return liveEditorRender(
-            tokens,
-            idx,
-            options,
-            env,
-            self,
-            content,
-            DrawerLiveEditorTag
-          );
-        } catch (error) {
-          return defaultRender(tokens, idx, options, env, self);
-        }
-      }
-      const ApiTableTag = new RegExp(`^<${ApiTag}\\s`);
-      if (ApiTableTag.test(content)) {
-        try {
-          return ApiTableRender(tokens, idx, options, env, self, content);
-        } catch (error) {
+          console.error('LiveEditor render error:', error);
           return defaultRender(tokens, idx, options, env, self);
         }
       }
@@ -209,7 +195,7 @@ export function demoBlockPlugin(md: MarkdownRenderer) {
   };
   // addRenderRule('html_block');
   addRenderRule('html_inline');
-  
+
   // 添加这一行来启用 Mermaid 支持
   renderMermaid(md);
 }
@@ -252,14 +238,37 @@ const liveEditorRender = (tokens, idx, options, env, self, content, tag) => {
         !scriptClientRE.test(tag.content)
     );
     let _code = demoImportCodeStr;
+    let nonImportCode = ''; // 保存非 import 语句的代码
+    
     // FIXME： 切换文件后需要清空缓存的 import 语句
     if (existingSetupScriptIndex > -1) {
       // 如果 script 中还有其他引入
       const tagSrc = tags[existingSetupScriptIndex];
       const [, c] = tagSrc.content.match(scriptRegex);
+      
+      // 分离 import 语句和非 import 语句
+      const lines = c.split('\n');
+      const importLines = [];
+      const nonImportLines = [];
+      
+      for (const line of lines) {
+        const trimmedLine = line.trim();
+        // 判断是否是 import 语句（包括多行 import）
+        if (trimmedLine.startsWith('import ') || 
+            (importLines.length > 0 && !importLines[importLines.length - 1].includes('from'))) {
+          importLines.push(line);
+        } else if (trimmedLine) {
+          nonImportLines.push(line);
+        }
+      }
+      
+      // 保存非 import 的代码
+      nonImportCode = nonImportLines.join(os.EOL).trim();
+      
+      const existingImports = importLines.join(os.EOL);
       const componentRegisStatement = demoImportCodeArr.join(os.EOL).trim();
       // 将 react-live 所需 scope 添加在script 之中
-      _code = [c, componentRegisStatement].join(os.EOL);
+      _code = [existingImports, componentRegisStatement].join(os.EOL);
     }
     /**
      * 重新处理添加 scope 之后的代码片段，以obj形式输出所需依赖的scope
@@ -273,12 +282,17 @@ const liveEditorRender = (tokens, idx, options, env, self, content, tag) => {
     const importStatementCode = buildImportStatement(statementObj)
       .join(os.EOL)
       .trim();
-    const finalCode = [importStatementCode, ...directImportRecord]
+    const finalImportCode = [importStatementCode, ...directImportRecord]
       .join(os.EOL)
       .trim();
+    
+    // 合并 import 语句和非 import 语句
+    const finalCode = nonImportCode 
+      ? [finalImportCode, '', nonImportCode].join(os.EOL) 
+      : finalImportCode;
 
     // babel 重新编译,形成正确的 import 语句片段
-    const ast = parse(finalCode, {
+    const ast = parse(finalImportCode, {
       sourceType: 'module',
       plugins: ['typescript']
     });
@@ -309,23 +323,6 @@ const liveEditorRender = (tokens, idx, options, env, self, content, tag) => {
   });
 };
 
-const ApiTableRender = (tokens, idx, options, env, self, content) => {
-  const props = parseProps<{ path: string }>(content);
-  const mdFilePath = path.dirname(env.path); // md 原文件路径
-  const p = path.resolve(mdFilePath, props.path); // 引入的 code 原文件路径
-  console.log('ApiTable file path:', p);
-  const opts: docgen.ParserOptions = {
-    savePropValueAsString: false,
-    skipChildrenPropWithoutDoc: false,
-    shouldRemoveUndefinedFromOptional: false,
-    shouldExtractValuesFromUnion: false
-  };
-
-  const res = docgen.parse(p, opts);
-  const str = markdownRender(res);
-  return `<ApiTable content='${str}'></ApiTable>`;
-};
-
 export const parseProps = <T extends Record<string, any> = any>(
   content: string
 ) => {
@@ -346,13 +343,16 @@ export const parseProps = <T extends Record<string, any> = any>(
               if (prop.type === 7) {
                 const propName = prop.arg?.loc.source;
                 const propVal = prop.exp?.loc.source;
-                let v = false;
+                let v: any = propVal; // 默认使用原始字符串值
                 try {
                   v = JSON.parse(propVal || '');
-                } catch (error) {
-                  v = false;
+                } catch {
+                  // JSON 解析失败时,保留原始字符串值而不是设置为 false
+                  v = propVal;
                 }
-                propName && (propsMap[propName] = v);
+                if (propName) {
+                  propsMap[propName] = v;
+                }
               }
             });
           }

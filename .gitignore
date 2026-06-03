@@ -31,3 +31,4 @@ es
 pnpm-lock.yaml
 yarn.lock
 package-lock.json
+*.code-workspace

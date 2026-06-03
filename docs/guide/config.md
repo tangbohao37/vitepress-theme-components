@@ -32,17 +32,36 @@ vitepress 会把目录下的`.md` 都编译成.vue 文件。为了防止changelo
 
 ### changelog.parse
 
-TODO: 待补充
+- Type: `(content: string) => void`
+- Default: `null`
+
+自定义 changelog 解析函数，用于处理特殊格式的 changelog 文件：
+
+```js
+themeConfig: {
+  changelog: {
+    path: '/CHANGELOG.md',
+    parse: (content) => {
+      // 自定义解析逻辑
+      return parseCustomChangelog(content);
+    }
+  }
+}
+```
 
 ## coverage
 
-配置 coverage 路径
+配置单测覆盖率路径和解析方式
 
 ```js
 themeConfig: {
   // 获取public中的文件。 直接使用站点绝对路径
   coverage: {
-    path: '/coverage-summary.json'
+    path: '/coverage-summary.json',
+    parse: (content) => {
+      // 自定义解析逻辑
+      return JSON.parse(content);
+    }
   },
 }
 ```
@@ -52,8 +71,168 @@ themeConfig: {
 - Type: `string`
 - Default: `null`
 
-覆盖率文件放置在 public 中，`/xxx.json` 使用绝对路径配置
+覆盖率文件放置在 public 中，`/xxx.json` 使用绝对路径配置。
+
+支持的覆盖率文件格式：
+- Jest 生成的 `coverage-summary.json`
+- NYC 生成的覆盖率报告
+- 自定义 JSON 格式
 
 ### coverage.parse
 
-TODO: 待补充
+- Type: `(content: string) => CoverageData`
+- Default: `JSON.parse`
+
+自定义覆盖率数据解析函数：
+
+```js
+themeConfig: {
+  coverage: {
+    path: '/coverage-summary.json',
+    parse: (content) => {
+      const data = JSON.parse(content);
+      // 转换为标准格式
+      return {
+        total: data.total,
+        covered: data.covered,
+        percentage: data.percentage
+      };
+    }
+  }
+}
+```
+
+## customPagePath
+
+- Type: `string`
+- Default: `null`
+
+自定义页面路径，用于指定使用空布局的页面路径前缀：
+
+```js
+themeConfig: {
+  customPagePath: '/mobile'
+}
+```
+
+当页面路径包含指定前缀时，将使用 `EmptyLayout` 而不是默认的 `BaseLayout`。
+
+## exampleDir
+
+- Type: `string`
+- Default: `'/example/'`
+
+配置 `SandpackEditor` 组件加载示例文件的目录路径（相对于 `public` 目录）：
+
+```js
+themeConfig: {
+  // 默认配置
+  exampleDir: '/example/'
+  
+  // 或使用自定义目录
+  // exampleDir: '/demos/'
+  // exampleDir: '/code-samples/'
+}
+```
+
+::: info 使用说明
+- 路径相对于 `docs/public/` 目录
+- 路径会自动标准化（确保以 `/` 开头和结尾）
+- 示例文件实际位置：`docs/public/{exampleDir}/`
+- 在 `SandpackEditor` 组件中使用 `path` 属性引用示例文件时，会自动从此目录加载
+:::
+
+### 示例
+
+配置自定义目录：
+
+```ts
+// .vitepress/config.ts
+export default defineConfig<AdvThemeConfig>({
+  themeConfig: {
+    exampleDir: '/demos/'
+  }
+});
+```
+
+目录结构：
+
+```
+docs/
+├── public/
+│   └── demos/              # 自定义的示例目录
+│       ├── button.jsx
+│       ├── counter.jsx
+│       └── components/
+│           └── header.jsx
+└── demo/
+    └── button.md
+```
+
+在文档中使用：
+
+```md
+<!-- 会从 docs/public/demos/ 目录加载 -->
+<SandpackEditor path="button.jsx"></SandpackEditor>
+
+<!-- 支持子目录 -->
+<SandpackEditor path="components/header.jsx"></SandpackEditor>
+```
+
+## 完整配置示例
+
+```ts
+// .vitepress/config.ts
+import { defineConfigWithTheme } from 'vitepress';
+import { type AdvThemeConfig } from 'vitepress-theme-components';
+import { baseConfig } from 'vitepress-theme-components/config';
+
+export default defineConfigWithTheme<AdvThemeConfig>({
+  extends: baseConfig,
+  
+  title: '我的组件库',
+  description: '基于 VitePress 的组件库文档',
+  
+  themeConfig: {
+    // VitePress 原生配置
+    nav: [
+      { text: '指南', link: '/guide/' },
+      { text: '组件', link: '/components/' }
+    ],
+    
+    sidebar: {
+      '/guide/': [
+        {
+          text: '开始',
+          items: [
+            { text: '快速开始', link: '/guide/start' },
+            { text: '配置', link: '/guide/config' }
+          ]
+        }
+      ]
+    },
+    
+    // 主题扩展配置
+    changelog: {
+      path: '/CHANGELOG.md',
+      parse: (content) => {
+        // 自定义解析逻辑
+        return content;
+      }
+    },
+    
+    coverage: {
+      path: '/coverage-summary.json',
+      parse: (content) => {
+        const data = JSON.parse(content);
+        return data;
+      }
+    },
+    
+    customPagePath: '/mobile',
+    
+    // 示例文件目录配置
+    exampleDir: '/example/'
+  }
+});
+```

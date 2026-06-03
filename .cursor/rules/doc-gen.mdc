@@ -1,0 +1,26 @@
+---
+description: Documentation generation rules for Atome Design
+globs:
+  - '/docs/**/*.md'
+alwaysApply: false
+---
+
+# 在执行 doc-gen 生成文档前
+
+- 需要先阅读 vitepress 在书写前可以阅读 @vitepress vitepress(https://vitepress.dev/zh/guide/markdown#syntax-highlighting-in-code-blocks) 的官方文档，了解其语法和使用方式
+- 需要先阅读当前项目的源码
+
+## 文档编写要求：
+
+- 文档内容模块需要包括：基础用法 / 参数说明 / api / 详细说明 / 技术实现
+- 其中需要用 markdown 展示的代码部分，需要使用 vitepress 的语法高亮重点代码
+- 在书写文档的时候一个 feature 讲解后面需要紧跟示例代码
+- 在写`详细说明`和`技术实现`的时候对于复杂的逻辑进行着重讲解,使用 vitepress 的`自定义容器`进行重点标记，常规的代码逻辑则可以忽略
+- 源码中用注释专门标注的地方需要补充到文档中进行讲解
+- 在书写示例参数的时候，比如某个参数 `beforeClose ={xxxx}` 时，需要把上下文写出来,类似这样：`<A>beforeClose ={xxxx}</A>`
+- 在文档中书写 api 时，类型和默认值全部用 `` 包裹
+
+## 对于已有的文档修改
+
+- 如果文档中没有的 feature，需要补充示例代码，并补充文档
+- 如果文档中已经有的 feature，需要补充示例代码，并补充文档

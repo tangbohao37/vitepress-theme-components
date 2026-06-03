@@ -1,12 +1,13 @@
-import { defineConfigWithTheme } from 'vitepress';
+import { defineConfig } from 'vitepress';
 // import { baseConfig } from '../../src/base-config';
 // import { type AdvThemeConfig } from '../../src';
 import { baseConfig } from '../../lib/base-config';
 import { type AdvThemeConfig } from '../../lib';
 import pkg from '../../package.json';
 
+
 // https://vitepress.dev/reference/site-config
-export default defineConfigWithTheme<AdvThemeConfig>({
+export default defineConfig<AdvThemeConfig>({
   title: 'Vitepress theme components',
   description: 'A vitepress theme for components site',
   extends: baseConfig,
@@ -35,18 +36,50 @@ export default defineConfigWithTheme<AdvThemeConfig>({
         base: '/guide/',
         items: [
           {
-            text: '指南',
+            text: '开始',
             items: [
-              { text: '动机', link: 'why' },
-              { text: '开始', link: 'start' }
+              { text: '为什么选择', link: 'why' },
+              { text: '快速开始', link: 'start' }
             ]
           },
           {
-            text: '使用',
+            text: '基础使用',
             items: [
-              { text: '配置项', link: 'config' },
+              {
+                text: '组件使用指南',
+                link: 'components',
+                collapsed: false,
+                items: [
+                  {
+                    text: 'LiveEditor - 实时代码编辑器',
+                    link: 'components/live-editor'
+                  },
+                  {
+                    text: 'SandpackEditor - 在线编辑器',
+                    link: 'components/sandpack-editor'
+                  },
+                  { text: 'Mermaid - 图表渲染', link: 'components/mermaid' }
+                ]
+              },
               { text: 'Markdown 扩展', link: 'markdown' },
-              { text: 'Frontmatter 扩展', link: 'frontmatter' }
+              { text: '配置选项', link: 'config' },
+              { text: 'Frontmatter 扩展', link: 'frontmatter' },
+              { text: '移动设备预览', link: 'mobile-preview' }
+            ]
+          },
+          {
+            text: '高级功能',
+            items: [
+              { text: '主题定制', link: 'customization' },
+              { text: '插件开发', link: 'plugin-development' }
+            ]
+          },
+          {
+            text: '开发指南',
+            items: [
+              { text: '开发环境', link: 'development' },
+              { text: 'API 参考', link: 'api-reference' },
+              { text: '故障排除', link: 'troubleshooting' }
             ]
           }
         ]
@@ -60,7 +93,9 @@ export default defineConfigWithTheme<AdvThemeConfig>({
               { text: 'Button', link: 'button' },
               { text: 'Icons', link: 'icons' },
               { text: 'Custom Component', link: 'custom-component' },
-              { text: 'Mermaid', link: 'mermaid' }
+              { text: 'Mermaid', link: 'mermaid' },
+              { text: 'SandpackEditor', link: 'sandpack' },
+              { text: 'DeviceFrame', link: 'device-frame-test' }
             ]
           }
         ]
@@ -69,10 +104,10 @@ export default defineConfigWithTheme<AdvThemeConfig>({
   },
   vite: {
     server: {
-      port: 5174,
+      port: 5174
     },
     ssr: {
-      noExternal: ['@arco-design/web-react']
+      noExternal: ['@arco-design/web-react', 'sandpack-vue3', 'devices.css']
     }
   }
 });

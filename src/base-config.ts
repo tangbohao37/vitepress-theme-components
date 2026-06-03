@@ -1,8 +1,6 @@
 import { demoBlockPlugin } from './plugins/index.js';
 import { defineConfig } from 'vitepress';
 import taskLists from 'markdown-it-task-lists';
-import { whyframe } from '@whyframe/core';
-import { whyframeVue } from '@whyframe/vue';
 import react from '@vitejs/plugin-react';
 
 const deps = [
@@ -18,7 +16,8 @@ const deps = [
   '@mermaid-js/mermaid-zenuml',
   'mermaid',
   'dayjs',
-  '@braintree/sanitize-url'
+  '@braintree/sanitize-url',
+  'sandpack-vue3'
 ];
 
 /**
@@ -31,27 +30,37 @@ const baseConfig = defineConfig({
   markdown: {
     config(md) {
       md.use(demoBlockPlugin).use(taskLists);
+      md.renderer.rules.code_inline = (tokens, index) => {
+        const escapedContent = md.utils.escapeHtml(tokens[index].content);
+        return `<code v-pre>${escapedContent}</code>`;
+      };
     }
   },
   vite: {
     optimizeDeps: {
-      include: deps
+      include: [
+        ...deps,
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
+        'react-live'
+      ]
     },
     resolve: {
       alias: {
         // 强制使用 dayjs 的 ESM 版本，但保留插件路径
-        'dayjs$': 'dayjs/esm/index.js',
+        dayjs$: 'dayjs/esm/index.js',
+        // 确保 React 使用正确的版本
+        react: 'react',
+        'react-dom': 'react-dom'
       },
+      dedupe: ['react', 'react-dom']
     },
     plugins: [
-      react(),
-      // Initialize core plugin
-      whyframe({
-        defaultSrc: 'frames/default' // provide our own html
-      }) as any,
-      // Initialize Vue integration plugin
-      whyframeVue({
-        include: /\.(?:vue|md)$/ // also scan in markdown files
+      react({
+        jsxRuntime: 'automatic',
+        jsxImportSource: 'react'
       })
     ],
     ssr: {
